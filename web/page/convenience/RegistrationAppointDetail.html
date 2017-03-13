@@ -1,0 +1,275 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="../../css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../../css/easy-responsive-tabs.css" /> 
+	<link rel="stylesheet" href="../../css/main.css">
+	
+<!-- 	<link rel="stylesheet" href="mobile.time/css/jqueryMobile.css"> -->
+	<link href="../../mobile.time/css/mobiscroll.css" rel="stylesheet" type="text/css" />
+	<script src="../../lib/jquery.min.js"></script>
+	<script src="../../lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../../mobile.time/js/mobiscroll.js"></script>
+	<script src="../../lib/jquery.validate.min.js"></script>
+	<script src="../../lib/jquery.metadata.js"></script>
+	<script src="../../lib/cordova-1.5.0.js"></script>
+<!-- 	<script src="lib/cordova.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script src="lib/jqLoading.js"></script> -->
+	<script src="../../js/main.js"></script>
+	<script src="../../js/messages_cn.js"></script>
+	<script src="../../lib/LocalResizeIMG.js"></script>
+	<script src="../../lib/mobileBUGFix.mini.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FBqGlnTD1PFePw7StH7EANlD"></script>
+ </head>
+ <body>
+	<div data-role="page" id="registrationAppointDetail_page1" data-dom-cache="true" >
+	<script type="text/javascript">
+	$("#registrationAppointDetail_page1").on("pageshow",function(){
+		/* var locaUrl =  window.location.href;
+		locaUrl = locaUrl.substring(locaUrl.lastIndexOf("/"), locaUrl.length-1);
+		if(locaUrl!="RegistrationAppointDetail.html")return; */
+		//setLoginNavigationBar("registrationAppointDetail_AId");
+		var username = getLocalStorageObj().getItemInLS("loginusername");
+		var usercId = getLocalStorageObj().getItemInLS("loginusercId");
+		var usermob = getLocalStorageObj().getItemInLS("loginusermob");
+		if(username=="null"){
+			username="";
+		}
+		if(usercId=="null"){
+			usercId="";
+		}
+		if(usermob=="null"){
+			usermob="";
+		}
+		$("#name").val(username);
+		$("#cId").val(usercId);
+		$("#mob").val(usermob);
+		getAppointmentTimeList(registrationAppoint_slddId);
+		getBussinessTypeList();
+		$("#registrationAppointTitle").text(registrationAppoint_slddTitle);
+		/* $("#formRegistrationAppointDetail").validate({ 
+			focusCleanup:true,
+			submitHandler:function(form){
+				submitInfo();
+			},
+			errorPlacement:function(error, element) { 
+				error.css('color','red');
+				var  filed = element.parent().parent().parent().parent().find(".tdpadding").text();
+				var filed=filed+error.text();
+				dialogJQM(filed);
+			} 
+		}); */
+	});
+	//获取预约时间列表并自动生成options对象追加html
+	function getAppointmentTimeList(slddId){
+		if($("#appoint_Time option").length)return;
+		//showLoader();
+		addDataLoader("appoint_Time");
+		$.ajax({
+			type: 'GET',
+			contentType : 'application/json',
+			url: getLocalStorageObj().getItemInLS("servicePath")+"appointment/time/list/"+slddId,
+			dataType: 'json',
+			success:function(result, textStatus, jqXHR){
+				delDataLoader();
+				if(result){
+					var option = "<option>选择预约号时间</option>";
+					 $.each(result,function(index,taget){
+						 option+="<option value='"+taget.chbId+"'>"+(taget.sjd+taget.slsj)+"</option>";
+					 });
+					 $(option).appendTo($("#appoint_Time"));
+					 $("#appoint_Time").selectmenu('refresh', true);
+				}else{
+					noMoreData("appoint_Time");
+				}
+				//hideLoader();
+			},
+            error:function(responseData){
+            	//hideLoader();
+            	delDataLoader();
+            }
+		});
+	}
+	//获取业务类别列表并自动生成options对象追加html
+	function getBussinessTypeList(){
+		if($("#business_td option").length)return;
+		showLoader();
+		$.ajax({
+			type: 'GET',
+			contentType : 'application/json',
+			url: getLocalStorageObj().getItemInLS("servicePath")+"appointment/bussinessType/list",
+			dataType: 'json',
+			success:function(result, textStatus, jqXHR){
+				if(result){
+					var option = "<option>选择要办理的业务</option>";
+					 $.each(result,function(index,taget){
+						 option+="<option value='"+taget.ywlbId+"'>"+taget.ywlb+"</option>";
+					 });
+					 $(option).appendTo($("#business_td"));
+					 $("#business_td").selectmenu('refresh', true);
+				}
+				hideLoader();
+			},
+            error:function(responseData){
+            	hideLoader();
+            	alert(responseData);
+            }
+		});
+	}
+	
+	$("#registrationAppointDetail_page1 .buttoncheck").on("click",function(){
+		/* dialogJQM('必须输入<br/>必须输入数字<br/>aaaa' ); */
+		submitInfo();
+	});
+	
+	// 提交预约资料
+	function submitInfo(){
+		/* dialogJQM("errorinfo"); */
+	
+		var name=$("#name").val();
+		var cId = $("#cId").val();
+		var mob = $("#mob").val();
+		var error="";
+		var flg = 0;
+		if(isEmpty(name)){
+			error += "姓名必须输入<br/>";
+			flg = 1;
+		}
+		if(isEmpty(cId)){
+			error += "身份证号必须输入<br/>";
+			flg = 1;
+		}
+		if(isEmpty(mob)){
+			error += "手机号必须输入<br/>";
+			flg = 1;
+		}
+		if (flg ==1){
+			dialogJQM(error);
+			return;
+		}
+		
+		var business_td = $("#business_td").val();
+		var fangwuNumber = $("#fangwuNumber").val();
+		var chbId =  $("#appoint_Time").val();
+		var slsj = $("#appoint_Time").find("option:selected").text();
+		var yyrq = registrationAppoint_cjsj;
+		var slck = registrationAppoint_slck;
+		var userId ="";
+		userId = getLocalStorageObj().getItemInLS("loginuserid");
+		var sfdhyy = "0";
+		var data={"name":name,"cId":cId,"mob":mob,"ywlb":business_td,"chbId":chbId,
+		"yyrq":yyrq,"userId":userId,"sfdhyy":sfdhyy,"slck":slck,"slsj":slsj};
+		
+		var url = getLocalStorageObj().getItemInLS("servicePath")+"appointment/insert/info";
+		confirmJQM('确认提交数据?', function(){
+			$.ajax({
+				type: 'POST',
+				contentType : 'application/json',
+				url: url,
+				dataType: 'json',
+				data:JSON.stringify(data),
+				success:function(result, textStatus, jqXHR){
+					if(result == 1){
+						alert("预约成功");
+						$.mobile.changePage("../convenience/Service.html","pop");
+					} else{
+						alert("预约失败");
+					}
+					hideLoader();
+				},
+	            error:function(responseData){
+	            	hideLoader();
+	            	console.log(responseData);
+	            }
+			});
+		});
+		
+	}
+	$("#registrationAppointDetail_page1 #tuichu").on("click", function(){
+		getLocalStorageObj().setItemInLS("registUser",false);
+		getLocalStorageObj().setItemInLS("loginuserid","");
+		getLocalStorageObj().setItemInLS("loginusername","");
+		getLocalStorageObj().setItemInLS("loginusercId","");
+		getLocalStorageObj().setItemInLS("loginusermob","");
+		$.mobile.changePage("Service.html","pop");
+	});
+	</script>
+ 	<div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+	    <a class="aftera"  href="javascript:void(0);" data-icon="back" data-rel="back" style="background-color: rgba(8, 187, 249, 0);color:#FFF;border:1px solid rgba(8, 187, 249, 0);opacity: 0.8;"><font style="color:#FFFFFF;">返回</font>
+	    	<div class="div_placearrow" style="width:20px;height:20px;top: 7px; left: 5px;background-image:url(../../img/serviceHotline/back_03.png);background-repeat:no-repeat;background-size:20px 20px;background-position:center;position: absolute"></div>
+	    </a>
+	    <h1>房产登记预约</h1>
+	    <a class="selfChangeHouse_content_page2-login-btn" id="tuichu" rel="external" >退出</a>
+  	</div>
+    <div class="placecontentmain_tit">基本信息</div>
+	  <div data-role="content"  style="padding:0px">
+		<form  id="formRegistrationAppointDetail" class="validate">
+	        <table class="appointDetailTable" style="width:100%;background-color:#E7E6E6" cellpadding ="10" cellspacing="10" bgcolor="#E7E6E6" border="0" bordercolor="#FFFFFF" >
+           			<tr class="trbottomline"><td class="tdpadding">姓名</td><td class="righttr"><div class="inputwrapper"><input type="text" name="slbh" id="name" placeholder="请输入"></input></div></td></tr>
+           			<tr class="bgtr"></tr>
+           			<tr class="trbottomline"><td class="tdpadding">身份证号</td><td class="righttr"><div class="inputwrapper"><input type="text" name="sqrxm" id="cId" placeholder="请输入"></input></div></td></tr>
+           			<tr class="bgtr"></tr>
+           			<tr class="trbottomline"><td class="tdpadding">手机号码</td><td class="righttr"><div class="inputwrapper"><input type="text" name="sqrxm" id="mob" placeholder="请输入"></input></div></td></tr>
+           			<tr class="bgtr"></tr>
+           			<tr class="trbottomline" style="height:40px;background-color:#E7E6E6;margin-left:10px"><td id="registrationAppointTitle" class="tdpadding" colspan="2"></td></tr>
+           			<tr class="trbottomline"><td class="tdpadding">办理业务</td>
+	       				<td class="righttr"><div class="inputwrapper1">
+	       					 <select  id="business_td" name="business" data-native-menu="false">
+							 </select></div>
+						</td>
+					</tr>
+             			<tr class="bgtr"></tr>
+             			<tr class="trbottomline"><td class="tdpadding">房屋套数</td>
+	       				<td class="righttr"><div class="inputwrapper1">
+	       					 <select name="operation_type" data-native-menu="false" id="fangwuNumber">
+								 <option>房屋套数</option>
+						         <option value="1">1套</option>
+						         <option value="2">2套</option>
+						         <option value="3">3套</option>
+							 </select></div>
+						</td>
+					</tr>
+             			<tr class="bgtr"></tr>
+             			<tr class="trbottomline"><td class="tdpadding">预约时间</td>
+	       				<td class="righttr"><div class="inputwrapper1">
+	       					 <select id="appoint_Time" name="time" data-native-menu="false">
+							 </select></div>
+						</td>
+					</tr>
+					<tr class="bgtr"></tr>
+					<tr class="trbottomline"><td colspan="2"><a data-role="button" class="buttoncheck">提交</a><a data-role="button" class="buttonreset">重置</a></td></tr>
+                	<tr class="bgtr"></tr>
+              </table>
+	      </form>
+	  </div>
+
+	  	<div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+			<div role="navigation" class="ui-navbar" data-role="navbar">
+				<ul  class="ui-grid-c">
+					<li class="ui-block-a"><a class="aftera" href="javascript:openToPage(1)" data-icon="home" data-transition="slide" style="background-color:#FFF !important">首页
+		            <div class="footer_placeiconsgrey"></div></a>
+		            </li>
+					<li class="ui-block-b"><a class="aftera" href="javascript:openToPage(2)" data-icon="search" data-transition="slide" rel="external" style="background-color:#FFF !important">信息公开
+		             <div class="footer_placeicons_search"></div></a>
+		            </li>
+					<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+					<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external" style="background-color:#FFF !important"><font style="color:#08bbf9">便民服务</font>
+		            <div class="footer_placeicons_interactivelight"></div></a>
+		            </li>
+		           <!--  <li class="ui-block-d"><a class="aftera" id="interactivity_AId" href="javascript:openToPage(4)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">登录
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li> -->
+					<li class="ui-block-d"><a class="aftera" href="javascript:openToPage(5)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">政务动态
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li>
+				</ul>
+			</div>
+		</div>
+	</div> 
+ </body>
+</html>

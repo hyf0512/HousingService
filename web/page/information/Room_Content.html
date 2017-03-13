@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="../../css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../../css/easy-responsive-tabs.css" /> 
+	<link rel="stylesheet" href="../../css/main.css">
+	
+<!-- 	<link rel="stylesheet" href="mobile.time/css/jqueryMobile.css"> -->
+	<link href="../../mobile.time/css/mobiscroll.css" rel="stylesheet" type="text/css" />
+	<script src="../../lib/jquery.min.js"></script>
+	<script src="../../lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../../mobile.time/js/mobiscroll.js"></script>
+	<script src="../../lib/jquery.validate.min.js"></script>
+	<script src="../../lib/jquery.metadata.js"></script>
+	<script src="../../lib/cordova-1.5.0.js"></script>
+<!-- 	<script src="lib/cordova.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script src="lib/jqLoading.js"></script> -->
+	<script src="../../js/main.js"></script>
+	<script src="../../js/messages_cn.js"></script>
+	<script src="../../lib/LocalResizeIMG.js"></script>
+	<script src="../../lib/mobileBUGFix.mini.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FBqGlnTD1PFePw7StH7EANlD"></script>
+</head>
+<body>
+	<div data-role="page" id="room_ContentPage"  style="background:white">
+	<script>
+	 document.addEventListener("backbutton",onBackKeyDown,false);   
+      
+    //BackButton按钮  
+    function onBackKeyDown(){  
+        alert("请用电脑登录网站查看");
+    }
+    function changeurl(con){
+    	var content1=con;
+    	var first1=0;
+    	var length=con.length;
+    	while(content1.indexOf('href=',first1)!=-1){
+    		 var first = content1.indexOf('href=',first1);
+    		 first1=first+6;
+    			var second = content1.indexOf('\"',first+6);
+				 	var j = content1.substring(first+6,second);
+					content1 = content1.replace(j,'javascript:onBackKeyDown();');
+					console.log(content1);
+    	}
+			return content1;
+    }
+		$('#room_ContentPage').on('pageinit',function(event){
+			//setLoginNavigationBar("room_Content_AId");
+			/* $("#room_msg_Page2_h1").html(page_information_roomContent.title); */
+			$("#contentTitle").html(page_information_roomContent.title);
+			//showLoader();
+			addDataLoader("contentDetail");
+			$.ajax({
+				type: 'GET',
+				contentType : 'application/json',
+				url: getLocalStorageObj().getItemInLS("servicePath")+"news/detail/"+page_information_roomContent.id,
+				dataType: 'json',
+				success:function(result, textStatus, jqXHR){
+					delDataLoader();
+					if(result){
+						if(result.outputContent!=null ||result.outputContent==""){
+							var content=result.outputContent;
+							content=changeurl(content);
+							$(content).appendTo($("#contentDetail"));
+						}
+					}else{
+						noMoreData("contentDetail");
+					}
+					//hideLoader();
+				},
+	           error:function(responseData){
+	        	   //hideLoader();
+	        	   noMoreData("contentDetail");
+	           }
+			});
+		});
+	</script>
+	   <div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+	    <a class="aftera"  href="javascript:void(0);" data-icon="back" data-rel="back" style="background-color: rgba(8, 187, 249, 0);color:#FFF;border:1px solid rgba(8, 187, 249, 0);opacity: 0.8;"><font style="color:#FFFFFF;">返回</font>
+	    	<div class="div_placearrow" style="width:20px;height:20px;top: 7px; left: 5px;background-image:url(../../img/serviceHotline/back_03.png);background-repeat:no-repeat;background-size:20px 20px;background-position:center;position: absolute"></div>
+	    </a>
+	    <h1 id="room_msg_Page2_h1">公告内容</h1>
+	   </div>
+	  <div data-role="content" id="room_Content_content">
+	  	  <div class="content_title">
+		  	<div id="contentTitle" ></div>
+		  </div>
+		  <div class="content_detail">
+		  	<div id="contentDetail"></div>
+		  </div>
+	  </div>
+	  
+	  <div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+		<div role="navigation" class="ui-navbar" data-role="navbar">
+			<ul class="ui-grid-c">
+				<li class="ui-block-a"><a class="aftera" href="javascript:openToPage(1)" data-icon="home" data-transition="slide"  rel="external">首页<div class="footer_placeiconsgrey"></div></a></li>
+				<li class="ui-block-b"><a class="aftera" href="javascript:openToPage(2)" data-icon="search" data-transition="slide" rel="external"><font style="color:#08bbf9">信息公开</font><div class="footer_placeicons_searchlight"></div></a></li>
+				<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+				<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external">便民服务<div class="footer_placeicons_interactive"></div></a></li>
+				<!-- <li class="ui-block-d"><a class="aftera" id="footSearch_AId"  href="javascript:openToPage(4)" data-icon="gear" data-transition="slide" rel="external"><font>登录</font><div class="footer_placeicons_setting"></div></a></li> -->
+				<li class="ui-block-d"><a class="aftera" href="javascript:openToPage(5)" data-icon="gear" data-transition="slide" rel="external">政务动态<div class="footer_placeicons_setting"></div></a></li>
+			</ul>
+		</div>
+	</div>
+	</div> 
+
+</body>
+
+</html>

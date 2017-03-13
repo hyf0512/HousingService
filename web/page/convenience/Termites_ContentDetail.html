@@ -1,0 +1,604 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="../../css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../../css/easy-responsive-tabs.css" /> 
+	<link rel="stylesheet" href="../../css/main.css">
+	
+<!-- 	<link rel="stylesheet" href="mobile.time/css/jqueryMobile.css"> -->
+	<link href="../../mobile.time/css/mobiscroll.css" rel="stylesheet" type="text/css" />
+	<script src="../../lib/jquery.min.js"></script>
+	<script src="../../lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../../mobile.time/js/mobiscroll.js"></script>
+	<script src="../../lib/jquery.validate.min.js"></script>
+	<script src="../../lib/jquery.metadata.js"></script>
+	<script src="../../lib/cordova-1.5.0.js"></script>
+<!-- 	<script src="lib/cordova.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script src="lib/jqLoading.js"></script> -->
+	<script src="../../js/main.js"></script>
+	<script src="../../js/messages_cn.js"></script>
+	<script src="../../lib/LocalResizeIMG.js"></script>
+	<script src="../../lib/mobileBUGFix.mini.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FBqGlnTD1PFePw7StH7EANlD"></script>
+ </head>
+ <body>
+	<div data-role="page" id="termites_ContentDetail_page1" style="background:white">
+	<script type="text/javascript">
+		var showresult;
+		function goback(){
+			clearInterval(showresult);
+			void(0);
+		}
+		var payurl="https://cashier.allinpay.com/mobilepayment/mobile/SaveMchtOrderServlet.action?";
+		$("#termites_ContentDetail_page1").on("pageshow",function(){
+			$("#slxx1").hide();
+			$("#slspyj1").hide();
+			$("#fyzfxx1").hide();
+			$("#tkxx1").hide();
+			$("#zfan").hide();
+			$("#fram").hide();
+			//setLoginNavigationBar("termites_ContentDetail_AId");
+			var outData={"searchlb":search_lb,"slbh":search_yslbh,"cqzh":search_cqzh,"name":search_cqr};
+			var url = getLocalStorageObj().getItemInLS("servicePath")+"searchbyfz/search/info";
+			addDataLoader("TermitesDetail_content");
+			$.ajax({
+				type: 'POST',
+				url: url,
+				contentType:"application/json;charset=UTF-8",
+				data: JSON.stringify(outData),
+				dataType: 'json',
+				success:function(result, textStatus, jqXHR){
+					delDataLoader();
+					//alert(result);
+					var slxxmsg="";//受理信息
+					var slspyjmsg="";//审批意见
+					var zfxx="";//支付信息
+					var tkxxmsg="";//退款信息
+					var syqr = getTextValue(result.name);//产权人
+					var lxsj = getTextValue(result.lxsj);//联系手机
+					var statu = getTextValue(result.statu);//状态
+					var slno = getTextValue(result.slbh);//受理编号
+					var addtime = getTextValue(result.addtime);//增加时间
+					var shtime = getTextValue(result.shsj);//审核时间
+					var shyj = getTextValue(result.shyj);//审核意见
+					var billno = getTextValue(result.billno);//支付订单号
+					var statuscode = getTextValue(result.statuscode);//支付状态代码
+					var	fee = getTextValue(result.fee);//治理费用
+					var responsecode = getTextValue(result.responsecode);
+					var orderid = getTextValue(result.orderid);//订单id
+					var paystatu = getTextValue(result.paystatu);//支付状态
+					var fcznm = getTextValue(result.syqzid);//房产证内码
+					var fee1 = parseFloat(fee);
+					fee1=fee1*100;
+					if(statu=="0"){
+						if(slno!=""){
+							if(billno==""||statuscode==""){
+								slxxmsg="您的预受理编号为"+slno+"信息已预受理，受理时间"+addtime;
+								slspyjmsg=shyj;
+								zfxx="应支付白蚁防治费为"+fee+"元。支付请点击支付按钮。";
+								$("#slxx1").show();
+								$("#slspyj1").show();
+								$("#fyzfxx1").show();
+								$("#slxx").text(slxxmsg);
+								$("#slspyj").text(slspyjmsg);
+								$("#fyzfxx").text(zfxx);
+								$("#zfan").show();
+								var ordertime = setOrdertime();
+								var url2 = getLocalStorageObj().getItemInLS("servicePath")+"pay/message/paymessage";
+								var outData2 = {"payerName":syqr,"payerTelephone":lxsj,"orderAmount":fee1,"orderDatetime":ordertime,"orderNo":slno,"fcznm":fcznm};
+								addDataLoader("TermitesDetail_content");
+								$.ajax({
+									type: 'POST',
+									url: url2,
+									contentType:"application/json;charset=UTF-8",
+									data: JSON.stringify(outData2),
+									dataType: 'json',
+									success:function(result1, textStatus, jqXHR){
+										delDataLoader();
+										var panduan=false;//判断是否是第一个为空的元素
+										if(getTextValue(result1.inputCharset)!=""){
+											if(!panduan){
+												payurl=payurl+"inputCharset="+getTextValue(result1.inputCharset);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&inputCharset="+getTextValue(result1.inputCharset);
+											}
+										}
+										if(getTextValue(result1.pickupUrl)!=""){
+											if(!panduan){
+												payurl=payurl+"pickupUrl="+getTextValue(result1.pickupUrl);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&pickupUrl="+getTextValue(result1.pickupUrl);
+											}
+										}
+										if(getTextValue(result1.receiveUrl)!=""){
+											if(!panduan){
+												payurl=payurl+"receiveUrl="+getTextValue(result1.receiveUrl);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&receiveUrl="+getTextValue(result1.receiveUrl);
+											}
+										}
+										if(getTextValue(result1.version)!=""){
+											if(!panduan){
+												payurl=payurl+"version="+getTextValue(result1.version);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&version="+getTextValue(result1.version);
+											}
+										}
+										if(getTextValue(result1.language)!=""){
+											if(!panduan){
+												payurl=payurl+"language="+getTextValue(result1.language);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&language="+getTextValue(result1.language);
+											}
+										}
+										if(getTextValue(result1.signType)!=""){
+											if(!panduan){
+												payurl=payurl+"signType="+getTextValue(result1.signType);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&signType="+getTextValue(result1.signType);
+											}
+										}
+										if(getTextValue(result1.merchantId)!=""){
+											if(!panduan){
+												payurl=payurl+"merchantId="+getTextValue(result1.merchantId);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&merchantId="+getTextValue(result1.merchantId);
+											}
+										}
+										if(getTextValue(result1.payerName)!=""){
+											if(!panduan){
+												payurl=payurl+"payerName="+getTextValue(result1.payerName);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&payerName="+getTextValue(result1.payerName);
+											}
+										}
+										if(getTextValue(result1.payerEmail)!=""){
+											if(!panduan){
+												payurl=payurl+"payerEmail="+getTextValue(result1.payerEmail);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&payerEmail="+getTextValue(result1.payerEmail);
+											}
+										}
+										if(getTextValue(result1.payerTelephone)!=""){
+											if(!panduan){
+												payurl=payurl+"payerTelephone="+getTextValue(result1.payerTelephone);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&payerTelephone="+getTextValue(result1.payerTelephone);
+											}
+										}
+										if(getTextValue(result1.payerIDCard)!=""){
+											if(!panduan){
+												payurl=payurl+"payerIDCard="+getTextValue(result1.payerIDCard);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&payerIDCard="+getTextValue(result1.payerIDCard);
+											}
+										}
+										if(getTextValue(result1.pid)!=""){
+											if(!panduan){
+												payurl=payurl+"pid="+getTextValue(result1.pid);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&pid="+getTextValue(result1.pid);
+											}
+										}
+										if(getTextValue(result1.orderNo)!=""){
+											if(!panduan){
+												payurl=payurl+"orderNo="+getTextValue(result1.orderNo);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&orderNo="+getTextValue(result1.orderNo);
+											}
+										}
+										if(getTextValue(result1.orderAmount)!=""){
+											if(!panduan){
+												payurl=payurl+"orderAmount="+getTextValue(result1.orderAmount);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&orderAmount="+getTextValue(result1.orderAmount);
+											}
+										}
+										if(getTextValue(result1.orderCurrency)!=""){
+											if(!panduan){
+												payurl=payurl+"orderCurrency="+getTextValue(result1.orderCurrency);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&orderCurrency="+getTextValue(result1.orderCurrency);
+											}
+										}
+										if(getTextValue(result1.orderDatetime)!=""){
+											if(!panduan){
+												payurl=payurl+"orderDatetime="+getTextValue(result1.orderDatetime);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&orderDatetime="+getTextValue(result1.orderDatetime);
+											}
+										}
+										if(getTextValue(result1.orderExpireDatetime)!=""){
+											if(!panduan){
+												payurl=payurl+"orderExpireDatetime="+getTextValue(result1.orderExpireDatetime);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&orderExpireDatetime="+getTextValue(result1.orderExpireDatetime);
+											}
+										}
+										if(getTextValue(result1.productName)!=""){
+											if(!panduan){
+												payurl=payurl+"productName="+getTextValue(result1.productName);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&productName="+getTextValue(result1.productName);
+											}
+										}
+										if(getTextValue(result1.productPrice)!=""){
+											if(!panduan){
+												payurl=payurl+"productPrice="+getTextValue(result1.productPrice);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&productPrice="+getTextValue(result1.productPrice);
+											}
+										}
+										if(getTextValue(result1.productNum)!=""){
+											if(!panduan){
+												payurl=payurl+"productNum="+getTextValue(result1.productNum);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&productNum="+getTextValue(result1.productNum);
+											}
+										}
+										if(getTextValue(result1.productId)!=""){
+											if(!panduan){
+												payurl=payurl+"productId="+getTextValue(result1.productId);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&productId="+getTextValue(result1.productId);
+											}
+										}
+										if(getTextValue(result1.productDesc)!=""){
+											if(!panduan){
+												payurl=payurl+"productDesc="+getTextValue(result1.productDesc);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&productDesc="+getTextValue(result1.productDesc);
+											}
+										}
+										if(getTextValue(result1.ext1)!=""){
+											if(!panduan){
+												payurl=payurl+"ext1="+getTextValue(result1.ext1);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&ext1="+getTextValue(result1.ext1);
+											}
+										}
+										if(getTextValue(result1.ext2)!=""){
+											if(!panduan){
+												payurl=payurl+"ext2="+getTextValue(result1.ext2);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&ext2="+getTextValue(result1.ext2);
+											}
+										}
+										if(getTextValue(result1.payType)!=""){
+											if(!panduan){
+												payurl=payurl+"payType="+getTextValue(result1.payType);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&payType="+getTextValue(result1.payType);
+											}
+										}
+										if(getTextValue(result1.issuerId)!=""){
+											if(!panduan){
+												payurl=payurl+"issuerId="+getTextValue(result1.issuerId);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&issuerId="+getTextValue(result1.issuerId);
+											}
+										}
+										if(getTextValue(result1.pan)!=""){
+											if(!panduan){
+												payurl=payurl+"pan="+getTextValue(result1.pan);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&pan="+getTextValue(result1.pan);
+											}
+										}
+										if(getTextValue(result1.tradeNature)!=""){
+											if(!panduan){
+												payurl=payurl+"tradeNature="+getTextValue(result1.tradeNature);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&tradeNature="+getTextValue(result1.tradeNature);
+											}
+										}
+										if(getTextValue(result1.strSignMsg)!=""){
+											if(!panduan){
+												payurl=payurl+"signMsg="+getTextValue(result1.strSignMsg);
+												panduan=true;
+											}
+											else{
+												payurl=payurl+"&signMsg="+getTextValue(result1.strSignMsg);
+											}
+										}
+									},
+						           error:function(responseData){
+						        	   delDataLoader();
+						           		$("#TermitesDetail_content").html("支付异常");
+						           }
+								});
+							}
+						}
+						else{
+							slxxmsg="您的预受理编号为"+slno+"信息已提交，正在核查中。";
+							$("#slxx1").show();
+							$("#slxx").text(slxxmsg);
+						}
+					}
+					else if(statu=="1"&&statuscode==""){
+						slxxmsg="您的预受理编号为"+slno+"信息已预受理，受理时间"+addtime;
+						slspyjmsg=shyj;
+						$("#slxx1").show();
+						$("#slspyj1").show();
+						$("#slxx").text(slxxmsg);
+						$("#slspyj").text(slspyjmsg);
+					}
+					else if(statu=="2"){
+						slxxmsg="您的预受理编号为"+slno+"信息已进入内网受理，受理时间"+addtime;
+						slspyjmsg=shyj;
+						zfxx="已付款"+fee+"元。";
+						$("#slxx1").show();
+						$("#slspyj1").show();
+						$("#fyzfxx1").show();
+						$("#slxx").text(slxxmsg);
+						$("#slspyj").text(slspyjmsg);
+						$("#fyzfxx").text(zfxx);
+					}
+					else if(statu=="3"){
+						slxxmsg="您的预受理编号为"+slno+"信息不予受理，审批时间"+addtime;
+						slspyjmsg=shyj;
+						$("#slxx1").show();
+						$("#slspyj1").show();
+						$("#slxx").text(slxxmsg);
+						$("#slspyj").text(slspyjmsg);
+					}
+					else if(statu=="4"&&fee==""){
+						slxxmsg="您的预受理编号为"+slno+"信息内网退回，审批时间"+addtime;
+						slspyjmsg=shyj;
+						$("#slxx1").show();
+						$("#slspyj1").show();
+						$("#slxx").text(slxxmsg);
+						$("#slspyj").text(slspyjmsg);
+					}
+					else if(statu=="4"&&orderid!=""&&responsecode==""){
+						slxxmsg="您的预受理编号为"+slno+"退款申请已经提交，请等待。";
+						$("#slxx1").show();
+						$("#slxx").text(slxxmsg);
+					}
+					else if(statu=="4"&&responsecode=="0"&&statuscode=="3"){
+						tkxxmsg="您的预受理编号为"+slno+"退款成功，金额为"+addtime;
+						$("#tkxx1").show();
+						$("#tkxx").text(tkxxmsg);
+					}
+					else if(paystatu=="6"){
+						slxxmsg="您的预受理编号为"+slno+"支付成功！已进入内网受理，受理时间"+addtime;
+						slspyjmsg=shyj;
+						zfxx="已付款"+fee+"元。";
+						$("#slxx1").show();
+						$("#slspyj1").show();
+						$("#fyzfxx1").show();
+						$("#slxx").text(slxxmsg);
+						$("#slspyj").text(slspyjmsg);
+						$("#fyzfxx").text(zfxx);
+					}
+					else if(slno!=""&&billno!=""&&(statuscode!="1001"||statuscode=="")){
+						slxxmsg="您的预受理编号为"+slno+"支付失败！";
+						slspyjmsg=shyj;
+						$("#slxx1").show();
+						$("#slspyj1").show();
+						$("#slxx").text(slxxmsg);
+						$("#slspyj").text(slspyjmsg);
+					}
+					if(statu=="1"&&slno=="n"){
+						slxxmsg="您的预受理编号为"+slno+"已预受理，受理时间"+addtime;
+						slspyjmsg=shyj;
+						$("#slxx1").show();
+						$("#slspyj1").show();
+						$("#slxx").text(slxxmsg);
+						$("#slspyj").text(slspyjmsg);
+					}
+				},
+	           error:function(responseData){
+	        	   delDataLoader();
+	           		//$("#TermitesDetail_content").html("查询异常");
+	           		alert("未查询到信息请核对'编号'、'房产证证号'和'房屋所有人'");
+	           		$.mobile.changePage("SearchTermites.html","slideup");
+	           		
+	           }
+			});
+		});
+		function getTextValue(value){
+			return valueStr = value==null?"":value;
+		}
+		function setOrdertime() {
+			var curr = new Date();
+			var m = curr.getMonth() + 1;
+			if (m < 10) {m = '0' + m;}
+			var d = curr.getDate();
+			if (d < 10) {d = '0' + d;}
+			var h = curr.getHours();
+			if (h < 10) {h = '0' + h;}
+			var mi = curr.getMinutes();
+			if (mi < 10) {mi = '0' + mi;}
+			var s = curr.getSeconds();
+			if (s < 10) {s = '0' + s;}
+			var strDatetime = '' + curr.getFullYear() + m + d + h + mi + s;		
+			//document.getElementById("orderDatetime").value = strDatetime;
+			//document.getElementById("orderNo").value = 'NO' + strDatetime;
+			return strDatetime;
+		}
+		function goPay(){
+			//alert(payurl);
+			showresult=setInterval(function(){
+			var url = getLocalStorageObj().getItemInLS("servicePath")+"payresult/get/result";
+			//addDataLoader("payresult_content");
+			$.ajax({
+				url: url,
+				type: 'GET',
+				contentType:"application/json;charset=UTF-8",
+				success:function(result, textStatus, jqXHR){
+					if(getTextValue(result.payResult)=="1"){
+						clearInterval(showresult);
+						alert("支付成功");
+						window.payresult = result;
+						$.mobile.changePage("PayResult.html","pop");
+					}
+				},
+		       error:function(responseData){
+		    	   clearInterval(showresult);
+		    	   delDataLoader();
+		    	   alert("支付未完成");
+		       }
+			});                    
+		},2000);
+			$("#fram").show();
+			$("#pay1").attr("src",payurl);
+			$("#TermitesDetail_content").hide();
+			//startInit('pay1', 600);
+		}
+		var browserVersion = window.navigator.userAgent.toUpperCase();
+		var isOpera = false;
+		var isFireFox = false;
+		var isChrome = false;
+		var isSafari = false;
+		var isIE = false;
+		var iframeTime;
+		function reinitIframe(iframeId, minHeight) {
+		    try {
+		        var iframe = document.getElementById(iframeId);
+		        var bHeight = 0;
+		        if (isChrome == false && isSafari == false)
+		            bHeight = iframe.contentWindow.document.body.scrollHeight;
+
+		        var dHeight = 0;
+		        if (isFireFox == true)
+		            dHeight = iframe.contentWindow.document.documentElement.offsetHeight + 2;
+		        else if (isIE == false && isOpera == false)
+		            dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+		        else
+		            bHeight += 3;
+		        var height = Math.max(bHeight, dHeight);
+		        if (height < minHeight) height = minHeight;
+		        iframe.style.height = height + "px";
+		    } catch (ex) { }
+		}
+		function startInit(iframeId, minHeight) {
+		    isOpera = browserVersion.indexOf("OPERA") > -1 ? true : false;
+		    isFireFox = browserVersion.indexOf("FIREFOX") > -1 ? true : false;
+		    isChrome = browserVersion.indexOf("CHROME") > -1 ? true : false;
+		    isSafari = browserVersion.indexOf("SAFARI") > -1 ? true : false;
+		    if (!!window.ActiveXObject || "ActiveXObject" in window)
+		        isIE = true;
+		    reinitIframe(iframeId, minHeight);
+		    if (iframeTime != null)
+		        clearInterval(iframeTime)
+		    iframeTime = window.setInterval("reinitIframe('" + iframeId + "'," + minHeight + ")", 100);
+		}
+		
+	</script>
+	<div id="fram" name="fram" style="height:100%;width:100%">
+		<iframe id="pay1" name="pay1" frameborder="0" style="padding: 0px; width: 100%; height: 1000px;" scrolling="no"></iframe>
+	</div>
+ 	<div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+	    <a class="aftera"  onclick="javascript:goback();" data-icon="back" data-rel="back" style="background-color: rgba(8, 187, 249, 0);color:#FFF;border:1px solid rgba(8, 187, 249, 0);opacity: 0.8;"><font style="color:#FFFFFF;">返回</font>
+	    	<div class="div_placearrow" style="width:20px;height:20px;top: 7px; left: 5px;background-image:url(../../img/serviceHotline/back_03.png);background-repeat:no-repeat;background-size:20px 20px;background-position:center;position: absolute"></div>
+	    </a>
+	    <h1>查询结果</h1>
+  	</div>
+	  <div id="TermitesDetail_content" style="margin: 0 10px;">
+		        	<form  id="formTermitesTab2" class="validate"> 
+		        	<table style="width:100%;background-color:#E7E6E6" cellpadding ="10" cellspacing="10" bgcolor="#E7E6E6" border="0" bordercolor="#FFFFFF" >
+			               <tr class="trbottomline" style="height:40px;background-color:#E7E6E6;margin-left:10px"><td class="tdpadding" style="width:50%">受理信息查询</td></tr>
+			       			<tr class="trbottomline" id="slxx1"><td class="tdpadding">受理信息</td><td class="righttr"><div class="inputwrapper"><label id="slxx" class="value"></label></div></td></tr>
+			                <tr class="bgtr"></tr>
+			       			<tr class="trbottomline" id="slspyj1"><td class="tdpadding">受理审批意见</td><td class="righttr"><div class="inputwrapper"><label id="slspyj" class="value"></label></div></td></tr>
+			                <tr class="bgtr"></tr>
+			       			<tr class="trbottomline" id="fyzfxx1"><td class="tdpadding">费用支付信息</td><td class="righttr"><div class="inputwrapper"><label id="fyzfxx" class="value"></label></div></td></tr>
+			                <tr class="bgtr"></tr>
+			                <tr class="trbottomline" id="tkxx1"><td class="tdpadding">退款信息</td><td class="righttr"><div class="inputwrapper"><label id="tkxx" class="value"></label></div></td></tr>
+			                <tr class="bgtr"></tr>
+				    </table>
+				    </form> 
+					<a href="javascript:goPay();" data-role="button" class="buttoncheck"  id="zfan" name="zfan">支付</a>
+	 
+	  </div>
+	  	 <div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+			<div role="navigation" class="ui-navbar" data-role="navbar">
+				<ul  class="ui-grid-c">
+					<li class="ui-block-a"><a class="aftera" href="javascript:openToPage(1)" data-icon="home" data-transition="slide" style="background-color:#FFF !important">首页
+		            <div class="footer_placeiconsgrey"></div></a>
+		            </li>
+					<li class="ui-block-b"><a class="aftera" href="javascript:openToPage(2)" data-icon="search" data-transition="slide" rel="external" style="background-color:#FFF !important">信息公开
+		             <div class="footer_placeicons_search"></div></a>
+		            </li>
+					<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+					<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external" style="background-color:#FFF !important"><font style="color:#08bbf9">便民服务</font>
+		            <div class="footer_placeicons_interactivelight"></div></a>
+		            </li>
+		           <!--  <li class="ui-block-d"><a class="aftera" id="interactivity_AId" href="javascript:openToPage(4)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">登录
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li> -->
+					<li class="ui-block-d"><a class="aftera" href="javascript:openToPage(5)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">政务动态
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li>
+				</ul>
+			</div>
+		</div>
+	</div> 
+ </body>
+</html>

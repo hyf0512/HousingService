@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.housing.management.backend.dao.GzfhfsqDAO">
+
+	<!--机构基本信息 -->
+	<select id="getGzfhfsqList" parameterType="Gzfhfsq" resultType="Gzfhfsq">
+		SELECT fzfhfsqId,  
+	       sqrCode,   
+	       xm,        
+	       xb,        
+	       sfzh,      
+	       yddh,      
+	       pzCode,    
+	       fyCode,     
+	       zscq,      
+	       fwzl,      
+	       xqmc,      
+	       sfct,      
+	       zcs,       
+	       szcs,      
+	       fwjg,      
+	       jzmj,      
+	       tnggmj,     
+	       ftggmj,    
+	       symj,       
+	        bt,        
+	       szqy,      
+	       szjd,      
+	       lxfs,       
+	       yxszcq,     
+	       yxfwzl,    
+	       yxxqmc,    
+	       yxsfct,    
+	       yxzcsStart,
+	       yxzcsEnd,  
+	       yxszcsStart,
+	       yxszcsEnd, 
+	       yxfwjg,    
+	       yxjzmjStart,
+	       yxjzmjEnd, 
+	       yxbj,      
+	       yxszqy,    
+	       yxDesc,    
+	       sqsj,      
+	       sqyxbz,    
+	       sqyxbzsj,  
+	       yzm,       
+	       pdId,      
+	       pdsj,      
+	       pdcgbz,    
+	       pdcgbzsj,  
+	       hfywbjbz,  
+	       hfywbjbzsj,
+	       isDelete,  
+	       deleteDate,
+	       bzfxz
+	FROM ( SELECT ROWNUM RN, 
+	            ID AS  fzfhfsqId,  
+	            SQRCODE AS sqrCode,   
+	            XM AS xm,        
+	            XB AS xb,        
+	            SFZH AS sfzh,      
+	            YDDH AS yddh,      
+	            PZCODE AS pzCode,    
+	            FYCODE AS fyCode,     
+	            SZCQ AS zscq,      
+	            FWZL AS fwzl,      
+	            XQMC AS xqmc,      
+	            SFCT AS sfct,      
+	            ZCS AS zcs,       
+	            SZCS AS szcs,      
+	            FWJG AS fwjg,      
+	            JZMJ AS jzmj,      
+	            TNGGMJ AS tnggmj,     
+	            FTGGMJ AS ftggmj,    
+	            SYMJ AS symj,       
+	            BT AS bt,        
+	            SZQY AS szqy,      
+	            SZJD AS szjd,      
+	            LXFS AS lxfs,       
+	            YXSZCQ AS yxszcq,     
+	            YXFWZL AS yxfwzl,    
+	            YXXQMC AS yxxqmc,    
+	            YXSFCT AS yxsfct,    
+	            YXZCSSTART AS yxzcsStart,
+	            YXZCSEND AS yxzcsEnd,  
+	            YXSZCSSTART AS yxszcsStart,
+	            YXSZCSEND AS yxszcsEnd,  
+	            YXFWJG AS yxfwjg,    
+	            YXJZMJSTART AS yxjzmjStart,
+	            YXJZMJEND AS yxjzmjEnd, 
+	            YXBT AS yxbj,      
+	            YXSZQY AS yxszqy,    
+	            YXDESC AS yxDesc,    
+	            SQSJ AS sqsj,      
+	            SQYXBZ AS sqyxbz,    
+	            SQYXBZSJ AS sqyxbzsj,  
+	            YZM AS yzm,       
+	            PDID AS pdId,      
+	            PDSJ AS pdsj,      
+	            PDCGBZ AS pdcgbz,    
+	            PDCGBZSJ AS pdcgbzsj,  
+	            HFYWBJBZ AS hfywbjbz,  
+	            HFYWBJBZSJ AS hfywbjbzsj,
+	            ISDELETE AS isDelete,  
+	            DELETEDATE AS deleteDate,
+	            BZFXZ AS bzfxz
+	            FROM WEB_GZFHFSQ 
+	            ORDER BY SQSJ ASC) A
+          <where> 
+			<if test="fromRowNum !=null and fromRowNum!=''">
+				AND A.RN >= #{fromRowNum}
+			</if>
+			<if test="toRowNum !=null and toRowNum !=''">
+				<![CDATA[AND A.RN <= #{toRowNum}]]>
+			</if>
+		</where>
+	</select>
+	
+	<select id="getGzfhfsqListCount" resultType="Integer">
+		SELECT COUNT(ID) AS cnt
+	            FROM WEB_GZFHFSQ
+	</select>
+	
+	<select id="getGzfhfsqDetail" parameterType="Integer" resultType="Gzfhfsq">
+		SELECT 
+            ID AS  fzfhfsqId,  
+            SQRCODE AS sqrCode,   
+            XM AS xm,        
+            XB AS xb,        
+            SFZH AS sfzh,      
+            YDDH AS yddh,      
+            PZCODE AS pzCode,    
+            FYCODE AS fyCode,     
+            SZCQ AS zscq,      
+            FWZL AS fwzl,      
+            XQMC AS xqmc,      
+            SFCT AS sfct,      
+            ZCS AS zcs,       
+            SZCS AS szcs,      
+            FWJG AS fwjg,      
+            JZMJ AS jzmj,      
+            TNGGMJ AS tnggmj,     
+            FTGGMJ AS ftggmj,    
+            SYMJ AS symj,       
+            BT AS bt,        
+            SZQY AS szqy,      
+            SZJD AS szjd,      
+            LXFS AS lxfs,       
+            YXSZCQ AS yxszcq,     
+            YXFWZL AS yxfwzl,    
+            YXXQMC AS yxxqmc,    
+            YXSFCT AS yxsfct,    
+            YXZCSSTART AS yxzcsStart,
+            YXZCSEND AS yxzcsEnd,  
+            YXSZCSSTART AS yxszcsStart,
+            YXSZCSEND AS yxszcsEnd,  
+            YXFWJG AS yxfwjg,    
+            YXJZMJSTART AS yxjzmjStart,
+            YXJZMJEND AS yxjzmjEnd, 
+            YXBT AS yxbj,      
+            YXSZQY AS yxszqy,    
+            YXDESC AS yxDesc,    
+            SQSJ AS sqsj,      
+            SQYXBZ AS sqyxbz,    
+            SQYXBZSJ AS sqyxbzsj,  
+            YZM AS yzm,       
+            PDID AS pdId,      
+            PDSJ AS pdsj,      
+            PDCGBZ AS pdcgbz,    
+            PDCGBZSJ AS pdcgbzsj,  
+            HFYWBJBZ AS hfywbjbz,  
+            HFYWBJBZSJ AS hfywbjbzsj,
+            ISDELETE AS isDelete,  
+            DELETEDATE AS deleteDate,
+            BZFXZ AS bzfxz
+            FROM WEB_GZFHFSQ 
+            WHERE ID=#{fzfhfsqId}
+	</select>
+	
+	<update id="updateGzfhfsq" parameterType="Gzfhfsq">
+		UPDATE WEB_GZFHFSQ SET
+		SQRCODE = #{sqrCode},
+		XM = #{xm},
+		XB = #{xb},
+		SFZH = #{sfzh},
+		YDDH = #{yddh},
+		PZCODE = #{pzCode},
+		FYCODE = #{fyCode},
+		FWZL = #{fwzl},
+		XQMC = #{xqmc},
+		SFCT = #{sfct},
+		ZCS = #{zcs},
+		SZCS = #{szcs},
+		FWJG = #{fwjg},
+		JZMJ = #{jzmj},
+		TNGGMJ = #{tnggmj},
+		FTGGMJ = #{ftggmj},
+		SYMJ = #{symj},
+		YZM = #{yzm},
+		BZFXZ = #{bzfxz} WHERE ID = #{fzfhfsqId}
+	</update>
+	<select id="getGzfhfsqID" parameterType="Gzfhfsq" resultType="Integer">
+		SELECT ID FROM WEB_GZFHFSQ 
+		WHERE ISDELETE = 0
+		AND XM = #{xm}
+		AND SFZH = #{sfzh}
+		AND YDDH = #{yddh}
+		AND PZCODE = #{pzCode}
+		AND FYCODE = #{fyCode}
+		AND BZFXZ = #{bzfxz}
+	</select>
+</mapper>

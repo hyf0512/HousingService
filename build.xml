@@ -1,0 +1,354 @@
+<?xml version="1.0"?>
+<project name="management_backend_service" basedir="." default="help">
+    <property file="build.properties"/>
+
+    <property name="src.dir" value="src"/>
+    <property name="web.dir" value="web"/>
+    <property name="test.src" value="test"/>
+    <property name="conf.dir" value="conf"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="build.dir" value="build"/>
+    <property name="test.dir" value="build/test"/>
+    <property name="webapp.name" value="HousingService"/>
+
+    <property environment="env"/>
+    <property name="tomcat.home" value="C:\java\tomcat7"/>
+
+	<!-- Tomcat Ant Tasks -->
+    <taskdef file="tomcatTasks.properties">
+        <classpath>
+            <pathelement path="${tomcat.home}/lib/catalina-ant.jar"/>
+            <pathelement path="${tomcat.home}/lib/tomcat-util.jar"/>
+            <pathelement path="${tomcat.home}/lib/tomcat-coyote.jar"/>
+            <pathelement path="${tomcat.home}/bin/tomcat-juli.jar"/>
+        </classpath>
+    </taskdef>
+
+    <path id="classpath">
+        <fileset dir="${web.dir}/WEB-INF/lib">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="lib">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement path="${build.dir}/classes"/>
+        <pathelement path="${test.dir}/classes"/>
+    </path>
+
+    <target name="help">
+        <echo message=""/>
+        <echo message="${webapp.name} build file"/>
+        <echo message="-----------------------------------"/>
+        <echo message=""/>
+        <echo message="Available targets are:"/>
+        <echo message=""/>
+        <echo message="compile   --> Compile all Java files"/>
+        <echo message="deploy    --> Deploy application as directory"/>
+        <echo message="clean     --> Deletes compiled classes and WAR"/>
+        <echo message=""/>
+        <echo message="remove    --> Remove application from Tomcat"/>
+        <echo message="reload    --> Reload application in Tomcat"/>
+        <echo message="start     --> Start Tomcat application"/>
+        <echo message="stop      --> Stop Tomcat application"/>
+        <echo message="list      --> List Tomcat applications"/>
+        <echo message=""/>
+    </target>
+
+    <target name="clean" description="Clean output directories">
+        <delete dir="${build.dir}/classes"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <target name="compile" description="Compile main source tree java files">
+        <mkdir dir="${build.dir}/classes"/>
+        <javac destdir="${build.dir}/classes" debug="true"
+            deprecation="false" optimize="false" failonerror="true">
+            <src path="${src.dir}"/>
+             <compilerarg line="-encoding UTF-8 " />  
+            <classpath refid="classpath"/>
+        </javac>
+        
+        <!-- compile tests -->
+        <mkdir dir="${test.dir}/classes"/>
+        <javac destdir="${test.dir}/classes" debug="true"
+            deprecation="false" optimize="false" failonerror="true">
+            <src path="${test.src}"/>
+             <compilerarg line="-encoding UTF-8 " />  
+            <classpath>
+                <path refid="classpath"/>
+            </classpath>
+        </javac>
+        <!-- Copy mybatics mapping files to ${build.dir}/classes -->
+        <copy todir="${build.dir}/classes">
+            <fileset dir="${src.dir}" includes="**/*.xml" excludes="*.jar"/>
+            <fileset dir="${src.dir}" includes="**/*.properties,**/*.wsdl"/>
+        </copy>
+        
+        <copy todir="${build.dir}/classes">
+            <fileset dir="${conf.dir}" includes="**/*.*"/>
+        </copy>
+    </target>
+
+    <target name="run-test" depends="compile">
+	    <java classname="org.junit.runner.JUnitCore" fork="true" failonerror="true">
+	    	 <arg value="com.airchina.mobile.test.UserRestServiceTest"/>
+		    <classpath>
+	            <path refid="classpath"/>
+	        </classpath>
+	    </java>
+	 </target>
+	 
+	
+	<target name="build-war-for-testing" depends="clean"> 
+	     <antcall target="update-testing-env-setting"           />
+	     <antcall target="compile"></antcall>
+	    <war destfile="dist/mappbatch_test.war" webxml="web/WEB-INF/web.xml"> 
+	        <fileset dir="web" excludes="**/*.jar"/> 
+	        <classes dir="build/classes"/> 
+	    </war> 
+	</target> 
+	
+	<target name="build-war-for-production" depends="clean"> 
+	     <antcall target="update-production-env-setting"           />
+	     <antcall target="compile"></antcall>
+	    <war destfile="dist/mappbatch_pro.war" webxml="web/WEB-INF/web.xml"> 
+	        <fileset dir="web" excludes="**/*.jar"/> 
+	        <classes dir="build/classes"/> 
+	    </war> 
+	</target> 
+	
+	
+    <target name="deploy" depends="compile" description="Deploy application">
+        <copy todir="${tomcat.home}/webapps/${webapp.name}" preservelastmodified="true">
+            <fileset dir="${web.dir}">
+                <include name="**/*.*"/>
+                <exclude name="**/junit.jar"/>
+                <exclude name="**/*mock.jar"/>
+                <exclude name="**/strutstestcase*.jar"/>
+            </fileset>
+        </copy>
+        <copy todir="${tomcat.home}/webapps/${webapp.name}/WEB-INF/classes"
+            preservelastmodified="true">
+            <fileset dir="${build.dir}/classes"/>
+        </copy>
+    </target>
+
+    <target name="remove" description="Remove application from Tomcat">
+        <undeploy url="${tomcat.manager.url}"
+            username="${tomcat.manager.username}"
+            password="${tomcat.manager.password}"
+            path="/${webapp.name}"/>
+    </target>
+
+    <target name="reload" depends="deploy" description="Reload application in Tomcat">
+        <reload url="${tomcat.manager.url}"
+            username="${tomcat.manager.username}"
+            password="${tomcat.manager.password}"
+            path="/${webapp.name}"/>
+    </target>
+
+    <target name="start" description="Start Tomcat application">
+        <start url="${tomcat.manager.url}"
+            username="${tomcat.manager.username}"
+            password="${tomcat.manager.password}"
+            path="/${webapp.name}"/>
+    </target>
+
+    <target name="stop" description="Stop Tomcat application">
+        <stop url="${tomcat.manager.url}"
+            username="${tomcat.manager.username}"
+            password="${tomcat.manager.password}"
+            path="/${webapp.name}"/>
+    </target>
+
+    <target name="list" description="List Tomcat applications">
+        <list url="${tomcat.manager.url}"
+            username="${tomcat.manager.username}"
+            password="${tomcat.manager.password}"/>
+    </target>
+    
+    <target name="update-production-env-setting">
+        <echo message="Setting  batch_service_version to         : ${prod.batch_service_version}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="batch_service_version=(.*)"
+             			replace="batch_service_version=${prod.batch_service_version}"
+                       	byline="true" />
+        
+        <echo message="Setting crm_rest_url to         : ${prod.crm_rest_url}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="crm_rest_url=(.*)"
+             			replace="crm_rest_url=${prod.crm_rest_url}"
+                       	byline="true" />
+        
+        <echo message="Setting order_rest_url to         : ${prod.order_rest_url}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="order_rest_url=(.*)"
+             			replace="order_rest_url=${prod.order_rest_url}"
+                       	byline="true" />
+        
+        <echo message="Setting esb_username to         : ${prod.esb_username}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="esb_username=(.*)"
+             			replace="esb_username=${prod.esb_username}"
+                       	byline="true" />
+        
+        <echo message="Setting esb_password to         : ${prod.esb_password}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="esb_password=(.*)"
+             			replace="esb_password=${prod.esb_password}"
+                       	byline="true" />
+        
+        <echo message="Setting batch.jdbc.url to         : ${prod.batch.jdbc.url}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="batch.jdbc.url=(.*)"
+             			replace="batch.jdbc.url=${prod.batch.jdbc.url}"
+                       	byline="true" />
+        
+        <echo message="Setting batch.jdbc.user to         : ${prod.batch.jdbc.user}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="batch.jdbc.user=(.*)"
+             			replace="batch.jdbc.user=${prod.batch.jdbc.user}"
+                       	byline="true" />
+        
+        <echo message="Setting batch.jdbc.password to         : ${prod.batch.jdbc.password}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="batch.jdbc.password=(.*)"
+             			replace="batch.jdbc.password=${prod.batch.jdbc.password}"
+                       	byline="true" />
+        
+        <echo message="Setting ftp.host to         : ${prod.ftp.host}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="ftp.host=(.*)"
+             			replace="ftp.host=${prod.ftp.host}"
+                       	byline="true" />
+                       	
+        <echo message="Setting  jms.hostName to         : ${prod.jms.hostName}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="jms.hostName=(.*)"
+             			replace="jms.hostName=${prod.jms.hostName}"
+                       	byline="true" />
+                       	
+                       	   <echo message="Setting  jms.port to         : ${prod.jms.port}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="jms.port=(.*)"
+             			replace="jms.port=${prod.jms.port}"
+                       	byline="true" />
+                       	
+                       	   <echo message="Setting  jms.front.hostName to         : ${prod.jms.front.hostName}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="jms.front.hostName=(.*)"
+             			replace="jms.front.hostName=${prod.jms.front.hostName}"
+                       	byline="true" />
+                       	
+                       	   <echo message="Setting  certifiFileName to         : ${prod.certifiFileName}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="certifiFileName=(.*)"
+             			replace="certifiFileName=${prod.certifiFileName}"
+                       	byline="true" />
+                       	
+                       	   <echo message="Setting  certifiFilePath to         : ${prod.certifiFilePath}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="certifiFilePath=(.*)"
+             			replace="certifiFilePath=${prod.certifiFilePath}"
+                       	byline="true" />
+                       	
+                       	   <echo message="Setting  isDistribution to         : ${prod.isDistribution}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="isDistribution=(.*)"
+             			replace="isDistribution=${prod.isDistribution}"
+                       	byline="true" />
+   	</target>
+   
+    
+    <target name="update-testing-env-setting">
+        <echo message="Setting  batch_service_version to         : ${test.batch_service_version}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="batch_service_version=(.*)"
+             			replace="batch_service_version=${test.batch_service_version}"
+                       	byline="true" />
+        
+        <echo message="Setting crm_rest_url to         : ${test.crm_rest_url}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="crm_rest_url=(.*)"
+             			replace="crm_rest_url=${test.crm_rest_url}"
+                       	byline="true" />
+        
+        <echo message="Setting order_rest_url to         : ${test.order_rest_url}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="order_rest_url=(.*)"
+             			replace="order_rest_url=${test.order_rest_url}"
+                       	byline="true" />
+        
+        <echo message="Setting esb_username to         : ${test.esb_username}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="esb_username=(.*)"
+             			replace="esb_username=${test.esb_username}"
+                       	byline="true" />
+        
+        <echo message="Setting esb_password to         : ${test.esb_password}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="esb_password=(.*)"
+             			replace="esb_password=${test.esb_password}"
+                       	byline="true" />
+        
+        <echo message="Setting batch.jdbc.url to         : ${test.batch.jdbc.url}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="batch.jdbc.url=(.*)"
+             			replace="batch.jdbc.url=${test.batch.jdbc.url}"
+                       	byline="true" />
+        
+        <echo message="Setting batch.jdbc.user to         : ${test.batch.jdbc.user}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="batch.jdbc.user=(.*)"
+             			replace="batch.jdbc.user=${test.batch.jdbc.user}"
+                       	byline="true" />
+        
+        <echo message="Setting batch.jdbc.password to         : ${test.batch.jdbc.password}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="batch.jdbc.password=(.*)"
+             			replace="batch.jdbc.password=${test.batch.jdbc.password}"
+                       	byline="true" />
+        
+        <echo message="Setting ftp.host to         : ${test.ftp.host}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="ftp.host=(.*)"
+             			replace="ftp.host=${test.ftp.host}"
+                       	byline="true" />
+                       	
+        <echo message="Setting  jms.hostName to         : ${test.jms.hostName}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="jms.hostName=(.*)"
+             			replace="jms.hostName=${test.jms.hostName}"
+                       	byline="true" />
+                       	
+                       	   <echo message="Setting  jms.port to         : ${test.jms.port}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="jms.port=(.*)"
+             			replace="jms.port=${test.jms.port}"
+                       	byline="true" />
+                       	
+                       	   <echo message="Setting  jms.front.hostName to         : ${test.jms.front.hostName}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="jms.front.hostName=(.*)"
+             			replace="jms.front.hostName=${test.jms.front.hostName}"
+                       	byline="true" />
+                       	
+                       	   <echo message="Setting  certifiFileName to         : ${test.certifiFileName}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="certifiFileName=(.*)"
+             			replace="certifiFileName=${test.certifiFileName}"
+                       	byline="true" />
+                       	
+                       	   <echo message="Setting  certifiFilePath to         : ${test.certifiFilePath}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="certifiFilePath=(.*)"
+             			replace="certifiFilePath=${test.certifiFilePath}"
+                       	byline="true" />
+                       	
+                       	   <echo message="Setting  isDistribution to         : ${test.isDistribution}"   />
+        <replaceregexp file="${conf.dir}/batch-default.properties"
+						match="isDistribution=(.*)"
+             			replace="isDistribution=${test.isDistribution}"
+                       	byline="true" />
+   	</target>
+</project>

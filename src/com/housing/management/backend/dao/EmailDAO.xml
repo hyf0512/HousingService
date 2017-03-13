@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.housing.management.backend.dao.EmailDAO">
+	<insert id="setemailuser" parameterType="EmailUser">
+		INSERT INTO WEB_NEW_EMAIL_USER
+		(EMAIL_SUBJECT, EMAIL_KIND_ID, EMAIL_TIME, REPLY_WEB, SEND_MAN, OPERATION_CLASS,
+            REPLY_EMAIL,REPLY_PHON,REPLY_FAX,REPLY_ADDRESS,REPLY_CODE,EMAIL_TEXT,EMAIL_PWD,EMAIL_NO,ACT_TIME,USER_IP)
+            VALUES(#{emailsubject},#{emailkindID},TIMESTAMP#{emailtime},#{replyweb},#{sendman},#{operationclass},#{replyemail},
+            #{replyphone},#{replyfax},#{replyaddress},#{replycode},#{emailtext},#{emailpwd},#{emailno},TIMESTAMP #{emailtime},#{visitorIP})
+	</insert>
+	<select id="getemailid" resultType="Integer">
+		SELECT NEW_EMAIL.CURRVAL EMAIL_ID FROM dual
+	</select>
+	<insert id="setmail" parameterType="EmailUser">
+		INSERT INTO WEB_NEW_EMAIL
+		(EMAIL_SUBJECT,EMAIL_KIND_ID,REPLY_WEB,SEND_MAN,OPERATION_CLASS,REPLY_PHON,REPLY_FAX,REPLY_ADDRESS,REPLY_CODE,EMAIL_TEXT,NEED_KIND,EMAIL_PWD,EMAIL_NO,EMAIL_TIME,ACT_TIME)
+            VALUES(#{emailsubject},#{emailkindID},#{replyweb},#{sendman},#{operationclass},#{replyphone},#{replyfax},#{replyaddress},#{replycode},#{emailtext},'51204',#{emailpwd},#{emailno},to_date(#{emailtime},'yyyy-mm-dd hh24:mi:ss'),to_date(#{emailtime},'yyyy-mm-dd hh24:mi:ss'))
+	</insert>
+	<select id="getemailno" parameterType="String" resultType="String">
+		SELECT GET_NEXT_SQH(#{emailno}) FROM dual
+	</select>
+</mapper>
+	

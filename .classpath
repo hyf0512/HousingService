@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="conf"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry exported="true" kind="lib" path="lib/ant-junit.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/j2ee.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/junit-4.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/commons-logging-api-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-aop-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-aspects-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-beans-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-context-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-context-support-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-core-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-expression-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-instrument-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-instrument-tomcat-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-jdbc-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-jms-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-orm-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-oxm-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-test-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-tx-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-web-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-webmvc-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/spring-webmvc-portlet-3.2.11.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/aopalliance-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/asm.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/commons-beanutils.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/commons-collections-3.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/commons-lang-2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/cxf-2.7.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/db2jcc_license_cu.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/db2jcc.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/ezmorph-1.0.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/geronimo-jaxws_2.2_spec-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/httpasyncclient-4.0-beta3.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/httpclient-4.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/httpclient-cache-4.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/httpcore-4.2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/httpcore-nio-4.2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/httpmime-4.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/jackson-core-asl-1.8.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/jackson-jaxrs-1.8.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/jackson-mapper-asl-1.8.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/jaxb-api-2.2.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/jaxb-impl-2.2.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/json-lib-2.3-jdk15.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/log4j-1.2.16.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/mybatis-3.0.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/mybatis-spring-1.0.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/mysql-connector-java-5.0.4-bin.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/neethi-3.0.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/stax2-api-3.1.1 2.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/woodstox-core-asl-4.2.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/wsdl4j-1.6.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/wss4j-1.6.10.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/xmlschema-core-2.0.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/xmlsec-1.3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/ojdbc14.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/ant-junit.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/j2ee.jar"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/junit-4.1.jar"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/ojdbc14.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>

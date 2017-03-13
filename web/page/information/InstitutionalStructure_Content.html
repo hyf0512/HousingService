@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="../../css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../../css/easy-responsive-tabs.css" /> 
+	<link rel="stylesheet" href="../../css/main.css">
+	
+<!-- 	<link rel="stylesheet" href="mobile.time/css/jqueryMobile.css"> -->
+	<link href="../../mobile.time/css/mobiscroll.css" rel="stylesheet" type="text/css" />
+	<script src="../../lib/jquery.min.js"></script>
+	<script src="../../lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../../mobile.time/js/mobiscroll.js"></script>
+	<script src="../../lib/jquery.validate.min.js"></script>
+	<script src="../../lib/jquery.metadata.js"></script>
+	<script src="../../lib/cordova-1.5.0.js"></script>
+<!-- 	<script src="lib/cordova.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script src="lib/jqLoading.js"></script> -->
+	<script src="../../js/main.js"></script>
+	<script src="../../js/messages_cn.js"></script>
+	<script src="../../lib/LocalResizeIMG.js"></script>
+	<script src="../../lib/mobileBUGFix.mini.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FBqGlnTD1PFePw7StH7EANlD"></script>
+</head>
+<body>
+
+<div data-role="page" id="institutionStructure_Content_Page1">
+ <script>
+ $(document).on("pageshow","#institutionStructure_Content_Page1",function(event){
+	 if(switchpageid=="structure2"){
+		 $("#chuanzhen").hide();
+		 $("#youbian").hide();
+		 $("#dizhi").hide();
+		 $("#jiancheng").hide();
+		 $("#tousu").hide();
+	 }
+ 	//setLoginNavigationBar("institutionStructure_Content_AId");
+ 	$.get(getLocalStorageObj().getItemInLS("servicePath")+"organization/base/info/"+page_information_institutionalStructure_deptId,
+		function(data,status){
+ 		console.log(data);
+			var aHref = "";
+			if(data.mainduty==null||data.mainduty.trim().length==0){
+						data.mainduty="暂无职责介绍...";
+			}
+			if(data.jbxx==null||data.jbxx.trim().length==0){
+				data.jbxx="暂无基本信息介绍...";
+			}
+			/* $("#institutionalStructure_ContentTitle").text = getObjctValue(data.deptName); */
+			$("#institutionStructure_Content_deptName").text(getObjctValue(data.deptName));
+			$("#institutionStructure_Content_shortName").text(getObjctValue(data.shortName));
+			/* aHref = getTelAHref(data.tel);
+			$("#institutionStructure_Content_tel").attr("href",aHref);
+			if(aHref=="#"){
+				$("#institutionStructure_Content_tel").text("");
+			}else{
+				$("#institutionStructure_Content_tel").text(aHref);
+			} */
+			$("#institutionStructure_Content_fax").text(getObjctValue(data.fax));
+			$("#institutionStructure_Content_post").text(getObjctValue(data.post));
+			$("#institutionStructure_Content_address").text(getObjctValue(data.address));
+			$("#institutionStructure_Content_email").text(getObjctValue(data.email));
+			$("#institutionStructure_Content_mainduty").html(getObjctValue(data.mainduty));
+			//aHref = getTelAHref(data.onDutyTel);
+			//$("#institutionStructure_Content_onDutyTel").attr("href",aHref);
+			/* if(aHref=="#"){
+				$("#institutionStructure_Content_onDutyTel").text("");
+			}else{
+				$("#institutionStructure_Content_onDutyTel").text(aHref);
+			} */
+			//$("#institutionStructure_Content_onDutyTel").attr("href",getTelAHref(data.onDutyTel));
+			//aHref = getTelAHref(data.askTel);
+			/* if(aHref=="#"){
+				$("#institutionStructure_Content_askTel").text("");
+			}else{
+				$("#institutionStructure_Content_askTel").text(aHref);
+			} */
+			//$("#institutionStructure_Content_askTel").attr("href",getTelAHref(data.askTel));
+			$("#institutionStructure_Content_askTel").text(getObjctValue(data.tel));
+			
+			$("#institutionStructure_Content_askTel").text(getObjctValue(data.tel));
+			$("#institutionStructure_Content_isleader").text(getObjctValue(data.isleader));
+			$("#institutionStructure_Content_tsTel").text(getObjctValue(data.tsTel));
+			//aHref = getTelAHref(data.tsTel);
+			//$("#institutionStructure_Content_tsTel").attr("href",aHref);
+			/* if(aHref=="#"){
+				$("#institutionStructure_Content_tsTel").text("");
+			}else{
+				$("#institutionStructure_Content_tsTel").text(aHref);
+			} */
+			//$("#institutionStructure_Content_tsTel").attr("href",getTelAHref(data.tsTel));
+		}
+	);
+ });
+ $(document).on("pagehide","#institutionStructure_Content_Page1",function(event){
+ 		$("#institutionalStructure_ContentTitle").text("");
+ 		$("#institutionStructure_Content_deptName").text("");
+		$("#institutionStructure_Content_shortName").text("");
+		
+		//$("#institutionStructure_Content_tel").attr("href","#");
+		
+		$("#institutionStructure_Content_fax").text("");
+		$("#institutionStructure_Content_post").text("");
+		$("#institutionStructure_Content_address").text("");
+		$("#institutionStructure_Content_email").text("");
+		$("#institutionStructure_Content_mainduty").text("");
+		
+		//$("#institutionStructure_Content_onDutyTel").attr("href","#");
+		//$("#institutionStructure_Content_askTel").attr("href","#");
+		$("#institutionStructure_Content_askTel").text("");
+		
+		$("#institutionStructure_Content_isleader").text("");
+		
+		//$("#institutionStructure_Content_tsTel").attr("href","#");
+		$("#institutionStructure_Content_tsTel").text("");
+ });
+
+ </script>
+ <div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+		<a class="aftera"  href="javascript:void(0);" data-icon="back" data-rel="back" style="background-color: rgba(8, 187, 249, 0);color:#FFF;border:1px solid rgba(8, 187, 249, 0);opacity: 0.8;"><font style="color:#FFFFFF;">返回</font>
+	    	<div class="div_placearrow" style="width:20px;height:20px;top: 7px; left: 5px;background-image:url(../../img/serviceHotline/back_03.png);background-repeat:no-repeat;background-size:20px 20px;background-position:center;position: absolute"></div>
+	    </a>
+     <h1 id="institutionalStructure_ContentTitle">基本信息</h1>
+  </div>
+  <div data-role="content">
+  	<div class="section basic-info">
+			<div class="section-header">详细信息</div>
+			<div class="section-content">
+				<div class="group">
+					<div class="name">部门全称</div>
+					<div id="institutionStructure_Content_deptName" class="value"></div>
+				</div>
+				<div class="group" id="jiancheng">
+					<div class="name">部门简称</div>
+					<div id="institutionStructure_Content_shortName" class="value"></div>
+				</div>
+				<div class="group" id="chuanzhen">
+					<div class="name">传真</div>
+					<div id="institutionStructure_Content_fax" class="value"></div>
+				</div>
+				<div class="group" id="youbian">
+					<div class="name">邮编</div>
+					<div id="institutionStructure_Content_post" class="value"></div>
+				</div>
+				<div class="group" id="dizhi">
+					<div class="name">地址</div>
+					<div id="institutionStructure_Content_address" class="value"></div>
+				</div>
+				<div class="group">
+					<div class="name">邮箱</div>
+					<div id="institutionStructure_Content_email" class="value"></div>
+				</div>
+				<div class="group" id="zixun">
+					<div class="name">咨询电话</div>
+					<div id="institutionStructure_Content_askTel" class="value"></div>
+				</div>
+				<div class="group" id="tousu">
+					<div class="name">投诉电话</div>
+					<div id="institutionStructure_Content_tsTel" class="value"></div>
+				</div>
+			</div>
+	</div>
+	<div class="section">
+		<div class="section-header">职责</div>
+		<div id="institutionStructure_Content_mainduty" class="section-content"></div>
+	</div>
+  </div>
+  <div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+		<div role="navigation" class="ui-navbar" data-role="navbar">
+			<ul class="ui-grid-c">
+				<li class="ui-block-a"><a class="aftera" href="javascript:openToPage(1)" data-icon="home" data-transition="slide"  rel="external">首页<div class="footer_placeiconsgrey"></div></a></li>
+				<li class="ui-block-b"><a class="aftera" href="javascript:openToPage(2)" data-icon="search" data-transition="slide" rel="external"><font style="color:#08bbf9">信息公开</font><div class="footer_placeicons_searchlight"></div></a></li>
+				<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+				<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external">便民服务<div class="footer_placeicons_interactive"></div></a></li>
+				<!-- <li class="ui-block-d"><a class="aftera" id="footSearch_AId"  href="javascript:openToPage(4)" data-icon="gear" data-transition="slide" rel="external"><font>登录</font><div class="footer_placeicons_setting"></div></a></li> -->
+				<li class="ui-block-d"><a class="aftera" href="javascript:openToPage(5)" data-icon="gear" data-transition="slide" rel="external">政务动态<div class="footer_placeicons_setting"></div></a></li>
+			</ul>
+		</div>
+	</div>		
+</div> 
+
+</body>
+
+</html>

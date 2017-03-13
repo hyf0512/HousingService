@@ -1,0 +1,87 @@
+<div data-role="page" id="testId" data-dom-cache="true">
+<meta charset="UTF-8">
+
+<script>
+/* 	$("#testId").on("pagebeforeshow",function(){
+		alert("b");
+	}); */
+
+
+		$("#testId").on("pageshow",function(){
+			alert(flg);
+			if (flg == 0){
+				flg = 0;
+				$("h3").text("测试标题");
+				
+				var output = '';
+				for(var i = 0; i < 100; i++){
+					 output += '<li>';
+						output +='<img src="../img/msg.jpg">';
+						output +='<h3><a href="javascript:void(0);" onclick="test()">子标题'+ i +'</a></h3>';
+						output +='<p>内容</p>';
+			      		output +='</li>';
+			      		
+				}
+				
+				$("#listVal").html(output);
+				$("#listVal").listview('refresh');  
+			}  
+	
+		});
+
+	
+	
+	$("h3").on("click",function(){
+		     $.mobile.changePage("../views/test2.html", {transition: "slideup"});
+
+	 });
+	 
+	 function test(){
+	 	$.mobile.changePage("../views/test2.html", {transition: "slideup"});
+	 }
+	 
+			
+			function myinit(){
+						$("#listVal").bind("scrollstart",function(event){
+			 	alert("a");
+			 
+			 }); 
+			}
+ 
+	 window.onload = myinit;
+
+</script>
+
+  <div data-role="header" >
+      <a href="javascript:void(0);" data-icon="back" data-rel="back">Back</a>
+	  <!-- <a onclick="goBack()" href="#" data-icon="arrow-l">Back</a>-->
+
+    <h1>标题1</h1>
+    
+  </div>
+
+  <div data-role="content" >
+    <ul data-role="listview" data-inset="true" id="listVal">
+      <li >
+			<img src="../img/msg.jpg">
+			<h3><a href="javascript:void(0);" onclick="test()">子标题</a></h3>
+			<p>内容</p>
+      </li>
+	  
+    </ul>
+  </div>
+
+ <div data-role="footer" data-position="fixed">
+  
+	<div data-role="navbar" data-iconpos="left">
+      <ul>
+        <li><a href="#" data-icon="home">首页</a></li>
+        <li><a href="#" data-icon="search">搜索</a></li>
+        <li><a href="#" data-icon="info">登录/注册</a></li>
+        <li><a href="#" data-icon="star">政民互动</a></li>
+        <li><a href="#" data-icon="gear">设置</a></li>
+      </ul>
+    </div>
+  </div>
+</div> 
+

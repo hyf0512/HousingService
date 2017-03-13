@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+    <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="../../css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../../css/easy-responsive-tabs.css" /> 
+	<link rel="stylesheet" href="../../css/main.css">
+	
+<!-- 	<link rel="stylesheet" href="mobile.time/css/jqueryMobile.css"> -->
+	<link href="../../mobile.time/css/mobiscroll.css" rel="stylesheet" type="text/css" />
+	<script src="../../lib/jquery.min.js"></script>
+	<script src="../../lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../../mobile.time/js/mobiscroll.js"></script>
+	<script src="../../lib/jquery.validate.min.js"></script>
+	<script src="../../lib/jquery.metadata.js"></script>
+	<script src="../../lib/cordova-1.5.0.js"></script>
+<!-- 	<script src="lib/cordova.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script src="lib/jqLoading.js"></script> -->
+	<script src="../../js/main.js"></script>
+	<script src="../../js/messages_cn.js"></script>
+	<script src="../../lib/LocalResizeIMG.js"></script>
+	<script src="../../lib/mobileBUGFix.mini.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FBqGlnTD1PFePw7StH7EANlD"></script>
+</head>
+<body>
+<div data-role="page" id="footSearch_page1"  data-dom-cache="true">
+<script type="text/javascript">
+	/* function footSearchToPage(1){
+		
+	} */
+	var dataLength=1;
+	var pageIndex =1;
+	var pageSize = 15;
+	$(document).on("pageshow","#footSearch_page1",function(){
+		//setLoginNavigationBar("footSearch_AId");
+
+		 ///滑动到底部事件
+	  	$(document).unbind("scroll");
+	  	$(document).bind("scroll", function(event){
+	     if($(document).scrollTop() >= $(document).height()-$(window).height()){
+	    	 if(dataLength!=1)return;//如果没有数据时,则不执行
+	    	 pageIndex ++;
+	    	 getData();
+	      }
+	  	});
+	});
+	
+	 $(document).on("pagehide","#footSearch_page1",function(){ 
+	  $(document).unbind("scroll");
+	 });
+    
+ 	$('#footSearch_page1').on('pageinit',function(event){
+ 		$(document).unbind("scroll");
+	});
+	
+	$("#seach").on("blur",function(){
+		getData(1,pageSize);
+	});
+
+	function getData1(pageIndex,pageSize){
+		/* var pageIndex = $("#pageIndex").val(); */
+		var title = $("#seach").val();
+		if(isEmpty(title)){
+			$("#newsList").html("");
+			return;
+		}
+		
+		var url = getLocalStorageObj().getItemInLS("servicePath")+"seach/news/list";
+		var outData={"title":title,"pageIndex":pageIndex,"pageSize":pageSize};
+		
+		//showLoader();
+		addDataLoader("newsList");
+		$.ajax({
+			type: 'POST',
+			url: url,
+			contentType:"application/json;charset=UTF-8",
+			data: JSON.stringify(outData),
+			dataType: 'json',
+			success:function(result, textStatus, jqXHR){
+				delDataLoader();
+				$("#newsList").empty();
+				if(result.rows != null && result.rows.length > 0){
+					dataLength = 1;
+					pageIndex = result.pageIndex;
+					createUlDom1(result.rows); 
+					
+				}else{
+					noMoreData("newsList");
+					dataLength = 0;
+				}
+			},
+			error:function(data){
+	           	dataLength=0;
+	           	delDataLoader();
+			}
+		});
+	}
+	
+	//创建内容 
+	function createUlDom1(fillData) {
+		//var createId = columnId;
+		//if($("#"+createId).html()!='')return;
+
+		$.each(fillData,function(index,taget){
+        	 var li = '<li class="row" onclick="governmentAffairDetail1(\''+taget.contentId+'\',\''+taget.title+'\')">\
+				 	        <div class="left">\
+					     		<div class="title">'+taget.title+'</div>\
+					     		<div class="line">\
+					     			<div class="date">发布时间:'+new Date().DateGridFormat(taget.fbDate)+'</div>\
+					     			<div class="point">点击量：'+taget.click+'</div>\
+				     			</div>\
+				     		</div>\
+					     	<div class="right">\
+					     		<div class="arrow-icon"></div>\
+					     	</div>\
+						</li>';
+			$(li).appendTo($("#newsList"));		 
+        });
+	}
+	
+	//查看详情
+	function governmentAffairDetail1(contentId,title){
+		window.page_seach_detail_contentId=contentId;
+		window.page_seach_detail_title=title;
+		$.mobile.changePage("Detail_Content.html","pop");
+	}
+</script>
+	<div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+		<table style="width: 100%;" cellspacing ="10px">
+			<tr>
+				<td style="width: 85%;padding-left: 10px;">
+					<input type="text" id="seach" placeholder="搜素房产咨询" value=""/>
+				</td>
+				<td style="width: 15%;">
+					<a style="color:#FFFFFF;padding-left: 10px;" href="javascript:getData1(1,15);">搜索</a>
+				</td>
+			</tr>
+		</table>
+  	</div>
+  	
+	<div class="placetabswrapper">
+	  	<div class="placetabswrapperinsidecontent" style="margin-top:0px;">
+	        <div class="contentinside notice">
+		        <ul id="newsList"></ul>
+	        </div>
+	    </div>
+	 		<div class="nomoredata" style="display:none">没有更多数据了</div>
+	 </div>
+  
+  <!-- <div data-role="content"> -->
+  
+    <!-- <ul data-role="listview" data-filter-placeholder="搜索房产咨询" id="newsList"> -->
+    
+		<!-- <li id="footLi_aImg1"><a href="../information/Room.html" class="aftera"><img src="../../img/serviceHotline/07_11.png"  class="ui-li-icon"><font style="color:#08bbf9">公告公示</font></a>
+        <div class="search_placearrow"></div>
+        </li>
+		<li id="footLi_aImg2"><a href="../information/GovernmentAffairs.html" class="aftera"><img src="../../img/serviceHotline/08_11.png"  class="ui-li-icon"><font style="color:#08bbf9">政务动态</font></a> <div class="search_placearrow"></div></li>
+		<li id="footLi_aImg3"><a href="../information/InstitutionalStructure.html" class="aftera"><img src="../../img/serviceHotline/12_11.png"  class="ui-li-icon"><font style="color:#08bbf9">机构职能</font></a> <div class="search_placearrow"></div></li>
+		<li id="footLi_aImg4"><a href="../convenience/Hotline.html" class="aftera"><img src="../../img/serviceHotline/01_07.png"  class="ui-li-icon"><font style="color:#08bbf9">服务热线</font></a> <div class="search_placearrow"></div></li>
+		<li id="footLi_aImg5"><a href="#" class="aftera"><img src="../../img/serviceHotline/02_11.png" class="ui-li-icon"><font style="color:#08bbf9">应急维修</font></a> <div class="search_placearrow"></div></li>
+		<li id="footLi_aImg6"><a href="../convenience/RegistrationAddress.html" class="aftera"><img src="../../img/serviceHotline/03_11.png" class="ui-li-icon"><font style="color:#08bbf9">房产交易办理点</font></a> <div class="search_placearrow"></div></li>
+		<li id="footLi_aImg7"><a href="../convenience/ArchivesAddress.html" class="aftera"><img src="../../img/serviceHotline/04_11.png" class="ui-li-icon"><font style="color:#08bbf9">查档地址</font></a> <div class="search_placearrow"></div></li>
+		<li id="footLi_aImg8"><a href="../convenience/GuaranteedHouse.html" class="aftera"><img src="../../img/serviceHotline/05_11.png" class="ui-li-icon"><font style="color:#08bbf9">保障房受理</font></a> <div class="search_placearrow"></div></li>
+		<li id="footLi_aImg9"><a href="#" class="aftera"><img src="../../img/serviceHotline/06_11.png" class="ui-li-icon"><font style="color:#08bbf9">房产交易办理预约</font></a> <div class="search_placearrow"></div></li>
+		<li id="footLi_aImg10"><a href="#" class="aftera"><img src="../../img/serviceHotline/09_11.png" class="ui-li-icon"><font style="color:#08bbf9">自助换房</font></a> <div class="search_placearrow"></div></li>
+		<li id="footLi_aImg11"><a href="../convenience/Termites.html" class="aftera"><img src="../../img/serviceHotline/13_11.png" class="ui-li-icon"><font style="color:#08bbf9">白蚁防治</font></a> <div class="search_placearrow"></div></li>
+		<li id="footLi_aImg12"><a href="#" class="aftera"><img src="../../img/serviceHotline/14_11.png" class="ui-li-icon"><font style="color:#08bbf9">我要查询</font></a> <div class="search_placearrow"></div></li>
+		<li id="footLi_aImg13"><a href="#" class="aftera"><img src="../../img/serviceHotline/10_11.png" class="ui-li-icon"><font style="color:#08bbf9">我要咨询</font></a> <div class="search_placearrow"></div></li>
+		<li id="footLi_aImg14"><a href="#" class="aftera"><img src="../../img/serviceHotline/11_11.png" class="ui-li-icon"><font style="color:#08bbf9">我要投票</font></a> <div class="search_placearrow"></div></li>
+		<li id="footLi_aImg15"><a href="#"><img src="../../img/serviceHotline/15_11.png" class="ui-li-icon"><font style="color:#08bbf9">我要定制</font></a> <div class="search_placearrow"></div></li> 
+		<li id="footLi_aImg16"><a href="#" class="aftera"><img src="../../img/serviceHotline/16_11.png" class="ui-li-icon"><font style="color:#08bbf9">民政互动</font></a> <div class="search_placearrow"></div></li> -->
+    <!-- </ul> -->
+<!--   </div> -->
+
+ 	<div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+		<div role="navigation" class="ui-navbar" data-role="navbar">
+			<ul class="ui-grid-c">
+				<li class="ui-block-a"><a class="aftera" href="javascript:openToPage(1)" data-icon="home" data-transition="slide"  rel="external">首页<div class="footer_placeiconsgrey"></div></a></li>
+				<li class="ui-block-b"><a class="aftera" href="javascript:openToPage(2)" data-icon="search" data-transition="slide" rel="external"><font style="color:#08bbf9">信息公开</font><div class="footer_placeicons_searchlight"></div></a></li>
+				<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+				<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external">便民服务<div class="footer_placeicons_interactive"></div></a></li>
+				<!-- <li class="ui-block-d"><a class="aftera" id="footSearch_AId"  href="javascript:openToPage(4)" data-icon="gear" data-transition="slide" rel="external"><font>登录</font><div class="footer_placeicons_setting"></div></a></li> -->
+				<li class="ui-block-d"><a class="aftera" href="javascript:openToPage(5)" data-icon="gear" data-transition="slide" rel="external">政务动态<div class="footer_placeicons_setting"></div></a></li>
+			</ul>
+		</div>
+	</div>
+</div> 
+</body>
+</html>

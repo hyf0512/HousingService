@@ -1,0 +1,232 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="../../css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../../css/easy-responsive-tabs.css" /> 
+	<link rel="stylesheet" href="../../css/main.css">
+	
+<!-- 	<link rel="stylesheet" href="mobile.time/css/jqueryMobile.css"> -->
+	<link href="../../mobile.time/css/mobiscroll.css" rel="stylesheet" type="text/css" />
+	<script src="../../lib/jquery.min.js"></script>
+	<script src="../../lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../../mobile.time/js/mobiscroll.js"></script>
+	<script src="../../lib/jquery.validate.min.js"></script>
+	<script src="../../lib/jquery.metadata.js"></script>
+	<script src="../../lib/cordova-1.5.0.js"></script>
+<!-- 	<script src="lib/cordova.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script src="lib/jqLoading.js"></script> -->
+	<script src="../../js/main.js"></script>
+	<script src="../../js/messages_cn.js"></script>
+	<script src="../../lib/LocalResizeIMG.js"></script>
+	<script src="../../lib/mobileBUGFix.mini.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FBqGlnTD1PFePw7StH7EANlD"></script>
+ </head>
+ <body>
+	<div data-role="page" id="consultation_QueryDetailInfo_page1">
+	<script type="text/javascript">
+	$('#consultation_QueryDetailInfo_page1').on('pageinit',function(event){
+		//setLoginNavigationBar("consultation_QueryDetailInfo_AId");
+		
+		var outData = {"emailno":acceptance_id,"emailpwd":acceptance_pw};
+		//业务查询结果
+		var url = getLocalStorageObj().getItemInLS("servicePath")+"email/result";
+		addDataLoader("queryDetail_content");
+		$.ajax({
+			type: 'POST',
+			url: url,
+			contentType:"application/json;charset=UTF-8",
+			data: JSON.stringify(outData),
+			dataType: 'json',
+			success:function(result, textStatus, jqXHR){
+				delDataLoader();
+				if(!isEmpty(result.emailsubject)){
+				       $("#emailsubject").text(getTextValue(result.emailsubject));
+				       if (result.emailkindid == '51101'){
+				         $("#emailkindid").text('咨询');
+				       } else if(result.emailkindid == '51102'){
+				         $("#emailkindid").text('建议');
+				       } else if(result.emailkindid == '51103'){
+				         $("#emailkindid").text('投诉');
+				       }
+				       $("#emailtime").text(getTextValue(result.emailtime));
+				       $("#emailtext").text(getTextValue(result.emailtext));
+				       $("#emailnum").text(getTextValue(result.emailnum));
+				       
+				       if(result.operationclass == '51306'){
+				       		$("#operationclass").text('住房保障及制度改革');
+				       } else if(result.operationclass == '51301'){
+				       		$("#operationclass").text('物业管理');
+				       } else if(result.operationclass == '51302'){
+				       		$("#operationclass").text('物业维修基金管理');
+				       } else if(result.operationclass == '51304'){
+				       		$("#operationclass").text('房产交易产权管理');
+				       } else if(result.operationclass == '51305'){
+				       		$("#operationclass").text('城市房屋拆迁管理');
+				       }else if(result.operationclass == '51307'){
+				       		$("#operationclass").text('白蚁防治');
+				       }else if(result.operationclass == '51308'){
+				       		$("#operationclass").text('房产档案管理');
+				       }else if(result.operationclass == '51309'){
+				       		$("#operationclass").text('房产信息服务');
+				       }else if(result.operationclass == '51310'){
+				       		$("#operationclass").text('房产市场管理');
+				       }else if(result.operationclass == '51311'){
+				       		$("#operationclass").text('房屋安全鉴定');
+				       }else if(result.operationclass == '51312'){
+				       		$("#operationclass").text('综合类');
+				       }
+  					   	$("#replyphone").text(getTextValue(result.replyphone));
+						$("#replycode").text(getTextValue(result.replycode));
+						$("#replyaddress").text(getTextValue(result.replyaddress));
+						$("#replytime").text(getTextValue(result.replytime));
+						$("#replytext").text(getTextValue(result.replytext));
+						$("#staffname").text(getTextValue(result.staffname));
+						$("#stafftel").text(getTextValue(result.stafftel));
+						if(result.handovermark == '1'){
+							$("#handovermark").text('已回答');
+						} else {
+							$("#handovermark").text('未回答');
+						}
+
+						$("#deptname").text(getTextValue(result.deptname));
+						$("#deptID").text(getTextValue(result.deptID));
+				    
+				} else{
+					//$("#queryDetail_content").html("查询失败");
+					noMoreData("queryDetail_content");
+				}
+			},
+           error:function(responseData){
+        	   delDataLoader();
+           		$("#queryDetail_content").html("查询异常");
+           }
+		});
+	});
+	
+	function getTextValue(value){
+			return valueStr = value==null?"":value;
+	}
+	</script>
+ 	<div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+	    <a class="aftera"  href="javascript:void(0);" data-icon="back" data-rel="back" style="background-color: rgba(8, 187, 249, 0);color:#FFF;border:1px solid rgba(8, 187, 249, 0);opacity: 0.8;"><font style="color:#FFFFFF;">返回</font>
+	    	<div class="div_placearrow" style="width:20px;height:20px;top: 7px; left: 5px;background-image:url(../../img/serviceHotline/back_03.png);background-repeat:no-repeat;background-size:20px 20px;background-position:center;position: absolute"></div>
+	    </a>
+	    <h1>详细信息</h1>
+  	</div>
+  	
+	  <div data-role="content" id="queryDetail_content">
+ 		<div class="section">
+			<div class="section-header">咨询结果详情</div>
+			<div class="section-content">
+				<div class="group">
+					<label class="name">主题</label>
+					<label id="emailsubject" class="value"></label>
+				</div>
+				<div class="group">
+					<label class="name">类型</label>
+					<label id="emailkindid" class="value"></label>
+				</div>
+				<div class="group">
+					<label class="name">受理类别</label>
+					<label id="operationclass" class="value"></label>
+				</div>
+				<div class="group">
+					<label class="name">发件时间</label>
+					<label id="emailtime" class="value"></label>
+				</div>	
+				<div class="group">
+					<label class="name">受理编号</label>
+					<label id="emailnum" class="value"></label>
+				</div>	
+				<div class="group">
+					<label class="name">正文</label>
+					<label id="emailtext" class="value"></label>
+				</div>					
+			</div>
+		</div>
+		<div class="section">
+			<div class="section-header">联系信息</div>
+			<div class="section-content">
+				<div class="group">
+					<label class="name">联系电话</label>
+					<label id="replyphone" class="value"></label>
+				</div>
+				<div class="group">
+					<label class="name">邮编</label>
+					<label id="replycode" class="value"></label>
+				</div>
+				<div class="group">
+					<label class="name">联系地址</label>
+					<label id="replyaddress" class="value"></label>
+				</div>
+		
+			</div>
+		</div>
+		<div class="section">
+			<div class="section-header">经办信息</div>
+			<div class="section-content">
+				<div class="group">
+					<label class="name">经办人</label>
+					<label id="staffname" class="value"></label>
+				</div>
+				<div class="group">
+					<label class="name">联系电话</label>
+					<label id="stafftel" class="value"></label>
+				</div>
+				<div class="group">
+					<label class="name">是否被回答</label>
+					<label id="handovermark" class="value"></label>
+				</div>
+				<div class="group">
+					<label class="name">反馈时间</label>
+					<label id="replytime" class="value"></label>
+				</div>		
+				<div class="group">
+					<label class="name">反馈意见</label>
+					<label id="replytext" class="value"></label>
+				</div>
+				<div class="group">
+					<label class="name">承办单位名字</label>
+					<label id="deptname" class="value"></label>
+				</div>	
+				<div class="group">
+					<label class="name">承办单位ID</label>
+					<label id="deptID" class="value"></label>
+				</div>		
+			</div>	
+		</div>
+	  </div>
+	  	<div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+		<div role="navigation" class="ui-navbar" data-role="navbar">
+			<ul  class="ui-grid-c">
+				<li class="ui-block-a"><a class="aftera" href="javascript:openToPage(1)" data-icon="home" data-transition="slide" style="background-color:#FFF !important">首页
+	            <div class="footer_placeiconsgrey"></div></a>
+	            </li>
+				<li class="ui-block-b"><a class="aftera" href="javascript:openToPage(2)" data-icon="search" data-transition="slide" rel="external" style="background-color:#FFF !important">信息公开
+	             <div class="footer_placeicons_search"></div></a>
+	            </li>
+				<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+				<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external" style="background-color:#FFF !important">便民服务
+	            <div class="footer_placeicons_interactive"></div></a>
+	            </li>
+	           <!--  <li class="ui-block-d"><a class="aftera" id="config_indexAId" href="javascript:openToPage(4)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">登录
+	            <div class="footer_placeicons_setting"></div></a>
+	            </li> -->
+				<li class="ui-block-d"><a class="aftera" href="javascript:openToPage(5)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;"><font style="color:#08bbf9">政民互动</font>
+	            <div class="footer_placeicons_settinglight"></div></a>
+	            </li>
+			</ul>
+		</div>
+	</div>
+	</div> 
+ </body>
+</html>

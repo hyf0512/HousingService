@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="../../css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../../css/easy-responsive-tabs.css" /> 
+	<link rel="stylesheet" href="../../css/main.css">
+	
+<!-- 	<link rel="stylesheet" href="mobile.time/css/jqueryMobile.css"> -->
+	<link href="../../mobile.time/css/mobiscroll.css" rel="stylesheet" type="text/css" />
+	<script src="../../lib/jquery.min.js"></script>
+	<script src="../../lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../../mobile.time/js/mobiscroll.js"></script>
+	<script src="../../lib/jquery.validate.min.js"></script>
+	<script src="../../lib/jquery.metadata.js"></script>
+	<script src="../../lib/cordova-1.5.0.js"></script>
+<!-- 	<script src="lib/cordova.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script src="lib/jqLoading.js"></script> -->
+	<script src="../../js/main.js"></script>
+	<script src="../../js/messages_cn.js"></script>
+	<script src="../../lib/LocalResizeIMG.js"></script>
+	<script src="../../lib/mobileBUGFix.mini.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FBqGlnTD1PFePw7StH7EANlD"></script>
+</head>
+<body>
+<div data-role="page" id="selfChangeHousePage1">
+<script>
+	var pageSize=10,pageIndex=0,dataLength=1;
+	$(document).on("pageinit","#selfChangeHousePage1",pageinitSelfChangeHousePage);
+	function pageinitSelfChangeHousePage(){
+		/* var locaUrl =  window.location.href;
+		locaUrl = locaUrl.substring(locaUrl.lastIndexOf("/"), locaUrl.length-1);
+		if(locaUrl!="SelfChangeHouse_Content.html")return;
+		setLoginNavigationBar("selfChangeHouse_Content_AId"); */
+		//setLoginNavigationBar("selfChangeHouse_AId");
+		$("#selfChangeHousePage1_content_div1").html("");
+		$(document).off('pageinit', '#selfChangeHousePage1', pageinitSelfChangeHousePage);
+		$(document).on("scroll", scrollBody);
+		if($("#selfChangeHousePage1_content_div1").html()){
+			getChangeHouseData();
+		}
+	}
+	function scrollBody(e){
+		var url = $.mobile.path.parseUrl(e.target.baseURI);
+		if(url.href.search("Service.html") != -1 ||url.href.search("SelfChangeHouse_Content.html") != -1 ){
+			$("#selfChangeHousePage1_content_div1").html("");
+			offScrollBody();
+		}else{
+		     /*if($(document).scrollTop() >= $(document).height()-$(window).height()){
+		    	 if(dataLength!=1)return;//如果没有数据时,则不执行
+		    	 pageIndex ++;
+		    	 getChangeHouseData();
+		     }*/
+		    if(dataLength!=1)return;
+		    pageIndex ++;
+		    getChangeHouseData();
+		}
+	 }
+	function offScrollBody(){
+		 $(document).off("scroll", scrollBody);
+	}
+	
+	//获取后台数据
+	function getChangeHouseData(){
+		//showLoader();
+		addDataLoader("selfChangeHousePage1_content_div1");
+		$.ajax({
+			type: 'POST',
+			contentType : 'application/json',
+			url: getLocalStorageObj().getItemInLS("servicePath")+"housingChange/list",
+			data: JSON.stringify({pageSize:pageSize,pageIndex:pageIndex}),
+			dataType: 'json',
+			success:function(result, textStatus, jqXHR){
+				delDataLoader();
+				if(result.rows.length){
+				 	createDom3(result.rows); 
+				}else{
+					noMoreData("selfChangeHousePage1_content_div1");
+					dataLength = 0;
+				}
+				//hideLoader();
+			},
+           error:function(responseData){
+	           	dataLength=0;
+	           	delDataLoader();
+	           //	hideLoader();
+           }
+		});
+	}
+	function createDom3(fillData) {
+		var flag = false;
+		
+		if(fillData.length<=0){
+			flag = true;
+		}
+		if(flag){return;}
+/* 		var li = ""; */
+		var output="";
+		var imgPath = "../../img/nopic.jpg";
+	    $.each(fillData,function(index,taget){
+	    	var yxszqy = "";
+	    	var yxszqy1 = taget.yxszqy;
+	    	if(yxszqy1!=null){
+	    		if(yxszqy1.indexOf("n")>-1){
+		    		yxszqy=yxszqy+"城北";
+		    	}
+		    	if(yxszqy1.indexOf("s")>-1){
+		    		if(yxszqy!=""){
+		    			yxszqy=yxszqy+",城南";
+		    		}
+		    		else{
+		    			yxszqy=yxszqy+"城南";
+		    		}
+		    	}
+		    	if(yxszqy1.indexOf("e")>-1){
+		    		if(yxszqy!=""){
+		    			yxszqy=yxszqy+",城东";
+		    		}
+		    		else{
+		    			yxszqy=yxszqy+"城东";
+		    		}
+		    	}
+		    	if(yxszqy1.indexOf("w")>-1){
+		    		if(yxszqy!=""){
+		    			yxszqy=yxszqy+",城西";
+		    		}
+		    		else{
+		    			yxszqy=yxszqy+"城西";
+		    		}
+		    	}
+		    	if(yxszqy1.indexOf("m")>-1){
+		    		if(yxszqy!=""){
+		    			yxszqy=yxszqy+",城中";
+		    		}
+		    		else{
+		    			yxszqy=yxszqy+"城中";
+		    		}
+		    	}
+	    	}
+	    	
+	    	if(yxszqy==""){
+	    		yxszqy="无";
+	    	}
+	    	var val1 = "现房源:"+taget.xqmc;
+	    	if (!isEmpty(taget.symj)){
+	    		val1+="/面积:"+taget.symj;
+	    	}
+	    	if (!isEmpty(taget.zcs)){
+	    		val1+="/层数:"+taget.zcs;
+	    	}
+	    	if (!isEmpty(taget.zscq)){
+	    		val1+="/所在城区:"+taget.zscq;
+	    	}
+	    	if (!isEmpty(taget.szjd)){
+	    		val1+="/所在街道:"+taget.szjd;
+	    	}
+	    	if(taget.yxxqmc==null){
+	    		taget.yxxqmc="无";
+	    	}
+	    	var val2 = "意向房源:"+taget.yxxqmc;
+	    	if (!isEmpty(taget.yxjzmjStart)){
+	    		val2+="/面积:"+taget.yxjzmjStart;
+	    	}
+	    	if (!isEmpty(taget.yxszcsStart)){
+	    		val2+="/层数:"+taget.yxszcsStart;
+	    	}
+	    	if (!isEmpty(taget.yxszcq)){
+	    		val2+="/所在城区:"+taget.yxszcq;
+	    	}
+ 	    	if (!isEmpty(taget.yxszqy)){
+	    		val2+="/所在区域:"+yxszqy;
+	    	} 
+	    	
+	    	output+='<li>';
+  			output+='<div class="left" onclick="selfChangeHouseDetail(\''+taget.fzfhfsqId+'\')">';
+		  	output+='<img class="image" src="'+imgPath+'"  width="90px" height="80px">';
+		  	output+='<h2><font style="color:#08bbf9">'+taget.xqmc+'</font></h2>';
+		  	output+='<p>'+val1+'</p>';
+		  	output+='<p>'+val2+'</p>';
+  			output+='</div>';
+  			output+='<input type="hidden" id="hidFzfhfsqId'+index+'" value="'+taget.fzfhfsqId+'">';
+  			output+='<div class="right">';
+  			output+='<div class="arrow bigSearch_placearrow"></div>';
+  			output+='</div>';
+  			output+='</li>';
+	    	
+	    	/* li+="<li><a class='aftera'  style=\"text-decoration:none;\" href='javascript:selfChangeHouseDetail(\""+taget.fzfhfsqId+"\",\""+taget.xqmc+"\");' ><img src=\""+getRootPath()+"/img/nopic.jpg \"  width=\"90px\" height=\"80px\"><h2><font style=\"color:#08bbf9\">"+taget.xqmc+"</font></h2><p>现房源:"+taget.xqmc+"/面积:"+taget.symj+"/层数:"+taget.zcs+"/所在城区:"+taget.zscq+"/所在街道:"+taget.szjd+"</p></a><div class=\"bigSearch_placearrow\"></div></li>"; */
+	    }); 
+	    
+	    $(output).appendTo($("#selfChangeHousePage1_content_div1"));
+	    /*  if($("#selfChangeHousePage1_content_div1 :last-child").html()){
+	    	$("#selfChangeHousePage1_content_div1 :last-child").after(li);
+	    }else{
+	    	$(li).appendTo($("#selfChangeHousePage1_content_div1"));
+	    } */
+	    $("#selfChangeHousePage1_content_div1").listview('refresh'); 
+	}
+	//查看详情
+	function selfChangeHouseDetail(fzfhfsqId){
+		window.page_convenience_selfChangeHouseContent_fzfhfsqId=fzfhfsqId;
+		/* window.page_information_governmentAffairContent_title=title; */
+		$.mobile.changePage("SelfChangeHouse_Content.html","pop");
+	}
+	
+	// Jingjing
+	//$(document).off("click","ul#selfChangeHousePage1_content_div1>li");
+ 	/*$(document).on("click","ul#selfChangeHousePage1_content_div1>li",function(env){
+		 selfChangeHouseDetail($("#hidFzfhfsqId" + $(env.target).parents("li").index()).val());
+	}); */
+	
+ </script>
+  <div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+    <a class="aftera"  href="javascript:void(0);" data-icon="back" data-rel="back" style="background-color: rgba(8, 187, 249, 0);color:#FFF;border:1px solid rgba(8, 187, 249, 0);opacity: 0.8;"><font style="color:#FFFFFF;">返回</font>
+    	<div class="div_placearrow" style="width:20px;height:20px;top: 7px; left: 5px;background-image:url(../../img/serviceHotline/back_03.png);background-repeat:no-repeat;background-size:20px 20px;background-position:center;position: absolute"></div>
+    </a>
+    <h1>自助换房大厅房源展示</h1>
+  </div>
+
+  <div data-role="content" >
+  	<ul data-role="listview"  id="selfChangeHousePage1_content_div1">
+  	</ul>
+  </div>
+
+ 	<div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+			<div role="navigation" class="ui-navbar" data-role="navbar">
+				<ul  class="ui-grid-c">
+					<li class="ui-block-a"><a class="aftera" href="javascript:openToPage(1)" data-icon="home" data-transition="slide" style="background-color:#FFF !important">首页
+		            <div class="footer_placeiconsgrey"></div></a>
+		            </li>
+					<li class="ui-block-b"><a class="aftera" href="javascript:openToPage(2)" data-icon="search" data-transition="slide" rel="external" style="background-color:#FFF !important">信息公开
+		             <div class="footer_placeicons_search"></div></a>
+		            </li>
+					<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+					<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external" style="background-color:#FFF !important"><font style="color:#08bbf9">便民服务</font>
+		            <div class="footer_placeicons_interactivelight"></div></a>
+		            </li>
+		           <!--  <li class="ui-block-d"><a class="aftera" id="interactivity_AId" href="javascript:openToPage(4)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">登录
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li> -->
+					<li class="ui-block-d"><a class="aftera" href="javascript:openToPage(5)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">政务动态
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li>
+				</ul>
+			</div>
+		</div>
+</div> 
+
+</body>
+</html>

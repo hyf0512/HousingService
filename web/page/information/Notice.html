@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="../../css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../../css/easy-responsive-tabs.css" /> 
+	<link rel="stylesheet" href="../../css/main.css">
+	
+<!-- 	<link rel="stylesheet" href="mobile.time/css/jqueryMobile.css"> -->
+	<link href="../../mobile.time/css/mobiscroll.css" rel="stylesheet" type="text/css" />
+	<script src="../../lib/jquery.min.js"></script>
+	<script src="../../lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../../mobile.time/js/mobiscroll.js"></script>
+	<script src="../../lib/jquery.validate.min.js"></script>
+	<script src="../../lib/jquery.metadata.js"></script>
+	<script src="../../lib/cordova-1.5.0.js"></script>
+<!-- 	<script src="lib/cordova.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script src="lib/jqLoading.js"></script> -->
+	<script src="../../js/main.js"></script>
+	<script src="../../js/messages_cn.js"></script>
+	<script src="../../lib/LocalResizeIMG.js"></script>
+	<script src="../../lib/mobileBUGFix.mini.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FBqGlnTD1PFePw7StH7EANlD"></script>
+</head>
+<body>
+
+<div data-role="page" id="notice_page1">
+<script>
+	$('#notice_page1').on('pageinit',function(event){
+		window.switchpageid="structure1";
+		//setLoginNavigationBar("notice_AId");
+	});
+</script>
+  <div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+    <a class="aftera"  href="javascript:void(0);" data-icon="back" data-rel="back" style="background-color: rgba(8, 187, 249, 0);color:#FFF;border:1px solid rgba(8, 187, 249, 0);opacity: 0.8;"><font style="color:#FFFFFF;">返回</font>
+    	<div class="div_placearrow" style="width:20px;text-shadow: 0px 0px 0px;height:20px;top: 7px; left: 5px;background-image:url(../../img/serviceHotline/back_03.png);background-repeat:no-repeat;background-size:20px 20px;background-position:center;position: absolute"></div>
+    </a>
+    <h1>信息公开</h1>
+  </div>
+
+  <div data-role="content">
+    <ul data-role="listview">
+      <li class="lireset" id="testId">
+        <a class="aftera"  href="Room.html" >
+			<img src="../../img/serviceHotline/07_11.png"  width="60px" height="60px" class="imgreset">
+			<h2><font style="color:#08bbf9">公告公示</font></h2>
+			<p>经济适用，廉租，公共租赁的住房公告</p>
+		</a>
+		<div class="bigSearch_placearrow"></div>
+      </li>
+	  <li class="lireset">
+        <a class="aftera"  href="GovernmentAffairs.html">
+			<img src="../../img/serviceHotline/08_11.png"  width="60px" height="60px" class="imgreset">
+			<h2><font style="color:#08bbf9">政务动态</font></h2>
+			<p>住保房管动态</p>
+		</a>
+		<div class="bigSearch_placearrow"></div>
+      </li>
+	  <li class="lireset">
+        <a class="aftera"  href="InstitutionalStructure.html">
+			<img src="../../img/serviceHotline/12_11.png"  width="60px" height="60px" class="imgreset">
+			<h2><font style="color:#08bbf9">机构职能</font></h2>
+			<p>基本信息，内设机构，直属单位</p>
+		</a>
+		<div class="bigSearch_placearrow"></div>
+      </li>
+    </ul>
+  </div>
+
+ 	<div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+		<div role="navigation" class="ui-navbar" data-role="navbar">
+			<ul class="ui-grid-c">
+				<li class="ui-block-a"><a class="aftera" href="javascript:openToPage(1)" data-icon="home" data-transition="slide"  rel="external">首页<div class="footer_placeiconsgrey"></div></a></li>
+				<li class="ui-block-b"><a class="aftera" href="#" data-icon="search" data-transition="slide" rel="external"><font style="color:#08bbf9">信息公开</font><div class="footer_placeicons_searchlight"></div></a></li>
+				<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+				<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external">便民服务<div class="footer_placeicons_interactive"></div></a></li>
+				<!-- <li class="ui-block-d"><a class="aftera" id="footSearch_AId"  href="javascript:openToPage(4)" data-icon="gear" data-transition="slide" rel="external"><font>登录</font><div class="footer_placeicons_setting"></div></a></li> -->
+				<li class="ui-block-d"><a class="aftera" href="javascript:openToPage(5)" data-icon="gear" data-transition="slide" rel="external">政务动态<div class="footer_placeicons_setting"></div></a></li>
+			</ul>
+		</div>
+	</div>
+</div> 
+
+</body>
+</html>

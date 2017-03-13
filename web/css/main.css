@@ -1,0 +1,579 @@
+@CHARSET "UTF-8";
+/*CSS开始*/
+html, body, ul, li, ol, dl, dd, dt, p, h1, h2, h3, h4, h5, h6, form, fieldset, legend, img { margin:0; padding:0; font-family: "Microsoft YaHei","微软雅黑"; }
+fieldset, img { border:none; }
+font {font-family:"Microsoft YaHei","微软雅黑"}
+img{display: block;}
+address, caption, cite, code, dfn, th, var { font-style:normal; font-weight:normal; }
+ul, ol { list-style:none; }
+input { padding-top:0; padding-bottom:0; font-family: "Microsoft YaHei","微软雅黑";}
+input::-moz-focus-inner { border:none; padding:0; }
+select, input { vertical-align:middle; height: 30px;}
+select, input, textarea { font-size:12px; margin:0;font-family: "Microsoft YaHei","微软雅黑"; }
+input[type="text"], input[type="password"], textarea { outline-style:none; -webkit-appearance:none; font-family: "Microsoft YaHei","微软雅黑";}
+textarea { resize:none; font-family: "Microsoft YaHei","微软雅黑";}
+table { border-collapse:collapse;}
+body{background-color:#f3f3f3; font-family: "Microsoft YaHei","微软雅黑";}
+label{font-family: "Microsoft YaHei","微软雅黑";height:auto;}
+td,tr{font-family: "Microsoft YaHei","微软雅黑";height:auto;}
+.indextable{
+	margin: auto auto auto auto;
+	background-color:#ECEFF6;
+	bordercolordark:#006666;
+	bordercolorlight:#3333FF;
+}
+.indextable_td{
+	width:110px;
+	height:150px;
+	text-align:center
+}
+
+/* xubj start*/
+.navigationdiv_wrapper{
+	width:100%;height:70px;border-bottom:1px solid rgba(255, 255, 255, 0.35);
+	border-top:1px solid rgba(255, 255, 255, 0.35);
+	margin-bottom: 30px;
+}
+/* xubj end*/
+
+.navigationdiv_wrapper li{width:30%;margin-left:3%;height:120px;float:left;border-right:1px solid rgba(255, 255, 255, 0.35)}
+.navigationdiv_wrapper_placeimg{width:65px;height:65px;margin:10px auto;border-radius:40px}
+.navigationdiv_wrapper_placeimg img{border-radius:50px;width:65px;height:65px;}
+.navigationdiv_wrapper_placefont{width:80px;height:20px;line-height:20px;margin:10px auto;text-align:center;color:#FFF;font-family:微软雅黑;}
+.navigationdiv_wrapper_secondary{width:100%;height:50px;position:relative;float:left}
+.navigationdiv_wrapper_secondarycontent{width:90px;height:20px;line-height:20px;text-align:center;background-color:#669FDF;color:#FFF;font-family:微软雅黑;font-weight:100;margin-top:30px;font-size:14px}
+.navigationdiv_wrapper_secondarymain{width:100%;height:80px;line-height:80px;border-bottom:0px solid #E8E8E8}
+.cleardiv{clear:both}
+.divideheightdiv{height:30px}
+.navigationdiv_wrapper_secondary_third{width:100%;height:50px;position:relative;float:left}
+.navigationdiv_wrapper_secondary_thirdcontent{width:90px;height:20px;line-height:20px;text-align:center;background-color:#F90;color:#FFF;font-family:微软雅黑;font-weight:100;margin-top:30px;font-size:14px}
+.hearderdiv{width:100%;height:40px;line-height:40px;text-align:center;font-size:24px;color:#FFF;text-shadow:0 0 5px}
+.navigationdiv_wrapper_secondarymain_placeicon{width:20%;height:50px;float:left;margin-left:4%}
+.navigationdiv_wrapper_secondarymain_placeicon img{width:50px;height:50px;border-radius:40px;margin-top:5px}
+.navigationdiv_wrapper_secondarymain_placeiconwrapper{width:50px;height:50px;border-radius:40px;margin:0px auto}
+.navigationdiv_wrapper_secondarymain_placeiconwrapper_font{width:50px;height:20px;border-radius:40px;line-height:20px;font-size:12px;text-align:center;margin:0px auto;color:#FFF;font-family:微软雅黑;}
+.navigationdiv_wrapper_secondarymain_placeiconwrapper img{width:50px;height:50px;border-radius:40px}
+.div_mainwrapperbg{width:100%;height:auto;height:auto;min-height:600px;background-image:url(../img/bg.png);background-repeat:no-repeat;background-size:100% 100%}
+.footer_placeicons{width:30px;height:30px;margin:0px auto;top:-45px;position:relative;z-index:88;background-image:url(../img/homePage/check-01_07.png);background-repeat:no-repeat;background-size:30px 30px;background-position:center}
+.footer_placeiconsgrey{width:30px;height:30px;margin:0px auto;top:-45px;position:relative;z-index:88;background-image:url(../img/homePage/uncheck-01_07.png);background-repeat:no-repeat;background-size:30px 30px;background-position:center}
+.footer_placeicons_search{width:30px;height:30px;margin:0px auto;top:-45px;position:relative;z-index:88;background-image:url(../img/homePage/1.png);background-repeat:no-repeat;background-size:30px 30px;background-position:center}
+.footer_placeicons_searchlight{width:30px;height:30px;margin:0px auto;top:-45px;position:relative;z-index:88;background-image:url(../img/homePage/2-2.png);background-repeat:no-repeat;background-size:30px 30px;background-position:center}
+.footer_placeicons_interactive{width:30px;height:30px;margin:0px auto;top:-45px;position:relative;z-index:88;background-image:url(../img/homePage/2.png);background-repeat:no-repeat;background-size:30px 30px;background-position:center}
+.footer_placeicons_interactivelight{width:30px;height:30px;margin:0px auto;top:-45px;position:relative;z-index:88;background-image:url(../img/homePage/3-3.png);background-repeat:no-repeat;background-size:30px 30px;background-position:center}
+.footer_placeicons_setting{width:30px;height:30px;margin:0px auto;top:-45px;position:relative;z-index:88;background-image:url(../img/homePage/3.png);background-repeat:no-repeat;background-size:30px 30px;background-position:center}
+.footer_placeicons_settinglight{width:30px;height:30px;margin:0px auto;top:-45px;position:relative;z-index:88;background-image:url(../img/homePage/1-1.png);background-repeat:no-repeat;background-size:30px 30px;background-position:center}
+
+.search_placearrow{width:20px;height:20px;top:15px;position:absolute;right:15px;background-image:url(../img/serviceHotline/right_07.png);background-size:20px 20px;background-repeat:no-repeat;background-position:center}
+.bigSearch_placearrow{width:20px;height:20px;top:30px;position:absolute;right:15px;background-image:url(../img/serviceHotline/right_07.png);background-size:20px 20px;background-repeat:no-repeat;background-position:center}
+.bluefont_div li h2{color:#08BBF9}
+.bluefont_div li p{color:#08BBF9}
+.ui-li-has-icon ui-first-child{background-color:#63C}
+ .aftera:after{content: !important;
+position: absolute;
+display: none !important;
+width: 22px;
+height: 22px;}
+
+/*CSS结束*/
+.indextable{
+	margin: auto auto auto auto;
+	background-color:#ECEFF6;
+	bordercolordark:#006666;
+	bordercolorlight:#3333FF;
+}
+.indextable_td{
+	width:110px;
+	height:150px;
+	text-align:center
+}
+.content_div {
+    display: none;
+}
+.content_div:first-child {
+    display: block;
+}
+.icondiv{
+	position:absolute;
+	right:10px;
+	top:20px;
+}
+/*白蚁*/
+
+/* 二级栏目 start*/
+.ui-listview>li{background-color:#f6f6f6 !important}
+.ui-listview .lireset{
+	background-color:white !important
+}
+
+.ui-listview li{background-color:#f6f6f6 !important}
+.imgreset{top:9px !important;left:18px !important}
+/* 二级栏目 end*/
+
+/*咨询房屋css开始*/
+.placecontentmain_tit{width:90%;margin-left:10px;height:40px;line-height: 50px;color:#999}
+.bgnonecolor{background:none !important}
+.inputwrapper{width:100%;height:auto;padding:0px}
+.inputwrapper div{border:0px}
+.inputupdated{background:#fff !important;font-size:14px;margin-top:-17px !important}
+.inputupdatedtext{font-size:14px;margin-top:-7px !important;height:58px !important;background:none repeat scroll 0% 0% #FFF !important;border:1px solid #FFF !important;text-shadow:0px 0px 0px !important;overflow-y:scroll !important;box-shadow:none !important}
+.checkcode{background-color:#08BBF9 !important;border-radius:2px;border:0px;color:#FFF;width: 55px;height: 25px;line-height: 25px;}
+.buttoncheck{background-color:#08BBF9 !important;color:#FFF !important;font-weight:100 !important;text-shadow: 0px 0px 0px !important;; font-family: "Microsoft YaHei","微软雅黑";}
+.buttonreset{background-color:#08BBF9 !important;color:#FFF !important;font-weight:100 !important;text-shadow: 0px 0px 0px !important;}
+.tdpadding{padding-left:0.7em !important}
+.trbottomline{background-color:#fff}
+.inputwrapper1 .ui-select{margin-top:0px !important;margin-bottom:0px !important}
+.bgtr{width:100%;height:1px;opacity:0;}
+/*咨询房屋css结束*/
+/*公示公告css开始*/
+.placetabswrapper{width:100%;height:auto;min-height:300px}
+.placetabswrapperinside{width:100%;height:40px;line-height:40px;background-color:#FFF;min-height:40px}
+.placetabswrapperinside li{width:33%;height:40px;line-height:40px;float:left;text-align:center;font-size:12px;border-bottom:1px solid #fff}
+.divclear{clear:both}
+.blueli{color:#08BBF9}
+.placetabswrapperinsidecontent{margin-top:5px;width:100%;height:auto;min-height:60px;border-radius:0px;overflow:hidden;}
+.divcolor{width:100%;height:7px;background-color:#08BBF9}
+.contentinside{width:100%;height:auto;min-height:60px;line-height:20px}
+.contentinside li{width:94%;margin-left:3%;height:auto;line-height:20px;font-size:12px}
+.fontli{color:#06F;font-size:14px;font-weight:bold}
+.fontli a{text-decoration:none}
+.nomoredata{width:94%;margin-left:3%;height:auto;line-height:20px;font-size:12px;text-align:center;color:#999}
+.flaotspan{float:right}
+.get_more{width:100%;height:32px;background: url(../img/iconLoading.gif);background-position:center;background-size:30px 30px;background-repeat:no-repeat}
+/*公示公告css结束*/
+
+/*new add 2015/11/11 xubj start*/
+*{
+	box-sizing: border-box;
+}
+.aftera{
+	box-shadow: none;
+}
+
+/* .ui-header{
+	height:45.5px;
+} */
+
+.text-ellipsis{
+	white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+a{
+	text-decoration: initial;
+}
+
+.ui-collapsible-content{
+	background: transparent !important;
+}
+
+.guaranteed-house .items{
+	margin: 0 -16px;
+}
+    
+.guaranteed-house .items .item{
+	height: 70px;
+    background: white;
+    margin: 2px 0px;
+    padding: 0px 20px;
+}
+
+.guaranteed-house .items .item .left {
+	float:left;
+	width: 62%;
+	height:100%;
+}
+
+.guaranteed-house .items .item .right{
+	float:left;
+	width:38%;
+	height:100%;
+}
+.guaranteed-house .items .item .left .content{
+	height: 30px;
+    line-height: 30px;
+    color:#38c;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.guaranteed-house .items .item .left .detail{
+	line-height: 15px;
+	font-size:14px;
+}
+.guaranteed-house .items .item .left .detail .line{
+	width: 100%;
+	padding: 2px 0px;
+}
+
+.guaranteed-house .items .item .right .phone{
+	float:left;
+	line-height: 70px;
+	text-overflow: ellipsis;
+    word-break: break-all;
+    overflow: hidden;
+    width: 65%;
+    white-space: nowrap;
+}
+
+.guaranteed-house .items .item .right .arrow-icon,
+.guaranteed-house .items .item .right .phone-icon{
+	float:left;
+	height:100%;
+	width:16px;
+	background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+	background-image: url(../img/serviceHotline/01_07.png);
+}
+.guaranteed-house .items .item .right .arrow-area{
+	float:right;
+	width:32px;
+	height: 100%;
+	margin-right:-16px;
+}
+.guaranteed-house .items .item .right .arrow-icon{
+	background-image: url(../img/serviceHotline/right_07.png);
+}
+
+#selfChangeHousePage1_content_div1{
+	padding: 0px 16px;
+	margin-top: 0px;
+}
+
+ul#selfChangeHousePage1_content_div1>li{
+    margin: 2px -16px;
+    padding: 0px 16px;
+    height: 100px;
+    clear: both;
+}
+ul#selfChangeHousePage1_content_div1>li .left{
+	width: 90%;
+	float: left;
+    padding: 10px 0px;
+}
+ul#selfChangeHousePage1_content_div1>li .right{
+	width:10%;
+	float: right;
+	height: 100%;
+}
+
+ul#selfChangeHousePage1_content_div1>li .right .arrow{
+	position: relative;
+	top: 0;
+	right: 0;
+	float: right;
+	height: 100%;
+}
+ul#selfChangeHousePage1_content_div1>li .left .image{
+	float:left;
+	margin-right: 10px;
+}
+
+ul#selfChangeHousePage1_content_div1>li>a{
+	background: transparent;
+	border-top: none;
+	border-bottom: none;
+}
+
+.section{
+	margin: 0 -16px;
+    padding: 0 16px;
+    clear: both;
+}
+
+.section>.section-header{
+	height:40px;
+	line-height: 40px;
+	color: #A7A2A2;
+}
+
+.section>.section-content{
+	background: white;
+	margin: 0 -16px;
+    padding: 0 16px;
+}
+
+.section>.section-content .group{
+	clear:both;
+	height: auto;
+	min-height: 30px;
+    line-height: 30px;
+    overflow: auto;
+}
+
+.section>.section-content .group>.name{
+	float:left;
+	width:40%;
+}
+
+.section>.section-content .group>.value{
+	float:left;
+	width:60%;
+}
+
+table.appointDetailTable td{
+	max-width: 0;
+}
+
+table.appointDetailTable .tdpadding{
+	width: 35%;
+}
+
+table.appointDetailTable .righttr{
+	width: 70%;
+}
+
+.appointment-info{
+    margin: 0 -16px;
+    padding: 0 16px;
+}
+.appointment-info .row{
+	height: 40px;
+	line-height: 40px;
+	clear: both;
+	margin: 2px -16px;
+    background: white;
+    padding: 0 16px;
+}
+
+.appointment-info .row.head{
+	margin: 0 -16px;
+    padding: 0 16px;
+    background: transparent;
+}
+
+.appointment-info .row .col1{
+	width:50%;
+	float:left;
+	display:inline-block;
+}
+
+.appointment-info .row .col2{
+	width:30%;
+	float:left;
+	display:inline-block;
+}
+
+.appointment-info .row .col3{
+	width:20%;
+	float:left;
+	display:inline-block;
+}
+
+.appointment-info .row .col3.arrow-icon{
+	background-image: url(../img/serviceHotline/right_07.png);
+	background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100%;
+    width: 16px;
+    float: right;
+}
+
+#guaranteedHouse_content_page2 .pic-box{
+	height: 382px;
+    border: 1px solid #cecece;
+}
+
+/* #guaranteedHouse_content_page2 .basic-info{
+	margin-top:16px;
+} */
+
+.contentinside.notice ul>li.row{
+	margin: 2px 0px;
+	clear: both;
+	background: white;
+	width: 100%;
+    padding: 5px 16px;
+    display: flex;
+    height: 50px;
+}
+
+.contentinside.notice ul>li.row .left{
+	width: 90%;
+	float: left;
+	display: inline-block;
+	height: 100%;
+}
+
+.contentinside.notice ul>li.row .left .title{
+	color:#38c;
+	height: 20px;
+	text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.contentinside.notice ul>li.row .left .line{
+	clear: both;
+}
+
+.contentinside.notice ul>li.row .left .line .date{
+	width: 70%;
+	float:left;
+	display: inline-block;
+	text-overflow: ellipsis;
+    word-break: break-all;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.contentinside.notice ul>li.row .left .line .point{
+	width: 30%;
+	float:left;
+	display: inline-block;
+	text-overflow: ellipsis;
+    word-break: break-all;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.contentinside.notice ul>li.row .right{
+	width: 10%;
+	float: left;
+	display: inline-block;
+	height: 100%;
+}
+
+.contentinside.notice ul>li.row .right .arrow-icon{
+	background-image: url(../img/serviceHotline/right_07.png);
+	background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100%;
+    width: 16px;
+    float: right;
+}
+
+.placetabswrapper .placetabswrapperinside ul li{
+	font-size: 16px;
+}
+    
+/*new add 2015/11/11 xubj end*/
+
+/* 2015/11/17 xubj start*/
+.content_title {
+   text-align: center;
+   font-size: 20px;
+   margin-bottom: 10px;
+}
+.content_detail span{
+	font-size: 13pt !important
+}
+
+#consultation_HouseDetail_content table,
+#loginIndex_page1 table{
+	table-layout: fixed;
+}
+
+#consultation_HouseDetail_content .tdpadding,
+#loginIndex_page1 .tdpadding{
+	width: 30%;
+}
+
+#consultation_HouseDetail_content .code-column,
+#loginIndex_page1 .code-column{
+	padding-left:10px !important;
+}
+
+.selfChangeHouse_content_page2-login-btn{
+	background: transparent;
+    border: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    color: white;
+    font-size: 16px;
+    font-style: normal;
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 36px;
+}
+.baidu_map{
+	height:300px;
+}
+
+.seach_header{
+	margin-left: 20px;
+	width:90%;
+}
+
+#houseLoginIndex_page .radiozf div{
+	float:left;
+	padding-left:20px;
+}
+
+#houseLoginIndex_page .inputwrapper .labelzf{
+	float:left;
+	padding-left:10px;
+	padding-right: 20px;
+}
+.jqm .dwv{
+	background:#08BBF9;
+}
+.jqm .dwwb {
+	background:#08BBF9;
+}
+
+/* 2015/11/17 xubj end */
+.main_promptBox1{
+	width:auto;
+	height:25px;
+	line-height:25px;
+	float:left;
+	border:1px solid #FC0;
+	min-width:150px;
+	border-radius:4px;
+	position:relative
+}
+.req_promptBox2{
+	width:10px;
+	height:10px;
+	position:absolute;
+	top:7px;
+	left:-7px;
+	background:url(images/arrow.png);
+	background-repeat:no-repeat;
+	background-size:7px 7px;
+	background-position:center left;
+}
+.test{
+	color: red;
+    position: relative;
+    float: left;
+    left: 50px;
+}
+a#operation_type-button.ui-btn.ui-icon-carat-d.ui-btn-icon-right.ui-corner-all.ui-shadow{
+    height: 30px;
+    padding-top: 0.3em;
+}
+label.ui-btn.ui-corner-all.ui-btn-inherit.ui-btn-icon-left.ui-checkbox-off{
+	height: 30px;
+    padding-top: 2.5px;
+}
+a#sftl-button.ui-btn.ui-icon-carat-d.ui-btn-icon-right.ui-corner-all.ui-shadow{
+	height: 30px;
+    padding-top: 0.3em;
+}
+div.seach_header{
+	width: 85%;
+	float:left
+}
+a#operationclass-button.ui-btn.ui-icon-carat-d.ui-btn-icon-right.ui-corner-all.ui-shadow{
+	height: 30px;
+    padding-top: 0.3em;
+}
+div#guaranteedHouse_content_page2.ui-content{
+	padding-top: 5px;
+}
+.new_index_label{
+	margin-left: 16px;
+    background-color: #66CD00;
+    width: 85px;
+    font-weight: 900;
+    text-align: center;
+    font-size: larger;
+    color: #FFFFFF;
+    vertical-align: middle;
+}
+

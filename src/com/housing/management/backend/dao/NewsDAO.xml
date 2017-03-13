@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.housing.management.backend.dao.NewsDAO">
+<!-- 
+	<resultMap id="HousingNewsResultMap" type="com.housing.management.backend.domain.HousingNews" >
+	    <id column="contentId" property="contentId" jdbcType="VARCHAR" />
+	    <result column="content" property="content" jdbcType="BLOB" />
+	  </resultMap> -->
+
+	<!-- 获取住保房管动态列表 -->
+	<select id="getHousingNewsList" parameterType="HousingNews" resultType="HousingNews">
+	SELECT * FROM
+		(SELECT ROWNUM RN,
+			ID AS contentId,
+			TITLE AS title,
+			LIMIT_TIME AS limitTime,
+			SUBTITLE AS subTitle,
+			SHORTTITLE AS shortTitle,
+			FB_NO AS fbNo,
+			FB_DEP AS fbDep,
+			FB_DATE AS fbDate,
+			LOGOURL AS logoUrl,
+			CLICK AS click,
+			IS_HOT AS isHot,
+			IS_TOP AS isTop from
+			(SELECT * FROM TPM_NEWS_COLUMN A
+			INNER JOIN TPM_R_CONTENT_COLUMN B ON(A.ID = B.COLUMNID)
+			INNER JOIN TPM_NEWS_CONTENT C ON(C.ID = B.CONTENTID)
+			WHERE A.ID = #{columnId} AND C.STAT = 1
+			ORDER BY FB_DATE DESC))D
+			<where> 
+			<if test="fromRowNum !=null">
+				AND RN >= #{fromRowNum}
+			</if>
+			<if test="toRowNum !=null">
+				<![CDATA[AND D.RN <= #{toRowNum}]]>
+			</if>
+		</where>
+	</select>
+	<!-- 获取住保房管动态列表总行数 -->
+	<select id="getHousingNewsListCount" parameterType="HousingNews" resultType="Integer">
+		SELECT COUNT(C.ID) AS cnt
+		FROM TPM_NEWS_COLUMN A
+		INNER JOIN TPM_R_CONTENT_COLUMN B ON(A.ID = B.COLUMNID)
+		INNER JOIN TPM_NEWS_CONTENT C ON(C.ID = B.CONTENTID)
+		WHERE A.ID = #{columnId} AND C.STAT = 1
+	</select>
+	
+	<!--根据新闻ID,查询新闻详情 -->
+	<select id="getNewsDetailById" parameterType="String" resultType="HousingNews">
+		SELECT A.ID AS contentId,
+			A.TITLE AS title,
+			A.CONTENT AS content,
+			A.LIMIT_TIME AS limitTime,
+			A.SUBTITLE AS subTitle,
+			A.SHORTTITLE AS shortTitle,
+			A.DIRECTURL AS directUrl,
+			A.FB_NO AS fbNo,
+			A.FB_DEP AS fbDep,
+			A.FB_DATE AS fbDate,
+			A.LOGOURL AS logoUrl,
+			A.CLICK AS click,
+			A.IS_HOT AS isHot,
+			A.IS_TOP AS isTop
+		FROM TPM_NEWS_CONTENT A
+		WHERE A.ID = #{contentId}
+	</select>
+	<!-- 根据搜索内容，查询新闻列表 -->
+	<select id="getSearchList" parameterType="HousingNews" resultType="HousingNews">
+		SELECT * FROM 
+			(SELECT ROWNUM RN,
+			C.ID AS contentId,
+			C.TITLE AS title,
+			C.LIMIT_TIME AS limitTime,
+			C.SUBTITLE AS subTitle,
+			C.SHORTTITLE AS shortTitle,
+			C.DIRECTURL AS directUrl,
+			C.FB_NO AS fbNo,
+			C.FB_DEP AS fbDep,
+			C.FB_DATE AS fbDate,
+			C.LOGOURL AS logoUrl,
+			C.CLICK AS click,
+			C.IS_HOT AS isHot,
+			C.IS_TOP AS isTop
+			FROM TPM_NEWS_COLUMN A
+			INNER JOIN TPM_R_CONTENT_COLUMN B ON(A.ID = B.COLUMNID)
+			INNER JOIN TPM_NEWS_CONTENT C ON(C.ID = B.CONTENTID)
+			WHERE TITLE LIKE #{title} AND C.STAT = 1
+			ORDER BY FB_DATE DESC) D
+			<where> 
+			<if test="fromRowNum !=null">
+				AND D.RN >= #{fromRowNum}
+			</if>
+			<if test="toRowNum !=null">
+				<![CDATA[AND D.RN <= #{toRowNum}]]>
+			</if>
+		</where>
+	</select>
+	<select id="getSearchNewsListCount" parameterType="HousingNews" resultType="Integer">
+		SELECT COUNT(C.ID) AS cnt
+		FROM TPM_NEWS_COLUMN A
+		INNER JOIN TPM_R_CONTENT_COLUMN B ON(A.ID = B.COLUMNID)
+		INNER JOIN TPM_NEWS_CONTENT C ON(C.ID = B.CONTENTID)
+		WHERE C.TITLE LIKE #{title} AND C.STAT = 1
+	</select>
+</mapper>

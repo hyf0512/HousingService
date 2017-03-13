@@ -1,0 +1,202 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="../../css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../../css/easy-responsive-tabs.css" /> 
+	<link rel="stylesheet" href="../../css/main.css">
+	
+<!-- 	<link rel="stylesheet" href="mobile.time/css/jqueryMobile.css"> -->
+	<link href="../../mobile.time/css/mobiscroll.css" rel="stylesheet" type="text/css" />
+	<script src="../../lib/jquery.min.js"></script>
+	<script src="../../lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../../mobile.time/js/mobiscroll.js"></script>
+	<script src="../../lib/jquery.validate.min.js"></script>
+	<script src="../../lib/jquery.metadata.js"></script>
+	<script src="../../lib/cordova-1.5.0.js"></script>
+<!-- 	<script src="lib/cordova.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script src="lib/jqLoading.js"></script> -->
+	<script src="../../js/main.js"></script>
+	<script src="../../js/messages_cn.js"></script>
+	<script src="../../lib/LocalResizeIMG.js"></script>
+	<script src="../../lib/mobileBUGFix.mini.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FBqGlnTD1PFePw7StH7EANlD"></script>
+ </head>
+ <body>
+	<div data-role="page" id="houseLoginIndex_page" data-dom-cache="false" >
+	<script type="text/javascript">
+	$(document).on("pageshow",function(event){
+/* 		$("#frmLogin").validate({ 
+			focusCleanup:true,
+			submitHandler:loginIndexInfo,
+			errorPlacement:function(error, element) { 
+				error.css('color','red'); */
+				//console.info(error.html());
+				//element.before(error);
+				/* var div ='<div class="main_promptBox1">'+error.text()+
+			        		'<div class="req_promptBox2"></div>\
+			    		</div>';  */
+/* 				element.after(error);
+			} 
+		}); */
+	});
+	/* function loginIndexInfo(){
+		
+		var username = $("#loginIndex_username").val();
+		var password = $("#loginIndex_password").val();
+		var registUser = {
+				userId:username==""?0:1,
+				username:username,
+				password:password
+		};
+		getLocalStorageObj().setItemInLS("houseUser",JSON.stringify(registUser));
+		$.mobile.changePage(getRootPath()+"/page/convenience/RegistrationAppoint.html","pop");
+	} */
+	function getCheckNumber(){
+	
+		var xm = $("#username").val();
+		var sfzh = $("#sfzh").val();
+		var yddh = $("#mobile").val();
+		var bzfxz = $("input[type='radio']:checked").val();
+		var outData = {"xm":xm,"sfzh":sfzh,"yddh":yddh,"bzfxz":bzfxz};
+		
+		var url = getLocalStorageObj().getItemInLS("servicePath")+"fcbbyy/send/message";
+			if(xm==""||sfzh==""||yddh==""||bzfxz==""){
+				alert("请填写所有信息后获取验证码");
+				return;
+			}
+		$.ajax({
+				type: 'POST',
+				url: url,
+				contentType:"application/json;charset=UTF-8",
+				data: JSON.stringify(outData),
+				dataType: 'json',
+				async:false,
+				success:function(result, textStatus, jqXHR){
+					if(result == 1){
+						// 登录成功
+						alert("获取验证码成功");
+					} else {
+						alert("获取验证码失败");
+					}
+					
+				},
+				error:function(data){
+					alert("获取验证码失败!");
+				}
+			});
+		
+	}
+	
+	$("#houseLoginIndex_page #btnSubmit").on("click",function(){
+		var xm = $("#username").val();
+		var sfzh = $("#sfzh").val();
+		var yddh = $("#mobile").val();
+		var bzfxz = $("input[type='radio']:checked").val();
+		var yzm= $("#checkNumber").val();
+				var outData = {"xm":xm,"sfzh":sfzh,"yddh":yddh,"bzfxz":bzfxz,"yzm":yzm};
+		if(xm==""||sfzh==""||yddh==""||bzfxz==""||yzm==""){
+				alert("请填写所有信息后登录");
+				return;
+			}
+		var url = getLocalStorageObj().getItemInLS("servicePath")+"fcbbyy/login";
+		$.ajax({
+			type: 'POST',
+			url: url,
+			contentType:"application/json;charset=UTF-8",
+			data: JSON.stringify(outData),
+			dataType: 'json',
+			async:false,
+			success:function(result, textStatus, jqXHR){
+				if(result == 1){
+					// 登录成功
+					getLocalStorageObj().setItemInLS("houseRegistUser",true);
+					$.mobile.changePage("../convenience/SelfChangeHouse_Content.html","pop");
+				} else {
+					getLocalStorageObj().setItemInLS("houseRegistUser",false);
+					alert("登录失败!");
+				}
+				
+			},
+			error:function(data){
+				alert("登录失败!");
+			}
+		});
+
+	})
+	
+	</script>
+ 	<div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+	    <a class="aftera"  href="javascript:void(0);" data-icon="back" data-rel="back" style="background-color: rgba(8, 187, 249, 0);color:#FFF;border:1px solid rgba(8, 187, 249, 0);opacity: 0.8;"><font style="color:#FFFFFF;">返回</font>
+	    	<div class="div_placearrow" style="width:20px;height:20px;top: 7px; left: 5px;background-image:url(../../img/serviceHotline/back_03.png);background-repeat:no-repeat;background-size:20px 20px;background-position:center;position: absolute"></div>
+	    </a>
+	    <h1>换房意向登记平台</h1>
+  	</div>
+  	  <div class="placecontentmain_tit">用户登录</div>
+	  <div data-role="content" style="padding:0px">
+	  	 <form  id="frmLogin" class="validate"> 	
+	  		<table style="width:100%;background-color:#E7E6E6" cellpadding ="10" cellspacing="10" bgcolor="#E7E6E6" border="0" bordercolor="#FFFFFF" >
+       			<tr class="trbottomline">
+       				<td style="width: 50%" >
+       					<div class="inputwrapper radiozf">
+       					<input type="radio" name="bzfxz" value="1" checked><label class="labelzf">公共租赁</label>
+       					</div>
+       				</td>
+       				<td class="righttr">
+       					<div class="inputwrapper radiozf">
+		       					<input type="radio" name="bzfxz" value="2"><label class="labelzf">廉租</label>
+	       				</div>
+       				</td></tr>
+                <tr class="bgtr"></tr>
+       			<tr class="trbottomline"><td class="tdpadding" style="padding-left: 50px" >姓名</td><td class="righttr"><div class="inputwrapper"><input type="text" name="username" id="username" placeholder="请输入"></input></div></td></tr>
+                <tr class="bgtr"></tr>
+	  			<tr class="trbottomline"><td class="tdpadding" style="padding-left: 50px">身份证号</td><td class="righttr"><div class="inputwrapper"><input type="text" name="sfzh" id="sfzh" placeholder="请输入"></input></div></td></tr>
+                <tr class="bgtr"></tr>
+                <tr class="trbottomline"><td class="tdpadding" style="padding-left: 50px">手机号</td><td class="righttr"><div class="inputwrapper"><input type="text" name="mobile" id="mobile" placeholder="请输入"></input></div></td></tr>
+                <tr class="bgtr"></tr>
+               	<tr class="trbottomline "><td class="tdpadding code-column" style="width:40%"><div>
+               	<a href="javascript:getCheckNumber();" data-role="button" class="buttoncheck"  style="font-size: 12px;">获取验证码</a></div>
+               	</td><td class="righttr"><div class="inputwrapper"><input type="text" name="password1" id="checkNumber" placeholder="请输入验证码"></input></div></td></tr>
+                <tr class="bgtr"></tr>
+	  			<tr class="trbottomline"><td colspan="2"><a data-role="button" id="btnSubmit" class="buttoncheck">登录</a></td></tr>
+                <tr class="bgtr"></tr>
+                <tr class="trbottomline" style="height:40px;background-color:#E7E6E6">
+                <td class="tdpadding" colspan="2" style="color: #999;">登录默认已阅读<a href="ChangeHouseXy.html">《用户服务协议》</a>
+                </td></tr>
+
+       		</table>
+       	</form>
+	  </div>
+	  	<div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+			<div role="navigation" class="ui-navbar" data-role="navbar">
+				<ul  class="ui-grid-c">
+					<li class="ui-block-a"><a class="aftera" href="javascript:openToPage(1)" data-icon="home" data-transition="slide" style="background-color:#FFF !important">首页
+		            <div class="footer_placeiconsgrey"></div></a>
+		            </li>
+					<li class="ui-block-b"><a class="aftera" href="javascript:openToPage(2)" data-icon="search" data-transition="slide" rel="external" style="background-color:#FFF !important">搜索
+		             <div class="footer_placeicons_search"></div></a>
+		            </li>
+					<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+					<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external" style="background-color:#FFF !important">政民互动</font>
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li>
+		            <!-- <li class="ui-block-d"><a class="aftera" href="#" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;"><font style="color:#08bbf9">登录</font>
+		            <div class="footer_placeicons_settinglight"></div></a>
+		            </li> -->
+					<li class="ui-block-d"><a class="aftera" href="javascript:openToPage(5)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">设置
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li>
+				</ul>
+			</div>
+		</div>
+	</div> 
+ </body>
+</html>

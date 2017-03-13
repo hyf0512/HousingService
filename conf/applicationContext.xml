@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jms="http://www.springframework.org/schema/jms"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p='http://www.springframework.org/schema/p' 
+	xmlns:task="http://www.springframework.org/schema/task" 
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
+	xmlns:sec="http://cxf.apache.org/configuration/security"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd 
+		http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-3.0.xsd 
+		http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd
+		http://cxf.apache.org/configuration/security http://cxf.apache.org/schemas/configuration/security.xsd
+	    http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+	  	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+	    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<context:component-scan base-package="com.housing.management.backend.service,com.housing.management.backend.dao,com.housing.management.backend.filter,com.housing.management.backend.job" />
+	
+	<bean id="springApplicationContext" class="com.housing.management.backend.common.ApplicationContextHelper"></bean> 
+	
+	<bean
+		class="com.housing.management.backend.common.EncryptablePropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:backend.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="propertiesFactory"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath:backend.properties</value>
+			</list>
+		</property>
+	</bean>
+  
+  <!-- 配置三个数据源 -->
+     <bean id="dynamicDataSource" class="com.housing.management.backend.common.DynamicDataSource">  
+        <property name="targetDataSources">  
+            <map key-type="java.lang.String">  
+                <entry value-ref="dataSourceOne" key="dataSourceOne"></entry>  
+                <entry value-ref="dataSourceTwo" key="dataSourceTwo"></entry>  
+                <entry value-ref="dataSourceThree" key="dataSourceThree"></entry>  
+            </map>  
+        </property>  
+        <property name="defaultTargetDataSource" ref="dataSourceOne">  
+        </property>  
+    </bean>  
+    
+    <bean id="dataSourceOne" class="org.apache.commons.dbcp2.BasicDataSource"
+        destroy-method="close">
+        <property name="driverClassName" value="${sql.jdbc.driverClassName}" />
+        <property name="url" value="${sql.jdbc.one.url}" />
+        <property name="username" value="${sql.jdbc.one.username}" />
+        <property name="password" value="${sql.jdbc.one.password}" />
+        
+        <property name="testOnBorrow" value="${sql.testOnBorrow}" />
+        <property name="testWhileIdle" value="${sql.testWhileIdle}" />
+        <property name="validationQuery" value="${sql.validationQuery}" />
+        <property name="timeBetweenEvictionRunsMillis" value="${sql.timeBetweenEvictionRunsMillis}" />
+        
+        <property name="initialSize" value="${sql.initialSize}" />
+        <property name="maxTotal" value="${sql.maxTotal}" />
+        <property name="minIdle" value="${sql.minIdle}" />
+        <property name="maxIdle" value="${sql.maxIdle}" />
+        <property name="maxWaitMillis" value="${sql.maxWaitMillis}" />
+    
+    </bean>
+    
+    <bean id="dataSourceTwo" class="org.apache.commons.dbcp2.BasicDataSource"
+        destroy-method="close">
+        <property name="driverClassName" value="${sql.jdbc.driverClassName}" />
+        <property name="url" value="${sql.jdbc.two.url}" />
+        <property name="username" value="${sql.jdbc.two.username}" />
+        <property name="password" value="${sql.jdbc.two.password}" />
+        
+        <property name="testOnBorrow" value="${sql.testOnBorrow}" />
+        <property name="testWhileIdle" value="${sql.testWhileIdle}" />
+        <property name="validationQuery" value="${sql.validationQuery}" />
+        <property name="timeBetweenEvictionRunsMillis" value="${sql.timeBetweenEvictionRunsMillis}" />
+        
+        <property name="initialSize" value="${sql.initialSize}" />
+        <property name="maxTotal" value="${sql.maxTotal}" />
+        <property name="minIdle" value="${sql.minIdle}" />
+        <property name="maxIdle" value="${sql.maxIdle}" />
+        <property name="maxWaitMillis" value="${sql.maxWaitMillis}" />
+    
+    </bean>
+    <bean id="dataSourceThree" class="org.apache.commons.dbcp2.BasicDataSource"
+        destroy-method="close">
+        <property name="driverClassName" value="${sql.jdbc.driverClassName}" />
+        <property name="url" value="${sql.jdbc.three.url}" />
+        <property name="username" value="${sql.jdbc.three.username}" />
+        <property name="password" value="${sql.jdbc.three.password}" />
+        
+        <property name="testOnBorrow" value="${sql.testOnBorrow}" />
+        <property name="testWhileIdle" value="${sql.testWhileIdle}" />
+        <property name="validationQuery" value="${sql.validationQuery}" />
+        <property name="timeBetweenEvictionRunsMillis" value="${sql.timeBetweenEvictionRunsMillis}" />
+        
+        <property name="initialSize" value="${sql.initialSize}" />
+        <property name="maxTotal" value="${sql.maxTotal}" />
+        <property name="minIdle" value="${sql.minIdle}" />
+        <property name="maxIdle" value="${sql.maxIdle}" />
+        <property name="maxWaitMillis" value="${sql.maxWaitMillis}" />
+    
+    </bean>
+	
+	
+	<!-- Myibatis 配置 -->
+	<!-- define the SqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dynamicDataSource" />
+		<property name="typeAliasesPackage" value="com.housing.management.backend.domain" />
+				<property name="configurationProperties">  
+            <props>  
+                <prop key="cacheEnabled">true</prop>      
+            </props>  
+        </property> 
+	</bean>
+
+	<!-- scan for mappers and let them be autowired -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.housing.management.backend.dao" />
+	</bean>
+	
+	<!-- 客户端配置 -->
+	<bean id="byfzServiceClient" class="com.hzfc.soar.zfbz.byfz.websupport.ByfzwwWebService"
+		factory-bean="byfzServiceClientFactory" factory-method="create" />
+	
+	<bean id="byfzServiceClientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
+		<property name="serviceClass" value="com.hzfc.soar.zfbz.byfz.websupport.ByfzwwWebService" />
+		<property name="address" value="${byfz_address}"/>
+	</bean>
+
+    <!--==============================数据库事务 START====================================================== -->
+	<!-- mybatis orm -->
+   <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dynamicDataSource"/>
+    </bean>
+
+    <aop:config proxy-target-class="true">  
+ 		<aop:pointcut id="serviceOperation" expression="execution(* com.housing.management.backend.service..*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation" />  
+    </aop:config>  
+    
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="insert*" isolation="DEFAULT" read-only="false"
+                       propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="update*" isolation="DEFAULT" read-only="false"
+                       propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="save*" isolation="DEFAULT" read-only="false"
+                       propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="add*" isolation="DEFAULT" read-only="false"
+                       propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="commit*" isolation="DEFAULT" read-only="false"
+                       propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="create*" isolation="DEFAULT" read-only="false"
+                       propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="del*" isolation="DEFAULT" read-only="false"
+                       propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="undel*" isolation="DEFAULT" read-only="false"
+                       propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="remove*" isolation="DEFAULT" read-only="false"
+                       propagation="REQUIRED" rollback-for="Exception"/>
+<!--             <tx:method name="receive*" isolation="DEFAULT" read-only="false"
+                       propagation="REQUIRED" rollback-for="Exception"/> -->
+        </tx:attributes>
+    </tx:advice>
+        <!--==============================数据库事务 END====================================================== -->
+
+    <!-- 动态数据源 -->
+     <bean id="dataSourceInterceptor" class="com.housing.management.backend.common.DataSourceInterceptor"> 
+        <property name="defaultDsName" value="dataSourceOne"/>
+	</bean>
+	
+	<!-- 自定义注解读取datasouce -->
+<!--     <aop:config proxy-target-class="true">
+        <aop:pointcut id="serviceOperation"
+                      expression="execution(* com.housing.management.backend.service..*.*(..))"/>
+        <aop:pointcut id="serviceOperation1"
+                      expression="execution(* com.housing.management.backend.service..*.*(..))"/>
+        <aop:advisor pointcut-ref="serviceOperation" advice-ref="dataSourceInterceptor"/>    
+        <aop:advisor pointcut-ref="serviceOperation1" advice-ref="txAdvice"/>
+    </aop:config> -->
+    
+	<aop:config proxy-target-class="true">  
+        <aop:aspect id="dataSourceAspect" ref="dataSourceInterceptor">  
+            <aop:pointcut id="daoOne" expression="execution(* com.housing.management.backend.service.one..*.*(..))" />  
+            <aop:pointcut id="daoTwo" expression="execution(* com.housing.management.backend.service.two..*.*(..))" /> 
+            <aop:pointcut id="daoThree" expression="execution(* com.housing.management.backend.service.three..*.*(..))" /> 
+            <aop:before pointcut-ref="daoOne" method="setdataSourceOne" />  
+            <aop:before pointcut-ref="daoTwo" method="setdataSourceTwo" /> 
+            <aop:before pointcut-ref="daoThree" method="setdataSourceThree" /> 
+        </aop:aspect>  
+    </aop:config>
+
+<!-- 另外一种方式 -->
+ <!-- 配置数据库注解aop -->  
+<!--     <aop:aspectj-autoproxy></aop:aspectj-autoproxy>  
+
+    <aop:config>  
+        <aop:aspect id="c" ref="dataSourceInterceptor">  
+            <aop:pointcut id="tx" expression="execution(* com.housing.management.backend.service.one..*.*(..))"/>  
+            <aop:before pointcut-ref="tx" method="before"/>  
+        </aop:aspect>  
+    </aop:config>   -->
+    <!-- 配置数据库注解aop --> 
+
+ 
+</beans>

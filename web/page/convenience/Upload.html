@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="../../css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../../css/easy-responsive-tabs.css" /> 
+	<link rel="stylesheet" href="../../css/main.css">
+	
+<!-- 	<link rel="stylesheet" href="mobile.time/css/jqueryMobile.css"> -->
+	<link href="../../mobile.time/css/mobiscroll.css" rel="stylesheet" type="text/css" />
+	<script src="../../lib/jquery.min.js"></script>
+	<script src="../../lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../../mobile.time/js/mobiscroll.js"></script>
+	<script src="../../lib/jquery.validate.min.js"></script>
+	<script src="../../lib/jquery.metadata.js"></script>
+	<script src="../../lib/cordova-1.5.0.js"></script>
+<!-- 	<script src="lib/cordova.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script src="lib/jqLoading.js"></script> -->
+	<script src="../../js/main.js"></script>
+	<script src="../../js/messages_cn.js"></script>
+	<script src="../../lib/LocalResizeIMG.js"></script>
+	<script src="../../lib/mobileBUGFix.mini.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FBqGlnTD1PFePw7StH7EANlD"></script>
+  <title>白蚁防治</title>
+ 
+ </head>
+ <body>
+	<div data-role="page" id="termites_subNewBut">
+	<script type="text/javascript">
+		$("#termites_subNewBut").on("pageshow",function(){
+			$("input:file").localResizeIMG({
+            width: 500,  
+            quality: 0.8,  
+            success: function (result1) {  
+                var img = new Image();
+                img.src = result1.base64;  
+                console.log(result1.clearBase64);  
+                //$("body").append(img);  
+                //$("#result").empty();  
+                //$("#result").append(img); //呈现图像(拍照結果)
+                $("#photo").empty();
+                $("#photo").attr("src",result1.base64);
+                var url3 = getLocalStorageObj().getItemInLS("servicePath")+"picture/send/uplode";
+                var bh = uploadno;
+                var filedata = JSON.stringify(result1.base64);
+                var outdata3 = {"fileData":result1.clearBase64,"slbh":bh};
+				console.log(outdata3);
+                $.ajax({
+                	type: 'POST',
+                    url: url3,
+                    contentType:"application/json;charset=UTF-8",
+                    data:JSON.stringify(outdata3),  
+                    dataType: 'json', 
+                    async:true,
+                    error: function(result, textStatus, jqXHR){
+                        alert("上传失败");  
+                    },
+                     success: function(result){  
+                        //alert(result);  
+                        //console.log(result);  
+                        alert("上传成功，如果还有可再次点击按钮进行上传")  
+                    }
+                });
+            }  
+        });  
+		});
+		
+	</script>
+	<div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+	    <a class="aftera"  href="javascript:void(0);" data-icon="back" data-rel="back" style="background-color: rgba(8, 187, 249, 0);color:#FFF;border:1px solid rgba(8, 187, 249, 0);opacity: 0.8;"><font style="color:#FFFFFF;">返回</font>
+	    	<div class="div_placearrow" style="width:20px;height:20px;top: 7px; left: 5px;background-image:url(../../img/serviceHotline/back_03.png);background-repeat:no-repeat;background-size:20px 20px;background-position:center;position: absolute"></div>
+	    </a>
+	    <h1>白蚁防治</h1>
+	 </div>
+	 <div class="placetabswrapper">
+    	<div class="divclear"></div>
+	  	<div class="placetabswrapperinsidecontent">
+	        <div class="contentinside notice">
+		        <div id="termitesTab3_content">
+		        	<form  id="formTermitesTab3" class="validate"> 
+		        	<table style="width:100%;background-color:#E7E6E6" cellpadding ="10" cellspacing="10" bgcolor="#E7E6E6" border="0" bordercolor="#FFFFFF" >
+			        	<tr class="trbottomline" style="height:40px;background-color:#E7E6E6;margin-left:10px"><td class="tdpadding" style="width:40%">图片上传</td></tr>
+			        </table>
+			        </form>
+			        <input type="file" style='display:none' id="file1" name="file1"/>
+			        <button onclick="file1.click()" id="tijiao" name="tijiao">点击按钮选择图片并自动上传</button>
+        			<div id="result" align="center" style="margin-top: 20px">
+        				<img id="photo" name="photo" style="height:100%;width:100%;"></img>
+        			</div>
+		        </div>
+		    </div>
+		</div>
+  		<div class="nomoredata" style="display:none">没有更多数据了</div>
+  </div>
+	  	<div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+			<div role="navigation" class="ui-navbar" data-role="navbar">
+				<ul  class="ui-grid-c">
+					<li class="ui-block-a"><a class="aftera" href="javascript:openToPage(1)" data-icon="home" data-transition="slide" style="background-color:#FFF !important">首页
+		            <div class="footer_placeiconsgrey"></div></a>
+		            </li>
+					<li class="ui-block-b"><a class="aftera" href="javascript:openToPage(2)" data-icon="search" data-transition="slide" rel="external" style="background-color:#FFF !important">信息公开
+		             <div class="footer_placeicons_search"></div></a>
+		            </li>
+					<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+					<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external" style="background-color:#FFF !important"><font style="color:#08bbf9">便民服务</font>
+		            <div class="footer_placeicons_interactivelight"></div></a>
+		            </li>
+		           <!--  <li class="ui-block-d"><a class="aftera" id="interactivity_AId" href="javascript:openToPage(4)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">登录
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li> -->
+					<li class="ui-block-d"><a class="aftera" href="javascript:openToPage(5)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">政务动态
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li>
+				</ul>
+			</div>
+		</div>
+	</div> 
+ </body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="../../css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../../css/easy-responsive-tabs.css" /> 
+	<link rel="stylesheet" href="../../css/main.css">
+	
+<!-- 	<link rel="stylesheet" href="mobile.time/css/jqueryMobile.css"> -->
+	<link href="../../mobile.time/css/mobiscroll.css" rel="stylesheet" type="text/css" />
+	<script src="../../lib/jquery.min.js"></script>
+	<script src="../../lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../../mobile.time/js/mobiscroll.js"></script>
+	<script src="../../lib/jquery.validate.min.js"></script>
+	<script src="../../lib/jquery.metadata.js"></script>
+	<script src="../../lib/cordova-1.5.0.js"></script>
+<!-- 	<script src="lib/cordova.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script src="lib/jqLoading.js"></script> -->
+	<script src="../../js/main.js"></script>
+	<script src="../../js/messages_cn.js"></script>
+	<script src="../../lib/LocalResizeIMG.js"></script>
+	<script src="../../lib/mobileBUGFix.mini.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FBqGlnTD1PFePw7StH7EANlD"></script>
+</head>
+<body>
+
+<div data-role="page" id="room_msg_Page1">
+ <script>
+ var pageSize=10,pageIndex=1,dataLength=1;//index_no内容序号
+	$('#room_msg_Page1').on('pageinit',function(event){
+		//setLoginNavigationBar("room_msg_AId");
+		var oldpage = window.location.href;
+		if(oldpage.indexOf("new_index.html")>=0||oldpage.indexOf("Notice.html")>=0){
+			getRoomTypeData(pageSize,pageIndex,"30009");
+		}
+		else{
+			var pagename1="#"+pagename;
+			$(pagename1).click();
+		}
+	});
+	//加载数据
+	function getRoomTypeData(pageSize,pageIndex,columnId){
+		//showLoader();
+		if(columnId=="30009"){
+			createId = "room1_content";
+		}else if(columnId=="30012"){
+			createId = "room2_content";
+		}else if(columnId=="31361"){
+			createId = "room3_content";
+		}
+		addDataLoader(createId);
+		$.ajax({
+			type: 'POST',
+			contentType : 'application/json',
+			url: getLocalStorageObj().getItemInLS("servicePath")+"news/list",
+			data: JSON.stringify({pageSize:pageSize,pageIndex:pageIndex,columnId:columnId}),
+			dataType: 'json',
+			success:function(result, textStatus, jqXHR){
+				delDataLoader();
+				if(result.rows.length){
+					createDom4(result.rows,columnId); 
+				}else{
+					noMoreData(createId);
+				}
+			 //hideLoader();
+			},
+            error:function(responseData){
+            	//hideLoader();
+            	delDataLoader();
+            }
+		});
+	}
+	//创建内容 columnId 30009 经济适用住房,30012 廉租房公告,31361 公租房公告
+	function createDom4(fillData,columnId) {
+		var createId = "";
+		var index_no =0;
+		if(columnId=="30009"){
+			createId = "room1_content";
+		}else if(columnId=="30012"){
+			createId = "room2_content";
+		}else if(columnId=="31361"){
+			createId = "room3_content";
+		}
+		if($("#"+createId).html()!='')return;
+         $.each(fillData,function(index,taget){
+         	var fbsj1=new Date().DateGridFormat(taget.fbDate);
+						fbsj1=fbsj1.substring(0,10);
+        	 var li = '<li class="row" onclick="houseDetails(\''+taget.contentId+'\',\''+taget.title+'\')">\
+				 	        <div class="left">\
+					     		<div class="title">'+taget.title+'</div>\
+					     		<div class="line">\
+					     			<div class="date">发布时间:'+fbsj1+'</div>\
+					     			<div class="point">点击量：'+taget.click+'</div>\
+				     			</div>\
+				     		</div>\
+					     	<div class="right">\
+					     		<div class="arrow-icon"></div>\
+					     	</div>\
+						</li>';
+			$(li).appendTo($("#"+createId));		 
+         });
+	}
+	function houseDetails(id,title){
+		window.page_information_roomContent = {id:id,title:title};
+		$.mobile.changePage("Room_Content.html","slideup");
+	}
+	/*--切换tabsjs*/
+	$(function(){
+		$(".placetabswrapperinside li").click(
+		function(){
+				$(".placetabswrapperinside").find("li").css("color","#555859");
+				$(".placetabswrapperinside").find("li").css("border-bottom","1px solid #fff");
+				$(".placetabswrapperinside").find("li").css("height","40px");
+				$(this).css("height","39px");
+				$(this).css("border-bottom","2px solid #08BBF9");
+				$(this).css("color","#08BBF9");
+				switchPage($(this).attr("id"));
+		});
+	});
+	//页面切换
+	function switchPage(pageId){
+		$("#room1_content").hide();
+		$("#room2_content").hide();
+		$("#room3_content").hide();
+		if(pageId=="room1"){
+			$("#room1_content").show();
+			getRoomTypeData(pageSize,pageIndex,"30009");
+			window.pagename="room1";
+		}else if(pageId=="room2"){
+			$("#room2_content").show();
+			getRoomTypeData(pageSize,pageIndex,"30012");
+			window.pagename="room2";
+		}else if(pageId=="room3"){
+			$("#room3_content").show();
+			getRoomTypeData(pageSize,pageIndex,"31361");
+			window.pagename="room3";
+		}
+	}
+/*--切换tabsjs结束*/
+ </script>
+ <div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+    <a class="aftera"  href="javascript:void(0);" data-icon="back" data-rel="back" style="background-color: rgba(8, 187, 249, 0);color:#FFF;border:1px solid rgba(8, 187, 249, 0);opacity: 0.8;"><font style="color:#FFFFFF;">返回</font>
+    	<div class="div_placearrow" style="width:20px;height:20px;top: 7px; left: 5px;background-image:url(../../img/serviceHotline/back_03.png);background-repeat:no-repeat;background-size:20px 20px;background-position:center;position: absolute"></div>
+    </a>
+    <h1>公示公告</h1>
+  </div>
+   <div class="placetabswrapper">
+	   	<div class="placetabswrapperinside">
+	  		<ul>
+	        	<li id="room1"  style="border-bottom:2px solid #08BBF9;height:39px;">经济适用住房</li>
+	            <li id="room2">廉租房公告</li>
+	            <li id="room3">公租房公告</li>
+	        </ul>
+	    </div>
+    	<div class="divclear"></div>
+	  	<div class="placetabswrapperinsidecontent">
+	        <div class="contentinside notice">
+		        <ul id="room1_content"></ul>
+		        <ul id="room2_content" style="display:none"></ul>
+		        <ul id="room3_content"  style="display:none"></ul>
+	        </div>
+	    </div>
+  		<div class="nomoredata" style="display:none">没有更多数据了</div>
+  </div>
+  	<div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+		<div role="navigation" class="ui-navbar" data-role="navbar">
+			<ul class="ui-grid-c">
+				<li class="ui-block-a"><a class="aftera" href="javascript:openToPage(1)" data-icon="home" data-transition="slide"  rel="external">首页<div class="footer_placeiconsgrey"></div></a></li>
+				<li class="ui-block-b"><a class="aftera" href="javascript:openToPage(2)" data-icon="search" data-transition="slide" rel="external"><font style="color:#08bbf9">信息公开</font><div class="footer_placeicons_searchlight"></div></a></li>
+				<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+				<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external">便民服务<div class="footer_placeicons_interactive"></div></a></li>
+				<!-- <li class="ui-block-d"><a class="aftera" id="footSearch_AId"  href="javascript:openToPage(4)" data-icon="gear" data-transition="slide" rel="external"><font>登录</font><div class="footer_placeicons_setting"></div></a></li> -->
+				<li class="ui-block-d"><a class="aftera" href="javascript:openToPage(5)" data-icon="gear" data-transition="slide" rel="external">政务动态<div class="footer_placeicons_setting"></div></a></li>
+			</ul>
+		</div>
+	</div>		
+</div> 
+
+
+</body>
+
+</html>

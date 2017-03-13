@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.housing.management.backend.dao.TpmBsdDAO">
+
+	<select id="getAddressInfo" parameterType="String" resultType="TpmBsd">
+			SELECT ID AS tpmBsdId,
+				BSDLX AS bsdLx,
+				BSDMC AS bsdMc,
+				DZ AS dz,
+		        ZXDH AS zxdh,
+		        ZBWD AS zbwd,
+				ZBJD AS zbjd,
+				DDSYT AS ddsyt
+			FROM TPM_BSD
+			WHERE ID = #{id}
+	</select>
+	
+	<select id="getAddressList" resultType="TpmBsd">
+			SELECT ID AS TpmBsdId,
+				BSDLX AS bsdLx,
+				BSDMC AS bsdMc,
+				DZ AS dz,
+				 ZXDH AS zxdh
+			FROM TPM_BSD
+			WHERE BSDLX = #{bsdLx}
+	</select>
+
+</mapper>

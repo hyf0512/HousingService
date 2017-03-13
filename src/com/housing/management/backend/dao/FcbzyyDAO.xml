@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.housing.management.backend.dao.FcbzyyDAO">
+
+	<select id="getAddressList" resultType="FcbzyySldd">
+		SELECT
+			ID AS slddId,
+			SLDD AS sldd,
+			SLCK AS slck
+		FROM WEB_FCBZYY_SLDD
+		ORDER BY ID
+	</select>
+	
+	<select id="getTimeList" parameterType="String" resultType="FcbzyyChb">
+		SELECT 
+			ID AS chbId,
+			XH AS xh,
+			SJD AS sjd,
+			SLSJ AS slsj,
+			SLDDID AS slddId
+		FROM WEB_FCBZYY_CHB
+		 WHERE SLDDID = #{slddId}
+		 ORDER BY XH
+	</select>
+	
+	<select id="getBussinessTypeList" resultType="FcbzyyYwlb">
+		SELECT 
+			ID AS ywlbId,
+			YWLB AS ywlb,
+			LINK AS link
+		FROM WEB_FCBZYY_YWLB
+		 ORDER BY ID
+	</select>
+	
+	<!-- 预约选择日期 -->
+	<select id="getDateList"  parameterType="String" resultType="FcbzyyChb">
+
+		SELECT TO_CHAR(A.CJSJ,'yyyy-MM-dd') AS cjsj,(COUNT(A.ID)- CASE WHEN MAX(B.YYSS) IS NULL THEN 0 ELSE MAX(B.YYSS) END) AS YYSY
+		FROM WEB_FCBZYY_CHB A 
+		LEFT JOIN (SELECT C.YYRQ,COUNT(C.ID) AS YYSS FROM WEB_FCBZYY C GROUP BY C.YYRQ ORDER BY C.YYRQ) B
+		ON(TO_CHAR(A.CJSJ,'yyyy-MM-dd') = TO_CHAR(B.YYRQ,'yyyy-MM-dd'))
+		Where A.SLDDID = #{slddId}
+		group by  A.CJSJ
+		ORDER BY A.CJSJ
+	</select>
+	
+	<!-- 插入预约信息 -->
+	<insert id="insertInfo" parameterType="Fcbzyy">
+		INSERT INTO WEB_FCBZYY (ID,YYH, YYRQ, CHBID, USERID, YWLB, NAME, CID, MOB, SFDHYY, LSBZ) 
+		VALUES (SEQ_FCBZYY.nextval,#{yyh}, to_date(#{yyrq},'yyyy-mm-dd hh24:mi:ss'), 
+		#{chbId}, #{userId}, #{ywlb}, #{name},
+		#{cId}, #{mob}, #{sfdhyy},
+		#{lsbz})
+	</insert>
+	<select id="login" parameterType="Fcbzyy" resultType="Fcbzyy">
+		SELECT USER_NAME AS userId,
+			   FIRST_NAME AS name,
+			   REGISTER_CID AS cId,
+			   MOB AS mob,
+			   REGISTER_ID AS registerId
+		FROM WEB_REGISTER_INFO 
+		 WHERE USER_NAME = #{userId} AND CIPHER = #{password}
+	</select>
+	
+	<select id="getWorkDayList" resultType="WorkDay">
+		SELECT TO_CHAR(WDDATE,'yyyy-MM-dd') AS wdDate,ID AS id,
+		BZ AS bz
+        FROM WORKDAY
+        WHERE WDTYPE = '0'
+	</select>
+	
+	<select id="getDay" parameterType="int" resultType="String">
+		SELECT to_char(SYSDATE+#{I},'yyyy-mm-dd') FROM dual
+	</select>
+	<select id="getYyzs" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM WEB_FCBZYY_CHB a WHERE a.LSBZ=0 AND a.SLDDID=#{ID}
+	</select>
+	<select id="getYyys" parameterType="FcbzyyChb" resultType="int">
+		SELECT COUNT(*) FROM WEB_FCBZYY a,WEB_FCBZYY_CHB b WHERE b.ID=a.CHBID AND a.LSBZ=0 AND to_char(a.YYRQ,'yyyy-mm-dd')=#{cjsj} AND b.SLDDID=#{slddId}
+	</select>
+	<select id="getFcbzyy" parameterType="String" resultType="Fcbzyy">
+		SELECT 
+		ID AS id,
+		YYH AS yyh,
+		TO_CHAR(YYRQ,'yyyy-MM-dd') AS yyrq,
+		USERID AS userId,
+		YWLB AS ywlb,
+		NAME AS name
+		FROM WEB_FCBZYY
+		WHERE USERID=#{userId} AND TO_CHAR(YYRQ,'yyyy-MM-dd') &gt;= TO_CHAR(SYSDATE,'yyyy-MM-dd') AND LSBZ='0'
+		ORDER BY YYRQ DESC
+	</select>
+	<update id="updateFcbzyy" parameterType="Fcbzyy">
+		UPDATE WEB_FCBZYY SET
+		LSBZ='1',
+		QXSJ=to_date(#{qxsj},'yyyy-mm-dd hh24:mi:ss')
+		WHERE YYH=#{yyh}
+	</update>
+	<select id="searchyydetil" parameterType="String" resultType="Fcbzyy">
+		SELECT
+		a.ID AS id,
+		a.YYH AS yyh,	
+		TO_CHAR(a.YYRQ,'yyyy-MM-dd') AS yyrq,
+		a.USERID AS userId,
+		a.NAME AS name,
+		b.SJD AS sjd,
+		b.SLSJ AS slsj,
+		c.SLDD AS sldd
+		FROM WEB_FCBZYY a,WEB_FCBZYY_CHB b,WEB_FCBZYY_SLDD c
+		WHERE a.YYH=#{yyh} AND b.ID=a.CHBID and b.SLDDID=c.ID
+	</select>
+</mapper>

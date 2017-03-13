@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.housing.management.backend.dao.JgryDeptDAO">
+
+	<!--机构基本信息 -->
+	<select id="getBaseInfo" parameterType="String" resultType="JgryDept">
+		SELECT 
+			DEPT_ID AS deptId,
+		    DEPT_NAME AS deptName,
+		    DEPT_SHORTNAME AS shortName,
+		    PAR_DEPT_ID AS parDetpId,
+		    PAR_DEPT AS parDept,
+		    DEPT_INDEX AS deptIndex,
+		    TEL AS tel,
+		    FAX AS fax,
+		    POST AS post,
+		    ADDRESS AS address,
+		    EMAIL AS email,
+		    MAINDUTY AS mainduty,
+		    ISSHOW AS isShow,
+		    ONDUTYTEL AS onDutyTel,
+		    ASKTEL AS askTel,
+		    ISLEADER AS isleader,
+		    DELFLAG AS delFlag,
+		    JBXX AS jbxx,
+		    TSTEL AS tsTel
+		FROM JGRY_DEPT
+		WHERE DEPT_ID = #{deptId}
+	</select>
+	
+	<select id="getSubordinateList" resultType="JgryDept">
+		SELECT 
+			DEPT_ID AS deptId,
+		    DEPT_NAME AS deptName,
+		    DEPT_SHORTNAME AS shortName,
+		    TEL AS tel,
+		    ADDRESS AS address
+		FROM JGRY_DEPT
+		 WHERE PAR_DEPT_ID = '0' AND DEPT_ID != '1' AND DELFLAG = '0' AND ISSHOW = '1'
+		 ORDER BY DEPT_INDEX
+	</select>
+	
+	<select id="getInternalList" resultType="JgryDept">
+		SELECT 
+			DEPT_ID AS deptId,
+		    DEPT_NAME AS deptName,
+		    DEPT_SHORTNAME AS shortName,
+		    TEL AS tel,
+		    ADDRESS AS address
+		FROM JGRY_DEPT
+		 WHERE PAR_DEPT_ID = '1' AND DELFLAG = '0' AND ISSHOW = '1' AND ISLEADER = '0'
+		 ORDER BY DEPT_INDEX
+	</select>
+	
+</mapper>

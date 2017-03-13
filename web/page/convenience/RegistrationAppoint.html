@@ -1,0 +1,207 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+  <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="../../css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../../css/easy-responsive-tabs.css" /> 
+	<link rel="stylesheet" href="../../css/main.css">
+	
+<!-- 	<link rel="stylesheet" href="mobile.time/css/jqueryMobile.css"> -->
+	<link href="../../mobile.time/css/mobiscroll.css" rel="stylesheet" type="text/css" />
+	<script src="../../lib/jquery.min.js"></script>
+	<script src="../../lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../../mobile.time/js/mobiscroll.js"></script>
+	<script src="../../lib/jquery.validate.min.js"></script>
+	<script src="../../lib/jquery.metadata.js"></script>
+	<script src="../../lib/cordova-1.5.0.js"></script>
+<!-- 	<script src="lib/cordova.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script src="lib/jqLoading.js"></script> -->
+	<script src="../../js/main.js"></script>
+	<script src="../../js/messages_cn.js"></script>
+	<script src="../../lib/LocalResizeIMG.js"></script>
+	<script src="../../lib/mobileBUGFix.mini.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FBqGlnTD1PFePw7StH7EANlD"></script>
+  <title>房产交易登记预约</title>
+ </head>
+ <body>
+	<div data-role="page" id="registrationAppoint_page1" data-dom-cache="true">
+	<script type="text/javascript">
+	//getreGistrationAppointData();
+	//获取后台数据
+	$("#registrationAppoint_page1").on("pageshow",function(){
+		/* var locaUrl =  window.location.href;
+		locaUrl = locaUrl.substring(locaUrl.lastIndexOf("/"), locaUrl.length-1);
+		if(locaUrl!="RegistrationAppoint.html")return; */
+		//setLoginNavigationBar("registrationAppoint_AId");
+
+		getreGistrationAppointData();
+	});
+	function getreGistrationAppointData(){
+		if($("#registrationAppoint_Maindiv1").html()){
+			return;
+		}
+		//showLoader();
+		addDataLoader("registrationAppoint_Maindiv1");
+		$.ajax({
+			type: 'GET',
+			contentType : 'application/json',
+			url: getLocalStorageObj().getItemInLS("servicePath")+"appointment/address/list",
+			dataType: 'json',
+			success:function(result, textStatus, jqXHR){
+				delDataLoader();
+				if(result){
+					$.each(result,function(indexObj,tagetObj){
+						//hideLoader();
+					     var div = "<div data-role='collapsible' data-inset='false' id='registrationAppointCollapsible_"+tagetObj.slddId+"'><h6><font style='color:#08bbf9'>"+tagetObj.sldd+"</font></h6></div>";
+					     $(div).appendTo($("#registrationAppoint_Maindiv1"));
+					     $("#registrationAppoint_Maindiv1").trigger('create');
+					     $("#registrationAppointCollapsible_"+tagetObj.slddId).collapsible({
+							  expand: function( event, ui ) {
+									  	var tagetExpandId = $(this).attr("id");
+									  	var self = this;
+	 							 	  	if($(this).find(".ui-collapsible-content").html())
+	 							 	  		{
+	 							 	  			if(tagetExpandId=="registrationAppointCollapsible_1"){
+	 							 	  				$('#slyy').remove();
+	 							 	  			}
+	 							 	  			else if(tagetExpandId=="registrationAppointCollapsible_2"){
+	 							 	  				$('#slyy2').remove();
+	 							 	  			}
+	 							 	  		}
+	 							 		//showLoader();
+	 							 		addDataLoader($(self).find(".ui-collapsible-content"));
+	 									$.ajax({
+		 									type: 'GET',
+		 									contentType : 'application/json',
+		 									url: getLocalStorageObj().getItemInLS("servicePath")+"appointment/date/number/list/"+tagetExpandId.split("_")[1],
+		 									dataType: 'json',
+		 									success:function(result, textStatus, jqXHR){
+		 										console.info(result);
+		 										delDataLoader();
+		 										if(result){
+		 											var div = "";
+		 											if(tagetExpandId=="registrationAppointCollapsible_1"){
+		 												div = '<div  class="appointment-info" id="slyy">\
+				 									    	<div class="row head">\
+					 								    		<div class="col1">日期</div>\
+					 								    		<div class="col2">剩余</div>\
+					 								    	</div>';
+		 							 	  			}
+		 							 	  			else if(tagetExpandId=="registrationAppointCollapsible_2"){
+		 							 	  				div = '<div  class="appointment-info" id="slyy2">\
+			 									    		<div class="row head">\
+				 								    			<div class="col1">日期</div>\
+				 								    			<div class="col2">剩余</div>\
+				 								    		</div>';
+		 							 	  			}
+							 						var subDiv = "";
+			 								    	$.each(result,function(index,taget){
+		 												//cjsjTd+="<td >"+(taget.cjsj)+"</td>";
+		 												//yysyTd+="<td ><a href='javascript:registrationAppointTime("+tagetExpandId.split("_")[1]+")' data-role='button' class='buttoncheck' data-corners='false' data-inline='true'>剩余"+(taget.yysy)+"</a></td>";
+			 								    		subDiv+='<div class="row" onclick="registrationAppointTime('+tagetExpandId.split("_")[1]+',\''+taget.cjsj+'\',\''+tagetObj.sldd+'\',\''+tagetObj.slck+'\')">\
+														    		<div class="col1">'+taget.cjsj+'</div>\
+														    		<div class="col2">'+taget.yysy+'</div>\
+														    		<div class="col3 arrow-icon"></div>\
+														    	</div>';
+			 								    	});		  
+			 								    	div+=subDiv+"</div>";	    	
+		 											/* var table = "<table>"
+		 											var cjsjTd = "<tr><td>预约时间</td>";
+		 											var yysyTd = "<tr><td>剩余次数</td>";
+		 											 $.each(result,function(index,taget){
+		 												cjsjTd+="<td >"+(taget.cjsj)+"</td>";
+		 												yysyTd+="<td ><a href='javascript:registrationAppointTime("+tagetExpandId.split("_")[1]+")' data-role='button' class='buttoncheck' data-corners='false' data-inline='true'>剩余"+(taget.yysy)+"</a></td>";
+		 											 });
+		 											cjsjTd+="</tr>";
+		 											yysyTd+="</tr>";
+		 											table+=cjsjTd+yysyTd+"</table>"; */
+		 											//$(self).find(".ui-collapsible-content").html(div);
+		 											$(div).appendTo($(self).find(".ui-collapsible-content"));
+		 											//$(self).find(".ui-collapsible-content").trigger('create');
+		 											$("#registrationAppointCollapsible_"+tagetExpandId.split("_")[1]).trigger('create');
+		 											//$("#"+tagetExpandId).trigger('create');
+		 											//$(".appointment-info").trigger('create');
+		 										}else{
+		 											//noMoreData($(self).find(".ui-collapsible-content"));
+		 										}
+		 										//hideLoader();
+		 									},
+		 						            error:function(responseData){
+		 						            	//hideLoader();
+		 						            	delDataLoader();
+		 						            }
+	 									});
+							  }
+						});
+			         });
+				}else{
+					noMoreData("registrationAppoint_Maindiv1");
+				}
+				//hideLoader();
+			},
+            error:function(responseData){
+            	//hideLoader();
+            	delDataLoader();
+            }
+		});
+	}
+	function registrationAppointTime(slddId,cjsj,sldd,slck){
+		window.registrationAppoint_slddId = slddId;
+		window.registrationAppoint_slddTitle = sldd+"("+cjsj+")";
+		window.registrationAppoint_cjsj = cjsj;
+		window.registrationAppoint_slck = slck;
+		$.mobile.changePage("RegistrationAppointDetail.html","pop");
+	}
+	$("#registrationAppoint_page1 #tuichu").on("click", function(){
+		getLocalStorageObj().setItemInLS("registUser",false);
+		getLocalStorageObj().setItemInLS("loginuserid","");
+		getLocalStorageObj().setItemInLS("loginusername","");
+		getLocalStorageObj().setItemInLS("loginusercId","");
+		getLocalStorageObj().setItemInLS("loginusermob","");
+		$.mobile.changePage("Service.html","pop");
+	});
+	//Jingjing
+	/* $(document).on("click",".appointment-info .row:not(.head)",function(env){
+		var $row = $(env.target).parents(".row");
+		console.log($row);
+		alert($row.index());
+	}); */
+	</script>
+	 <div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+	    <a class="aftera"  href="javascript:void(0);" data-icon="back" data-rel="back" style="background-color: rgba(8, 187, 249, 0);color:#FFF;border:1px solid rgba(8, 187, 249, 0);opacity: 0.8;"><font style="color:#FFFFFF;">返回</font>
+	    	<div class="div_placearrow" style="width:20px;height:20px;top: 7px; left: 5px;background-image:url(../../img/serviceHotline/back_03.png);background-repeat:no-repeat;background-size:20px 20px;background-position:center;position: absolute"></div>
+	    </a>
+	    <h1>房产交易登记预约</h1>
+		<a class="selfChangeHouse_content_page2-login-btn" id="tuichu" rel="external" >退出</a>
+	  </div>
+	<div data-role="content" id="registrationAppoint_Maindiv1"></div>
+	<div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+			<div role="navigation" class="ui-navbar" data-role="navbar">
+				<ul  class="ui-grid-c">
+					<li class="ui-block-a"><a class="aftera" href="javascript:openToPage(1)" data-icon="home" data-transition="slide" style="background-color:#FFF !important">首页
+		            <div class="footer_placeiconsgrey"></div></a>
+		            </li>
+					<li class="ui-block-b"><a class="aftera" href="javascript:openToPage(2)" data-icon="search" data-transition="slide" rel="external" style="background-color:#FFF !important">信息公开
+		             <div class="footer_placeicons_search"></div></a>
+		            </li>
+					<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+					<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external" style="background-color:#FFF !important"><font style="color:#08bbf9">便民服务</font>
+		            <div class="footer_placeicons_interactivelight"></div></a>
+		            </li>
+		           <!--  <li class="ui-block-d"><a class="aftera" id="interactivity_AId" href="javascript:openToPage(4)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">登录
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li> -->
+					<li class="ui-block-d"><a class="aftera" href="javascript:openToPage(5)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">政务动态
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li>
+				</ul>
+			</div>
+		</div>
+	</div> 
+ </body>
+</html>

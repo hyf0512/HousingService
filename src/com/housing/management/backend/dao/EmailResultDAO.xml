@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.housing.management.backend.dao.EmailResultDAO">
+	<select id="getemailresult" parameterType="EmailResult" resultType="EmailResult">
+		SELECT
+			EMAIL_SUBJECT AS emailsubject,
+			EMAIL_KIND_ID AS emailkindid,
+			EMAIL_TIME AS emailtime,
+			REPLY_PHON AS replyphone,
+			OPERATION_CLASS AS operationclass,
+			REPLY_CODE AS replycode,
+			REPLY_ADDRESS AS replyaddress,
+			EMAIL_TEXT AS emailtext,
+			EMAIL_NUM AS emailnum,
+			REPLY_TIME AS replytime,
+			STAFF_NAME AS staffname,
+			STAFF_TEL AS stafftel,
+			REPLY_TEXT AS replytext,
+			HANDOVER_MARK AS handovermark,
+			EMAIL_DEPT_ID AS deptID
+		FROM WEB_NEW_EMAIL
+		 WHERE EMAIL_NO = #{emailno} AND EMAIL_PWD = #{emailpwd}
+	</select>
+	<select id="getdeptname" parameterType="String" resultType="String">
+		SELECT DEPT_NAME FROM WEB_OFFICE_DEPT WHERE DEPT_ID = #{deptID}
+	</select>
+</mapper>

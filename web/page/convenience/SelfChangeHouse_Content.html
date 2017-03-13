@@ -1,0 +1,350 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+ <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="../../css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../../css/easy-responsive-tabs.css" /> 
+	<link rel="stylesheet" href="../../css/main.css">
+	
+<!-- 	<link rel="stylesheet" href="mobile.time/css/jqueryMobile.css"> -->
+	<link href="../../mobile.time/css/mobiscroll.css" rel="stylesheet" type="text/css" />
+	<script src="../../lib/jquery.min.js"></script>
+	<script src="../../lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../../mobile.time/js/mobiscroll.js"></script>
+	<script src="../../lib/jquery.validate.min.js"></script>
+	<script src="../../lib/jquery.metadata.js"></script>
+	<script src="../../lib/cordova-1.5.0.js"></script>
+<!-- 	<script src="lib/cordova.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script src="lib/jqLoading.js"></script> -->
+	<script src="../../js/main.js"></script>
+	<script src="../../js/messages_cn.js"></script>
+	<script src="../../lib/LocalResizeIMG.js"></script>
+	<script src="../../lib/mobileBUGFix.mini.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FBqGlnTD1PFePw7StH7EANlD"></script>
+  <title>保障房受理</title>
+ </head>
+ <body>
+	<div data-role="page" id="selfChangeHouse_Content_page1" data-dom-cache="true">
+	
+	<script type="text/javascript">
+		$('#selfChangeHouse_Content_page1').on('pageshow',function(event){
+			/* var locaUrl =  window.location.href;
+			locaUrl = locaUrl.substring(locaUrl.lastIndexOf("/"), locaUrl.length-1);
+			if(locaUrl!="SelfChangeHouse_Content.html")return; */
+			//setLoginNavigationBar("selfChangeHouse_Content_AId");
+			showLoader();
+			//addDataLoader("appoint_Time");
+			$.ajax({
+				type: 'GET',
+				contentType : 'application/json',
+				url: getLocalStorageObj().getItemInLS("servicePath")+"housingChange/detail/"+page_convenience_selfChangeHouseContent_fzfhfsqId,
+				dataType: 'json',
+				success:function(result, textStatus, jqXHR){
+					var phonenumber="******（*隐私信息，请登录后再查看。）";
+					var fwzl="******（*隐私信息，请登录后再查看。）";
+					var qtlxfs="******（*隐私信息，请登录后再查看。）";
+					var houseRegistUser = JSON.parse(getLocalStorageObj().getItemInLS("houseRegistUser"));
+					if(houseRegistUser){
+						phonenumber = result.yddh;
+						fwzl = result.fwzl;
+						qtlxfs = result.lxfs;
+					}
+			    	var bt="";
+			    	var bt1=result.bt;
+			    	if(bt1!=null){
+			    		if(bt1.indexOf("e")>-1){
+			    			bt="东边套";
+			    		}
+			    		if(bt1.indexOf("w")>-1){
+			    			bt="西边套";
+			    		}
+			    		if(bt1.indexOf("m")>-1){
+			    			bt="中间套";
+			    		}
+			    	}
+					var yxszqy = "";
+			    	var yxszqy1 = result.yxszqy;
+			    	if(yxszqy1!=null){
+			    		if(yxszqy1.indexOf("n")>-1){
+				    		yxszqy=yxszqy+"城北";
+				    	}
+				    	if(yxszqy1.indexOf("s")>-1){
+				    		if(yxszqy!=""){
+				    			yxszqy=yxszqy+",城南";
+				    		}
+				    		else{
+				    			yxszqy=yxszqy+"城南";
+				    		}
+				    	}
+				    	if(yxszqy1.indexOf("e")>-1){
+				    		if(yxszqy!=""){
+				    			yxszqy=yxszqy+",城东";
+				    		}
+				    		else{
+				    			yxszqy=yxszqy+"城东";
+				    		}
+				    	}
+				    	if(yxszqy1.indexOf("w")>-1){
+				    		if(yxszqy!=""){
+				    			yxszqy=yxszqy+",城西";
+				    		}
+				    		else{
+				    			yxszqy=yxszqy+"城西";
+				    		}
+				    	}
+				    	if(yxszqy1.indexOf("m")>-1){
+				    		if(yxszqy!=""){
+				    			yxszqy=yxszqy+",城中";
+				    		}
+				    		else{
+				    			yxszqy=yxszqy+"城中";
+				    		}
+				    	}
+			    	}
+			    	
+			    	if(yxszqy==""){
+			    		yxszqy="无";
+			    	}
+			    	var szqy = "";
+			    	var szqy1 = result.szqy;
+			    	if(szqy1!=null){
+			    		if(szqy1.indexOf("n")>-1){
+				    		szqy=szqy+"城北";
+				    	}
+				    	if(szqy1.indexOf("s")>-1){
+				    		if(szqy!=""){
+				    			szqy=szqy+",城南";
+				    		}
+				    		else{
+				    			szqy=szqy+"城南";
+				    		}
+				    	}
+				    	if(szqy1.indexOf("e")>-1){
+				    		if(szqy!=""){
+				    			szqy=szqy+",城东";
+				    		}
+				    		else{
+				    			szqy=szqy+"城东";
+				    		}
+				    	}
+				    	if(szqy1.indexOf("w")>-1){
+				    		if(szqy!=""){
+				    			szqy=szqy+",城西";
+				    		}
+				    		else{
+				    			szqy=szqy+"城西";
+				    		}
+				    	}
+				    	if(szqy1.indexOf("m")>-1){
+				    		if(szqy!=""){
+				    			szqy=szqy+",城中";
+				    		}
+				    		else{
+				    			szqy=szqy+"城中";
+				    		}
+				    	}
+			    	}
+			    	
+			    	if(szqy==""){
+			    		szqy="无";
+			    	}
+					$("#selfChangeHouseConten_xqmc").text(getTextValue(result.xqmc));
+					$("#selfChangeHouseConten_zcs").text(getTextValue(result.zcs));
+					$("#selfChangeHouseConten_fwjg").text(getTextValue(result.fwjg));
+					$("#selfChangeHouseConten_szqy").text(getTextValue(szqy));
+					$("#selfChangeHouseConten_szjd").text(getTextValue(result.szjd));
+					$("#selfChangeHouseConten_yddh").text(getTextValue(phonenumber));
+					$("#selfChangeHouseConten_fwzl").text(getTextValue(fwzl));
+					$("#selfChangeHouseConten_symj").text(getTextValue(result.symj));
+					$("#selfChangeHouseConten_bt").text(getTextValue(bt));
+					$("#selfChangeHouseConten_zscq").text(getTextValue(result.zscq));
+					$("#selfChangeHouseConten_xm").text(getTextValue(result.xm));
+					$("#selfChangeHouseConten_lxfs").text(getTextValue(qtlxfs));
+					$("#selfChangeHouseConten_yxxqmc").text(getTextValue(result.yxxqmc));
+					$("#selfChangeHouseConten_yxzcsStart").text(getTextValue(result.yxzcsStart));
+					$("#selfChangeHouseConten_yxszcsEnd").text(getTextValue(result.yxszcsEnd));
+					$("#selfChangeHouseConten_yxfwjg").text(getTextValue(result.yxfwjg));
+					$("#selfChangeHouseConten_yxszqy").text(getTextValue(yxszqy));
+					hideLoader();
+				},
+	           error:function(responseData){
+	        	   hideLoader();
+	           }
+			});
+		});
+		$('#selfChangeHouse_Content_page1').on('pageshow',function(event){
+			$("#selfChangeHouseConten_xqmc").text("");
+			$("#selfChangeHouseConten_zcs").text("");
+			$("#selfChangeHouseConten_fwjg").text("");
+			$("#selfChangeHouseConten_szqy").text("");
+			$("#selfChangeHouseConten_szjd").text("");
+			$("#selfChangeHouseConten_yddh").text("");
+			$("#selfChangeHouseConten_fwzl").text("");
+			$("#selfChangeHouseConten_symj").text("");
+			$("#selfChangeHouseConten_bt").text("");
+			$("#selfChangeHouseConten_zscq").text("");
+			$("#selfChangeHouseConten_xm").text("");
+			$("#selfChangeHouseConten_lxfs").text("");
+			$("#selfChangeHouseConten_yxxqmc").text("");
+			$("#selfChangeHouseConten_yxzcsStart").text("");
+			$("#selfChangeHouseConten_yxszcsEnd").text("");
+			$("#selfChangeHouseConten_yxfwjg").text("");
+			$("#selfChangeHouseConten_yxszqy").text("");
+		});
+		
+		function getTextValue(value){
+			return valueStr = value==null?"":value;
+		}
+		
+		$("#selfChangeHouse_Content_page1 #houseLogin").on("click", function(){
+			$.mobile.changePage("../login/HouseLoginIndex.html","pop");
+		});
+	</script>
+<!-- 	 <div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+	    <a class="aftera"  href="javascript:void(0);" data-icon="back" data-rel="back" style="background-color: rgba(8, 187, 249, 0);color:#FFF;border:1px solid rgba(8, 187, 249, 0);opacity: 0.8;"><font style="color:#FFFFFF;">返回</font>
+	    	<div class="div_placearrow" style="width:20px;height:20px;top: 7px; left: 5px;background-image:url(../../img/serviceHotline/back_03.png);background-repeat:no-repeat;background-size:20px 20px;background-position:center;position: absolute"></div>
+	    </a>
+	    <h1 id="selfChangeHouse_content_h1_title"></h1>
+	</div> -->
+	  <div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+    <a class="aftera"  href="javascript:void(0);" data-icon="back" data-rel="back" style="background-color: rgba(8, 187, 249, 0);color:#FFF;border:1px solid rgba(8, 187, 249, 0);opacity: 0.8;"><font style="color:#FFFFFF;">返回</font>
+    	<div class="div_placearrow" style="width:20px;height:20px;top: 7px; left: 5px;background-image:url(../../img/serviceHotline/back_03.png);background-repeat:no-repeat;background-size:20px 20px;background-position:center;position: absolute"></div>
+    </a>
+    <h1>房源详情</h1>
+    <a class="selfChangeHouse_content_page2-login-btn" id="houseLogin" rel="external" >登录</a>
+  </div>
+  
+	<div id="selfChangeHouse_content_page2" data-role="content" style="padding-top: 0;">
+	
+		<div class="section">
+			<div class="section-header">小区信息</div>
+			<div class="section-content">
+				<div class="group">
+					<label class="name">小区名称</label>
+					<label id="selfChangeHouseConten_xqmc" class="value"></label>
+				</div>
+				<div class="xian "style="width:1000px;margin:0 auto;padding:0 200px; border-top:1px solid #ddd" ></div>
+				<div class="group">
+					<label class="name">层数/总层数</label>
+					<label id="selfChangeHouseConten_zcs" class="value"></label>
+				</div>
+				<div class="xian "style="width:1000px;margin:0 auto;padding:0 200px; border-top:1px solid #ddd" ></div>
+				<div class="group">
+					<label class="name">户型</label>
+					<label id="selfChangeHouseConten_fwjg" class="value"></label>
+				</div>
+				<div class="xian "style="width:1000px;margin:0 auto;padding:0 200px; border-top:1px solid #ddd" ></div>
+				<div class="group">
+					<label class="name">所在区域</label>
+					<label id="selfChangeHouseConten_szqy" class="value"></label>
+				</div>
+				<div class="xian "style="width:1000px;margin:0 auto;padding:0 200px; border-top:1px solid #ddd" ></div>
+				<div class="group">
+					<label class="name">所在街道</label>
+					<label id="selfChangeHouseConten_szjd" class="value"></label>
+				</div>
+				<div class="xian "style="width:1000px;margin:0 auto;padding:0 200px; border-top:1px solid #ddd" ></div>
+				<div class="group">
+					<label class="name">手机号码</label>
+					<label id="selfChangeHouseConten_yddh" class="value"></label>
+				</div>
+				<div class="xian "style="width:1000px;margin:0 auto;padding:0 200px; border-top:1px solid #ddd" ></div>
+				<div class="group">
+					<label class="name">房屋坐落</label>
+					<label id="selfChangeHouseConten_fwzl" class="value"></label>
+				</div>
+				<div class="xian "style="width:1000px;margin:0 auto;padding:0 200px; border-top:1px solid #ddd" ></div>
+				<div class="group">
+					<label class="name">面积</label>
+					<label id="selfChangeHouseConten_symj" class="value"></label>
+				</div>
+				<div class="xian "style="width:1000px;margin:0 auto;padding:0 200px; border-top:1px solid #ddd" ></div>
+				<div class="group">
+					<label class="name">边套</label>
+					<label id="selfChangeHouseConten_bt" class="value"></label>
+				</div>
+				<div class="xian "style="width:1000px;margin:0 auto;padding:0 200px; border-top:1px solid #ddd" ></div>
+				<div class="group">
+					<label class="name">所在城区</label>
+					<label id="selfChangeHouseConten_zscq" class="value"></label>
+				</div>
+				<div class="xian "style="width:1000px;margin:0 auto;padding:0 200px; border-top:1px solid #ddd" ></div>
+				<div class="group">
+					<label class="name">联系人</label>
+					<label id="selfChangeHouseConten_xm" class="value"></label>
+				</div>
+				<div class="xian "style="width:1000px;margin:0 auto;padding:0 200px; border-top:1px solid #ddd" ></div>
+				<div class="group">
+					<label class="name">其他联系方式</label>
+					<label id="selfChangeHouseConten_lxfs"></label>
+				</div>
+			</div>
+		</div>
+		<div class="section">
+			<div class="section-header">意向小区信息</div>
+			<div class="section-content">
+				<div class="group">
+					<label class="name">意向小区名称</label>
+					<label id="selfChangeHouseConten_yxxqmc" class="value"></label>
+				</div>
+				<div class="xian "style="width:1000px;margin:0 auto;padding:0 200px; border-top:1px solid #ddd" ></div>
+				<div class="group">
+					<label class="name">意向层数</label>
+					<label id="selfChangeHouseConten_yxzcsStart" class="value"></label>
+				</div>
+				<div class="xian "style="width:1000px;margin:0 auto;padding:0 200px; border-top:1px solid #ddd" ></div>
+				<div class="group">
+					<label class="name">意向边套</label>
+					<label id="selfChangeHouseConten_yxbj" class="value"></label>
+				</div>
+				<div class="xian "style="width:1000px;margin:0 auto;padding:0 200px; border-top:1px solid #ddd" ></div>
+				<div class="group">
+					<label class="name">意向房屋坐落</label>
+					<label id="selfChangeHouseConten_yxszcsEnd" class="value"></label>
+				</div>
+				<div class="xian "style="width:1000px;margin:0 auto;padding:0 200px; border-top:1px solid #ddd" ></div>
+				<div class="group">
+					<label class="name">意向户型</label>
+					<label id="selfChangeHouseConten_yxfwjg" class="value"></label>
+				</div>
+				<div class="xian "style="width:1000px;margin:0 auto;padding:0 200px; border-top:1px solid #ddd" ></div>
+				<div class="group">
+					<label class="name">意向区域</label>
+					<label id="selfChangeHouseConten_yxszqy" class="value"></label>
+				</div>
+			</div>
+		</div>
+	</div>
+  	<div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+			<div role="navigation" class="ui-navbar" data-role="navbar">
+				<ul  class="ui-grid-c">
+					<li class="ui-block-a"><a class="aftera" href="javascript:openToPage(1)" data-icon="home" data-transition="slide" style="background-color:#FFF !important">首页
+		            <div class="footer_placeiconsgrey"></div></a>
+		            </li>
+					<li class="ui-block-b"><a class="aftera" href="javascript:openToPage(2)" data-icon="search" data-transition="slide" rel="external" style="background-color:#FFF !important">信息公开
+		             <div class="footer_placeicons_search"></div></a>
+		            </li>
+					<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+					<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external" style="background-color:#FFF !important"><font style="color:#08bbf9">便民服务</font>
+		            <div class="footer_placeicons_interactivelight"></div></a>
+		            </li>
+		           <!--  <li class="ui-block-d"><a class="aftera" id="interactivity_AId" href="javascript:openToPage(4)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">登录
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li> -->
+					<li class="ui-block-d"><a class="aftera" href="javascript:openToPage(5)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">政务动态
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li>
+				</ul>
+			</div>
+		</div>
+	</div> 
+ </body>
+</html>

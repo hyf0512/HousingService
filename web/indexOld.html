@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+<!--     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="false" id="twcClient" name="twcClient">
+    <meta content="width=device-width, initial-scale=1" name="viewport"> -->
+    
+	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+	<link rel="stylesheet" href="css/easy-responsive-tabs.css" />
+	<link rel="stylesheet" href="css/main.css" />
+	<script src="lib/jquery.min.js"></script>
+	<script src="lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="lib/cordova-1.5.0.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script>
+	$(document).ready(function(){
+		$(".indextable_td").on("click",function(){
+			var n = $(this).attr('id');
+			if(n=="td_msg"){
+				$.mobile.changePage("page/information/Notice.html","slideup");
+			}else if(n=="td_bm"){
+				$.mobile.changePage("page/convenience/Service.html","slideup");
+			}else if(n=="td_mz"){
+				$.mobile.changePage("page/information/Notice.html","slideup");
+			}
+		});
+		
+	});
+	
+	</script>
+</head>
+<body>
+   <div data-role="page" id="home">
+		<div data-role="header" data-position="fixed">
+			<h1>公告公示、房管动态</h1>
+		</div>
+		<div data-role="content" id="homeContent" >
+		<div data-role="none">
+			<table class="indextable" cellpadding="5" cellspacing="5">
+				<tr>
+					<td class="indextable_td"  id="td_msg">
+						<p><img src="css/images/msg.jpg" width="100px" height="100px" /></p>
+						<p>信息公开</p>
+					</td>
+					<td class="indextable_td"  id="td_bm">
+						<p><img src="css/images/bm.jpg" width="100px" height="100px" /></p>
+						<p>便民服务</p>
+					</td>
+					<td class="indextable_td" id="td_mz">
+						<p><img src="css/images/mz.jpg" width="100px" height="100px" /></p>
+						<p>政民互动</p>
+					</td>
+				</tr>
+			</table>
+		</div>
+		</div>
+		<div data-role="footer" data-position="fixed" >
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#" data-icon="home" data-transition="slide" >首页</a></li>
+					<li><a href="#" data-icon="search" data-transition="slide" rel="external">搜索</a></li>
+					<li><a href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li>
+					<li><a href="#" data-icon="star" data-transition="slide" rel="external">民政互动</a></li>
+					<li><a href="#" data-icon="gear" data-transition="slide" rel="external">设置</a></li>
+				</ul>
+			</div>
+		</div>		
+	</div>
+</body>
+</html>

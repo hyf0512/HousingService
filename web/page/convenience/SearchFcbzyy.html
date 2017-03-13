@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+   <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="../../css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../../css/easy-responsive-tabs.css" /> 
+	<link rel="stylesheet" href="../../css/main.css">
+	
+<!-- 	<link rel="stylesheet" href="mobile.time/css/jqueryMobile.css"> -->
+	<link href="../../mobile.time/css/mobiscroll.css" rel="stylesheet" type="text/css" />
+	<script src="../../lib/jquery.min.js"></script>
+	<script src="../../lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../../mobile.time/js/mobiscroll.js"></script>
+	<script src="../../lib/jquery.validate.min.js"></script>
+	<script src="../../lib/jquery.metadata.js"></script>
+	<script src="../../lib/cordova-1.5.0.js"></script>
+<!-- 	<script src="lib/cordova.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script src="lib/jqLoading.js"></script> -->
+	<script src="../../js/main.js"></script>
+	<script src="../../js/messages_cn.js"></script>
+	<script src="../../lib/LocalResizeIMG.js"></script>
+	<script src="../../lib/mobileBUGFix.mini.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FBqGlnTD1PFePw7StH7EANlD"></script>
+</head>
+<body>
+<div data-role="page" id="searchfcbzyylist_Page" data-dom-cache="true">
+ <script type="text/javascript">
+	$('#searchfcbzyylist_Page').on('pageshow',function(event){
+		$("#structure2_content").html("");
+		//setLoginNavigationBar("institutionStructure_AId");
+		//switchPage(switchpageid);
+		var userId ="";
+		userId = getLocalStorageObj().getItemInLS("loginuserid");
+		searchyylist(userId);
+	});
+
+	
+	//创建内容 mark 1基本信息
+	function institutionalStructureInfoDetail(deptId){
+		window.page_information_searchdetil_yyh=deptId;
+		$.mobile.changePage("FcbzyyDetil.html","pop");
+	}
+	function searchyylist(userId){
+		addDataLoader(userId);
+		$.get(
+			getLocalStorageObj().getItemInLS("servicePath")+"/appointment/searchyy/list/"+userId,
+			function(data,status){
+				delDataLoader();
+				if(data.length){
+					createUlDom(data);
+				}else{
+					noMoreData("structure2_content");
+				}
+			}
+		);
+	}
+	//创建内容 
+	function createUlDom(fillData) {
+		//var createId = columnId;
+			//if($("#"+createId).html()!='')return;
+			$.each(fillData,function(index,taget){
+	       	 var li = '<li class="row" onclick="institutionalStructureInfoDetail(\''+taget.yyh+'\')">\
+					 	        <div class="left">\
+						     		<div class="title">预约号:'+taget.yyh+'</div>\
+						     		<div class="line">\
+						     		<div class="date">预约日期:'+taget.yyrq+'</div>\
+					     			</div>\
+					     		</div>\
+						     	<div class="right">\
+						     		<div class="arrow-icon"></div>\
+						     	</div>\
+							</li>';
+				$(li).appendTo($("#structure2_content"));		 
+	        });
+	}
+	$("#searchfcbzyylist_Page #tuichu").on("click", function(){
+		getLocalStorageObj().setItemInLS("registUser",false);
+		getLocalStorageObj().setItemInLS("loginuserid","");
+		getLocalStorageObj().setItemInLS("loginusername","");
+		getLocalStorageObj().setItemInLS("loginusercId","");
+		getLocalStorageObj().setItemInLS("loginusermob","");
+		$.mobile.changePage("Service.html","pop");
+	});
+ </script>
+ <div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+    <a class="aftera"  href="javascript:void(0);" data-icon="back" data-rel="back" style="background-color: rgba(8, 187, 249, 0);color:#FFF;border:1px solid rgba(8, 187, 249, 0);opacity: 0.8;"><font style="color:#FFFFFF;">返回</font>
+    	<div class="div_placearrow" style="width:20px;height:20px;top: 7px; left: 5px;background-image:url(../../img/serviceHotline/back_03.png);background-repeat:no-repeat;background-size:20px 20px;background-position:center;position: absolute"></div>
+    </a>
+     <h1>我的预约</h1>
+     <a class="selfChangeHouse_content_page2-login-btn" id="tuichu" rel="external" >退出</a>
+  </div>
+   <div class="placetabswrapper">
+	  	<div class="placetabswrapperinsidecontent">
+	        <div class="contentinside notice">
+		        <ul id="structure2_content"></ul>
+	        </div>
+	    </div>
+  		<div class="nomoredata" style="display:none">没有更多数据了</div>
+  </div>
+  	<div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+			<div role="navigation" class="ui-navbar" data-role="navbar">
+				<ul  class="ui-grid-c">
+					<li class="ui-block-a"><a class="aftera" href="javascript:openToPage(1)" data-icon="home" data-transition="slide" style="background-color:#FFF !important">首页
+		            <div class="footer_placeiconsgrey"></div></a>
+		            </li>
+					<li class="ui-block-b"><a class="aftera" href="javascript:openToPage(2)" data-icon="search" data-transition="slide" rel="external" style="background-color:#FFF !important">信息公开
+		             <div class="footer_placeicons_search"></div></a>
+		            </li>
+					<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+					<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external" style="background-color:#FFF !important"><font style="color:#08bbf9">便民服务</font>
+		            <div class="footer_placeicons_interactivelight"></div></a>
+		            </li>
+		           <!--  <li class="ui-block-d"><a class="aftera" id="interactivity_AId" href="javascript:openToPage(4)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">登录
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li> -->
+					<li class="ui-block-d"><a class="aftera" href="javascript:openToPage(5)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">政务动态
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li>
+				</ul>
+			</div>
+		</div>	
+</div> 
+
+</body>
+
+</html>

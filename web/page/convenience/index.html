@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html class="ui-mobile">
+<head>
+    <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="../../css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../../css/easy-responsive-tabs.css" /> 
+	<link rel="stylesheet" href="../../css/main.css">
+	
+<!-- 	<link rel="stylesheet" href="mobile.time/css/jqueryMobile.css"> -->
+	<link href="../../mobile.time/css/mobiscroll.css" rel="stylesheet" type="text/css" />
+	<script src="../../lib/jquery.min.js"></script>
+	<script src="../../lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../../mobile.time/js/mobiscroll.js"></script>
+	<script src="../../lib/jquery.validate.min.js"></script>
+	<script src="../../lib/jquery.metadata.js"></script>
+	<script src="../../lib/cordova-1.5.0.js"></script>
+<!-- 	<script src="lib/cordova.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script src="lib/jqLoading.js"></script> -->
+	<script src="../../js/main.js"></script>
+	<script src="../../js/messages_cn.js"></script>
+	<script src="../../lib/LocalResizeIMG.js"></script>
+	<script src="../../lib/mobileBUGFix.mini.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FBqGlnTD1PFePw7StH7EANlD"></script>
+	<script>
+/* 	window.addEventListener('load', function () {  
+  alert('load OK!');  
+}, false);   */
+
+	function onLoad() {
+		getLocalStorageObj().setItemInLS("registUser",false); 
+		getLocalStorageObj().setItemInLS("houseRegistUser",false);
+/* $.mobile.page.prototype.options.domCache=false; */
+/* 			$(document).on("backbutton", function(){alert("ccccdd");});      */
+	    /* $(document).on("deviceready", onDeviceReady,false); */   
+/* 	    document.addEventListener("backbutton", function () {  
+                        //如果要退出，则调用如下方法，如果不退出，则可以自己处理  
+                        navigator.app.exitApp();  
+                  
+            }, false);     */
+	}      
+	// device APIs are available    //      
+	function onDeviceReady() {        // Register the event listener    
+	alert("b");      
+	    document.addEventListener("backbutton", onBackKeyDown, false);
+	    }  
+	        
+    // Handle the back button    //      
+    function onBackKeyDown() {      
+	  	alert("c");    
+	} 
+	
+	$(document).on("pageshow",function(event){
+
+		
+		//setLoginNavigationBar("main_indexAId");
+		//$.mobile.pageLoadErrorMessage = '页面加载数据有问题,请重新操作!';
+		//动态生成感兴趣的栏目图标
+		var appStroe = getLocalStorageObj().getItemInLS("appStore");
+		if(appStroe!=null){
+			createHomeDom(JSON.parse(appStroe));
+		}
+	});
+	$(document).on("click",".navigationdiv_wrapper_placeimg",function(){
+		var n = $(this).attr('id');
+		if(n=="navinfo_msg"){
+			$.mobile.changePage("../../page/information/Notice.html","pop");
+		}else if(n=="navinfo_bm"){
+			$.mobile.changePage("../../page/convenience/Service.html","pop");
+		}else if(n=="navinfo_mz"){
+			$.mobile.changePage("../../page/masatami/Interactivity.html","pop");
+		}
+	});
+	$(document).on("click",".navigationdiv_wrapper_secondarymain_placeicon",function(){
+		var n = $(this).attr('id');
+		if(n=="nav_app_div_image1"){ //公示公告
+			$.mobile.changePage("../../page/information/Room.html","pop");
+		}else if(n=="nav_app_div_image2"){//政务动态
+			$.mobile.changePage("../../page/information/GovernmentAffairs.html","pop");
+		}else if(n=="nav_app_div_image3"){//机构职能
+			$.mobile.changePage("../../page/information/InstitutionalStructure.html","pop");
+		}else if(n=="nav_app_div_image4"){//服务热线
+			$.mobile.changePage("../../page/convenience/Hotline.html","pop");
+		}else if(n=="nav_app_div_image5"){//应急维修
+			window.page_convenience_servicePagetitle ="应急维修";
+			window.page_convenience_servicePageNo=3;
+			$.mobile.changePage("../../page/convenience/GuaranteedHouse.html","pop");
+		}else if(n=="nav_app_div_image6"){//房产交易办理点
+			window.page_convenience_servicePagetitle ="房产交易办理点";
+			window.page_convenience_servicePageNo=1;
+			$.mobile.changePage("../../page/convenience/GuaranteedHouse.html","pop");
+		}else if(n=="nav_app_div_image7"){//查档地址
+			window.page_convenience_servicePagetitle ="查档地址";
+			window.page_convenience_servicePageNo=4;
+			$.mobile.changePage("../../page/convenience/GuaranteedHouse.html","pop");
+		}else if(n=="nav_app_div_image8"){//保障房
+			window.page_convenience_servicePagetitle ="保障性住房受理点";
+			window.page_convenience_servicePageNo=2;
+			$.mobile.changePage("../../page/convenience/GuaranteedHouse.html","pop");
+		}else if(n=="nav_app_div_image9"){//办证预约
+			var registUser = JSON.parse(getLocalStorageObj().getItemInLS("registUser"));
+			if(registUser){
+				$.mobile.changePage("../../page/convenience/RegistrationAppoint.html","pop");
+			}else{
+				$.mobile.changePage("../../page/login/loginIndex.html","pop");
+			}
+		}else if(n=="nav_app_div_image10"){//自助换房
+			$.mobile.changePage("../../page/convenience/SelfChangeHouse.html","pop");
+		}else if(n=="nav_app_div_image11"){//白蚁防治
+			$.mobile.changePage("../../page/convenience/BeforeTermites.html","pop");
+		}else if(n=="nav_app_div_image12"){//我要查询
+			$.mobile.changePage("../../page/masatami/Query.html","pop");
+		}else if(n=="nav_app_div_image13"){//我要咨询
+			$.mobile.changePage("../../page/masatami/Consultation.html","pop");
+		}else if(n=="nav_app_div_image14"){//投票
+			alert("此功能暂未开发。。");
+		}else if(n=="nav_app_div_image15"){//政民互动
+			$.mobile.changePage("../../page/masatami/Interactivity.html","pop");
+		}
+	});
+	
+	/*动态创建App图标*/
+	function createHomeDom(fillData) {
+		if(app.setConfig){//设置过
+			//alert(app.setConfig);
+			//alert($(".navigationdiv_wrapper_secondarymain").html());
+			app.setConfig =false;
+			$(".navigationdiv_wrapper_secondarymain").empty();
+			$(".navigationdiv_wrapper_secondarymain").hide();
+			//alert($(".navigationdiv_wrapper_secondarymain").html());
+		}else{
+			if(!$(".navigationdiv_wrapper_secondarymain").html()){
+				$(".navigationdiv_wrapper_secondarymain").hide();
+				var divNavAppDiv = "";
+			    $.each(fillData,function(index,taget){
+			    	index++;
+			    	divNavAppDiv += "<div id='nav_app_div_"+taget.id+"' class='navigationdiv_wrapper_secondarymain_placeicon'><div class='navigationdiv_wrapper_secondarymain_placeiconwrapper'><img src=\'"+taget.src+"\' /></div><div class='navigationdiv_wrapper_secondarymain_placeiconwrapper_font'>"+taget.name+"</div></div>";
+			    	if(index%4==0){
+			    		var secondarymainDiv = "<div class='navigationdiv_wrapper_secondarymain'>"+divNavAppDiv+"</div>";
+		            	$(".content_div").before(secondarymainDiv);
+		            	divNavAppDiv = "";
+			    	}else if(fillData.length==index&&index%4!=0){
+			    		var secondarymainDiv = "<div class='navigationdiv_wrapper_secondarymain'>"+divNavAppDiv+"</div>";
+		            	$(".content_div").before(secondarymainDiv);
+		            	divNavAppDiv = "";
+			    	}
+			    }); 
+			}
+		}
+	}
+	//
+	
+	</script>
+	<title>杭州住保房管</title>
+</head>
+<body id="index_body" class="ui-mobile-viewport ui-overlay-a" onload="onLoad();">
+<!-- onload="onLoad()" -->
+<div class="div_mainwrapperbg" >
+<!--页头开始-->
+<div class="hearderdiv">杭州住保房管</div>
+<!--页头结束-->
+<!--导航图标开始-->
+<div class="navigationdiv_wrapper" >
+	<ul>
+     	<li>
+     		<div class="navigationdiv_wrapper_placeimg"  id="navinfo_msg">
+            		<img src="../../img/homePage/01_03.png" width="60px" height="60px"/>
+             </div>
+             <div class="navigationdiv_wrapper_placefont">信息公开</div>
+     	</li>
+         <li>
+     		<div class="navigationdiv_wrapper_placeimg"  id="navinfo_bm">
+             	<img src="../../img/homePage/02_03.png" width="60px" height="60px"/>
+             </div>
+             <div class="navigationdiv_wrapper_placefont">便民服务</div>
+     	</li>
+         <li style="border-right:none">
+     		<div class="navigationdiv_wrapper_placeimg"  id="navinfo_mz">
+             	<img src="../../img/homePage/03_03.png" width="60px" height="60px"/>
+             </div>
+             <div class="navigationdiv_wrapper_placefont">政民互动</div>
+     	</li>
+    </ul>
+
+</div>
+<!--二级导航内容结束-->  
+<div class="content_div"></div>
+</div>
+<div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+	<div role="navigation" class="ui-navbar" data-role="navbar">
+		<ul  class="ui-grid-c">
+			<li class="ui-block-a"><a class="aftera" href="#" data-icon="home" data-transition="slide" style="background-color:#FFF !important"><font style="color:#08bbf9">首页</font>
+            <div class="footer_placeicons"></div></a>
+            </li>
+			<li class="ui-block-b"><a class="aftera" href="javascript:openToPage(2)" data-icon="search" data-transition="slide" rel="external" style="background-color:#FFF !important">搜索
+             <div class="footer_placeicons_search"></div></a>
+            </li>
+			<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+			<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external" style="background-color:#FFF !important">政民互动
+            <div class="footer_placeicons_interactive"></div></a>
+            </li>
+           <!-- <li class="ui-block-d"><a class="aftera" id="main_indexAId"   href="javascript:openToPage(4)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;"><font>登录</font>
+            <div class="footer_placeicons_setting"></div></a>
+            </li> --> 
+			<li class="ui-block-d"><a class="aftera" href="javascript:openToPage(5)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">设置
+            <div class="footer_placeicons_setting"></div></a>
+            </li>
+		</ul>
+	</div>
+</div>
+<div class="ui-loader ui-corner-all ui-body-a ui-loader-default"><span class="ui-icon-loading"></span><h1>loading</h1></div>
+</body>
+</html>

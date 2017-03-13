@@ -1,0 +1,315 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="../../css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../../css/easy-responsive-tabs.css" /> 
+	<link rel="stylesheet" href="../../css/main.css">
+	
+<!-- 	<link rel="stylesheet" href="mobile.time/css/jqueryMobile.css"> -->
+	<link href="../../mobile.time/css/mobiscroll.css" rel="stylesheet" type="text/css" />
+	<script src="../../lib/jquery.min.js"></script>
+	<script src="../../lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../../mobile.time/js/mobiscroll.js"></script>
+	<script src="../../lib/jquery.validate.min.js"></script>
+	<script src="../../lib/jquery.metadata.js"></script>
+	<script src="../../lib/cordova-1.5.0.js"></script>
+<!-- 	<script src="lib/cordova.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script src="lib/jqLoading.js"></script> -->
+	<script src="../../js/main.js"></script>
+	<script src="../../js/messages_cn.js"></script>
+	<script src="../../lib/LocalResizeIMG.js"></script>
+	<script src="../../lib/mobileBUGFix.mini.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FBqGlnTD1PFePw7StH7EANlD"></script>
+  <title>白蚁防治</title>
+ </head>
+ <body>
+	<div data-role="page" id="termites_subNewBut">
+	<script type="text/javascript">
+
+	        
+	//载入页面时判断是何种类型来分别加载
+		function Search(){
+
+			var l1 = $("#yslbh").val().length;
+			var l2 = $("#cqzh3").val().length;
+			var l3 = $("#cqzh4").val().length;
+			var l4 = $("#cqr").val().length;
+			if(l1==0&&(l2==0||l3==0)&&l4==0){
+				alert("查询时填写\"预受理编号\"\"产权证证号\"与\"产权人姓名\"三项中的两项");
+			}
+			else if(l1!=0&&(l2==0||l3==0)&&l4==0){
+				alert("查询时填写\"预受理编号\"\"产权证证号\"与\"产权人姓名\"三项中的两项");
+			}
+			else if(l1==0&&(l2==0||l3==0)&&l4!=0){
+				alert("查询时填写\"预受理编号\"\"产权证证号\"与\"产权人姓名\"三项中的两项");
+			}
+			else if(l1==0&&(l2!=0&&l3!=0)&&l4==0){
+				alert("查询时填写\"预受理编号\"\"产权证证号\"与\"产权人姓名\"三项中的两项");
+			}
+			else{
+				var searchlb = 1;//查找预受理编号、产权证号和产权人姓名
+				if(l1!=0&&(l2==0||l3==0)&l4!=0){
+					searchlb = 2;//查找预受理编号和产权人姓名
+				}
+				if(l1!=0&&(l2!=0&&l3!=0)&l4==0){
+					searchlb = 3;//查找预受理编号和产权证号
+				}
+				if(l1==0&&(l2!=0&&l3!=0)&l4!=0){
+					searchlb = 4;//查找产权证号和产权人姓名
+				}
+				var yslbh = $("#yslbh").val();
+				var cqzh3 = $("#cqzh3").val();
+				var cqzh4 = $("#cqzh4").val();
+				var cqr = $("#cqr").val();
+				var cqzh5 = "杭房权证" + cqzh3 + "字第" + cqzh4 + "号" ;
+				window.search_yslbh=yslbh;
+				window.search_cqr=cqr;
+				window.search_cqzh=cqzh5;
+				window.search_lb=searchlb;
+				$.mobile.changePage("Termites_ContentDetail.html","slideup");
+			}
+		}
+		//页面切换
+		function switchPage(pageId){
+			$("#termitesTab1_content").hide();
+			$("#termitesTab2_content").hide();
+			$("#termitesTab3_content").hide();
+			$("#"+pageId).show();
+			if(pageId=="termitesTab1"){
+				$("#termitesTab1_content").show();
+			}else if(pageId=="termitesTab2"){
+				$("#termitesTab2_content").show();
+			}
+			else{
+				$("#termitesTab3_content").show();
+				if(canupload){
+					$("#tishi").hide();
+					$("#tijiao").show();
+				}
+				else{
+					$("#tishi").show();
+					$("#tijiao").hide();
+					//document.getElementsByName("tijiao").value="";
+				}
+
+			}
+		}9
+		$("#kysj").change(function(){
+			checkDate(1);
+		});
+		$("#kysj1").change(function(){
+			checkDate(2);
+		});
+		function checkDate(i) {
+			if(i==1){
+				if ($("#kysj").val() != "") {
+			        var sj = $("#kysj").val()
+			        if (sj != "" && getnowtime() >= sj) {
+			        	if(terpageNo==1){
+			            alert("请选择今天以后的时间,请修改第一个家中何时有人");}
+			        	else
+			        		alert("请选择今天以后的时间,请修改第一个装修时间");
+			            $("#kysj").val("")
+			            return false;
+			        }
+			       
+			        var ymd = sj.split("-")
+			        //日期为0或6时是星期天和星期六
+			        if (fngetday(ymd[0], ymd[1], ymd[2]) == 6 || fngetday(ymd[0], ymd[1], ymd[2]) == 0) {
+			        	if(terpageNo==1){
+			            alert("您选择的是双休日，请选择周一至周五,请修改第一个家中何时有人时间");}
+			        	else
+			        		alert("您选择的是双休日，请选择周一至周五,请修改第一个装修时间");
+			            $("#kysj").val("");
+			            return false;
+			        }
+			    }
+			}
+			if(i==2){
+				if ($("#kysj1").val() != "") {
+			        var sj = $("#kysj1").val()
+			        if (sj != "" && getnowtime() >= sj) {
+			        	if(terpageNo==1){
+				            alert("请选择今天以后的时间,请修改第二个家中何时有人");}
+				        	else
+				        		alert("请选择今天以后的时间,请修改第二个装修时间");
+			            $("#kysj1").val("")
+			            return false;
+			        }
+			       
+			        var ymd = sj.split("-")
+			        //日期为0或6时是星期天和星期六
+			        if (fngetday(ymd[0], ymd[1], ymd[2]) == 6 || fngetday(ymd[0], ymd[1], ymd[2]) == 0) {
+			        	if(terpageNo==1){
+				            alert("您选择的是双休日，请选择周一至周五,请修改第二个家中何时有人时间");}
+				        	else
+				        		alert("您选择的是双休日，请选择周一至周五,请修改第二个装修时间");
+			            $("#kysj1").val("");
+			            return false;
+			        }
+			    }
+			}
+		}
+		   
+		function fngetday(year, month, date) {
+		    var keystr = "622503514624";
+		    var deltmonth = parseInt(keystr.substr(month - 1, 1));
+		    var deltyear = (year - 2000) + Math.ceil((year - 2000) / 4);
+		    deltyear += (year - Math.floor(year / 4) * 4 == 0 && month > 2 ? 1 : 0);
+		    var deltdate = date - 1;
+		    return   (deltmonth + deltyear + deltdate) - Math.floor((deltmonth + deltyear + deltdate) / 7) * 7;
+		}
+		function chosephoto(){
+			$("#file1").click();
+		}
+		function getnowtime() {
+		    var today = new Date();
+		    var xYear = today.getFullYear();
+		    xYear = xYear;
+
+		    var xMonth = today.getMonth() + 1;
+		    if (xMonth < 10) {
+		        xMonth = "0" + xMonth;
+		    }
+
+		    var xDay = today.getDate();
+		    if (xDay < 10) {
+		        xDay = "0" + xDay;
+		    }
+
+		    var xHours = today.getHours();
+		    if (xHours < 10) {
+		        xHours = "0" + xHours;
+		    }
+
+		    var xMinutes = today.getMinutes();
+		    if (xMinutes < 10) {
+		        xMinutes = "0" + xMinutes;
+		    }
+
+		    var xSeconds = today.getSeconds();
+		    if (xSeconds < 10) {
+		        xSeconds = "0" + xSeconds;
+		    }
+		    return xYear + "-" + xMonth + "-" + xDay;
+		}
+		$("input:file").localResizeIMG({  
+            width: 500,  
+            quality: 0.8,  
+            success: function (result1) {  
+                var img = new Image();  
+                img.src = result1.base64;  
+                console.log(result1.clearBase64);  
+                //$("body").append(img);  
+                //$("#result").empty();  
+                //$("#result").append(img); //呈现图像(拍照結果)
+                $("#photo").empty();
+                $("#photo").attr("src",result1.base64);
+                var url3 = getLocalStorageObj().getItemInLS("servicePath")+"picture/send/uplode";
+                var bh = uploadno;
+                var filedata = JSON.stringify(result1.base64);
+                var outdata3 = {"fileData":result1.clearBase64,"slbh":bh};
+				console.log(outdata3);
+                $.ajax({
+                	type: 'POST',
+                    url: url3,
+                    contentType:"application/json;charset=UTF-8",
+                    data:JSON.stringify(outdata3),  
+                    dataType: 'json', 
+                    async:true,
+                    error: function(result, textStatus, jqXHR){
+                        alert("上传失败");  
+                    },
+                     success: function(result){  
+                        //alert(result);  
+                        //console.log(result);  
+                        alert("上传成功，如果还有可再次点击按钮进行上传")  
+                    }
+                });
+            }  
+        });  
+	</script>
+	<div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+	    <a class="aftera"  href="javascript:void(0);" data-icon="back" data-rel="back" style="background-color: rgba(8, 187, 249, 0);color:#FFF;border:1px solid rgba(8, 187, 249, 0);opacity: 0.8;"><font style="color:#FFFFFF;">返回</font>
+	    	<div class="div_placearrow" style="width:20px;height:20px;top: 7px; left: 5px;background-image:url(../../img/serviceHotline/back_03.png);background-repeat:no-repeat;background-size:20px 20px;background-position:center;position: absolute"></div>
+	    </a>
+	    <h1>白蚁防治</h1>
+	 </div>
+	 <div class="placetabswrapper">
+    	<div class="divclear"></div>
+	  	<div class="placetabswrapperinsidecontent">
+	        <div class="contentinside notice">
+		        <div id="termitesTab2_content">
+		        	<form  id="formTermitesTab2" class="validate"> 
+		        	<table style="width:100%;background-color:#E7E6E6" cellpadding ="10" cellspacing="10" bgcolor="#E7E6E6" border="0" bordercolor="#FFFFFF" >
+			               <tr class="trbottomline" style="height:40px;background-color:#E7E6E6;margin-left:10px"><td class="tdpadding" style="width:120px">受理信息查询</td></tr>
+			       			<tr class="trbottomline"><td class="tdpadding">预受理编号</td><td class="righttr"><div class="inputwrapper"><input type="text" name="yslbh" id="yslbh" placeholder="预受理编号，产权证号和产权人三项必须填写两项进行查询"></input></div></td></tr>
+			                <tr class="bgtr"></tr>
+			                <tr class="trbottomline">
+			                	<td class="tdpadding">杭 房 权 证</td>
+			       				<td class="righttr">
+			       					<table style="width:111%;background-color:#E7E6E6" cellpadding ="2" cellspacing="0" bgcolor="#E7E6E6" border="0" bordercolor="#FFFFFF">
+			       					<tr class="trbottomline">
+			       					<td class="righttr"><div class="inputwrapper"><input type="text"  name="cqzh3" id="cqzh3" placeholder="请输入"></input></div></td>
+			       					<td>字</td>
+			       					</tr>
+			       			</table></td>
+			       			</tr>
+			       			<tr class="trbottomline">
+			                	<td class="tdpadding">第</td>
+			       				<td class="righttr">
+			       					<table style="width:111%;background-color:#E7E6E6" cellpadding ="2" cellspacing="0" bgcolor="#E7E6E6" border="0" bordercolor="#FFFFFF">
+			       					<tr class="trbottomline">
+			       					<td class="righttr"><div class="inputwrapper"><input type="text"  name="cqzh4" id="cqzh4" placeholder="请输入"></input></div></td>
+			       					<td>号</td>
+			       					</tr>
+			       			</table></td>
+			       			</tr>
+			       			<tr class="bgtr"></tr>
+			       			<tr class="trbottomline"><td class="tdpadding">产 权 人</td><td class="righttr"><div class="inputwrapper"><input type="text" name="cqr" id="cqr" placeholder="请输入"></input></div></td></tr>
+			                <tr class="bgtr"></tr>
+			       			<!--<tr class="trbottomline"><td class="tdpadding"><input type="button" value="验证码" data-role="none" class="checkcode"></td><td class="righttr"><div class="inputwrapper"><input type="text" name="sqrxm14" placeholder="请输入"></input></div></tr>  	
+			                <tr class="bgtr"></tr>  -->
+			                <tr class="trbottomline"><td colspan="2"><a href="javascript:Search();" class="buttoncheck" data-role="button">提交</a><button class="buttonreset" type="reset">重置</button></td></tr>
+			                <tr class="bgtr"></tr>
+				    </table>
+				    </form>
+		        </div>
+		    </div>
+		</div>
+  		<div class="nomoredata" style="display:none">没有更多数据了</div>
+  </div>
+	  	<div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+			<div role="navigation" class="ui-navbar" data-role="navbar">
+				<ul  class="ui-grid-c">
+					<li class="ui-block-a"><a class="aftera" href="javascript:openToPage(1)" data-icon="home" data-transition="slide" style="background-color:#FFF !important">首页
+		            <div class="footer_placeiconsgrey"></div></a>
+		            </li>
+					<li class="ui-block-b"><a class="aftera" href="javascript:openToPage(2)" data-icon="search" data-transition="slide" rel="external" style="background-color:#FFF !important">信息公开
+		             <div class="footer_placeicons_search"></div></a>
+		            </li>
+					<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+					<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external" style="background-color:#FFF !important"><font style="color:#08bbf9">便民服务</font>
+		            <div class="footer_placeicons_interactivelight"></div></a>
+		            </li>
+		           <!--  <li class="ui-block-d"><a class="aftera" id="interactivity_AId" href="javascript:openToPage(4)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">登录
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li> -->
+					<li class="ui-block-d"><a class="aftera" href="javascript:openToPage(5)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">政务动态
+		            <div class="footer_placeicons_setting"></div></a>
+		            </li>
+				</ul>
+			</div>
+		</div>
+	</div> 
+ </body>
+</html>

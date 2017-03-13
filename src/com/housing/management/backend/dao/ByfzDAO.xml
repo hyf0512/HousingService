@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.housing.management.backend.dao.ByfzDAO">
+	<insert id="insert" parameterType="Byfz">
+		INSERT INTO WEB_BYS_SL(BID,YWLB,LXR,SYQR,CQ_NAME,XQ_NAME,TEL,MOBILE,FCZ_NM,FCZ_ID,FW_ADDRESS,
+		JZ_AREA,STRUCT,FC_YT,CQ_TYPE,SL_NO,STATU,WHQK,BZ,ADDTIME,FW_NM,FFSJ,BYTC,KYSJ,KYSJ2)
+		VALUES
+		(SEQ_WEB_BYS_SL_ID.nextval,#{ywlb},#{lxr},#{name},#{szcq},#{xqname},#{lxdh},#{lxsj},#{syqzid},#{cqzh},
+		#{fwaddress},#{area},#{fwjg},#{fcyt},#{cqxz},#{slbh},#{statu},#{whqk},#{bz},#{addtime},#{fwcode},#{ffsj},#{bytc},#{kysj},#{kysj1})
+	</insert>
+	<select id="getupdate" parameterType="Long" resultType="Byfz">
+		SELECT T.BID AS bid,
+		T.SL_NO AS slbh,
+		T.LXR AS lxr,
+		T.TEL AS lxdh,
+		T.MOBILE AS lxsj,
+		T.WHQK AS whqk,
+		T.FFSJ AS ffsj,
+		T.BYTC AS bytc,
+		T.KYSJ AS kysj,
+		T.KYSJ2 AS kysj1,
+		T.BZ AS bz,
+		T.STATU AS statu,
+		NVL(P.BID,0) PAYID AS payid FROM WEB_BYS_SL T,WEB_BYSPAY P WHERE T.SL_NO=P.SL_NO(+) AND T.BID=#{bid}
+	</select>
+	<select id="getsl" parameterType="String" resultType="String">
+		SELECT MAX(SL_NO) FROM WEB_BYS_SL WHERE ADDTIME LIKE #{today}
+	</select>
+	<insert id="setsl" parameterType="Byfz">
+		INSERT INTO WEB_BYS_REFUND
+		(ORDERID)
+		VALUES
+		(#{ywlb})
+	</insert>
+	<update id="update" parameterType="Byfz">
+		UPDATE WEB_BYS_SL SET
+		YWLB=#{ywlb},LXR=#{lxr},SYQR=#{name},ADDRESS=#{address},CQ_NAME=#{szcq},XQ_NAME=#{xqname},
+		TEL=#{lxdh},MOBILE=#{lxsj},FCZ_NM=#{syqzid},FCZ_ID=#{cqzh},FW_ADDRESS=#{fwaddress},JZ_AREA=#{area},
+		STRUCT=#{fwjg},FC_YT=#{fcyt},CQ_TYPE=#{cqxz},SL_NO=#{slbh},STATU=#{statu},WHQK=#{whqk},BZ=#{bz},
+		SHTIME=#{shsj},FFSJ=#{ffsj},BYTC=#{bytc},KYSJ=#{kysj},KYSJ2=#{kysj1} WHERE BID=#{bid}
+	</update>
+	<select id="searchbyfz1" parameterType="Byfz" resultType="Byfz">
+		SELECT A.BID AS bid,
+		A.FCZ_NM AS syqzid,
+		A.SYQR AS name,
+		A.MOBILE AS lxsj,
+		A.PAYSTATU AS paystatu,
+		A.STATU AS statu,
+		A.SL_NO AS slbh,
+		A.ADDTIME AS addtime,
+		A.SHTIME AS shsj,
+		A.SHYJ AS shyj,
+		A.BHLY AS bhly,
+		B.BILL_NO AS billno,
+		to_char(B.FEE,'fm9999999990.00') AS fee,
+		R.STATUSCODE AS statuscode,
+		R.RESPONSECODE AS responsecode,
+		R.ORDERID AS orderid 
+		FROM WEB_BYS_SL A LEFT JOIN WEB_BYSPAY B ON A.BID = B.BID LEFT JOIN WEB_BYS_REFUND R ON B.BILL_NO=R.ORDERID WHERE 1=1 AND A.SL_NO=#{slbh} AND SYQR=#{name} AND FCZ_ID=#{cqzh}
+		ORDER BY A.BID DESC
+	</select>
+	<select id="searchbyfz2" parameterType="Byfz" resultType="Byfz">
+		SELECT A.BID AS bid,
+		A.FCZ_NM AS syqzid,
+		A.SYQR AS name,
+		A.MOBILE AS lxsj,
+		A.PAYSTATU AS paystatu,
+		A.STATU AS statu,
+		A.SL_NO AS slbh,
+		A.ADDTIME AS addtime,
+		A.SHTIME AS shsj,
+		A.SHYJ AS shyj,
+		A.BHLY AS bhly,
+		B.BILL_NO AS billno,
+		to_char(B.FEE,'fm9999999990.00') AS fee,
+		R.STATUSCODE AS statuscode,
+		R.RESPONSECODE AS responsecode,
+		R.ORDERID AS orderid 
+		FROM WEB_BYS_SL A LEFT JOIN WEB_BYSPAY B ON A.BID = B.BID LEFT JOIN WEB_BYS_REFUND R ON B.BILL_NO=R.ORDERID WHERE 1=1 AND A.SL_NO=#{slbh} AND A.SYQR=#{name}
+		ORDER BY A.BID DESC
+	</select>
+	<select id="searchbyfz3" parameterType="Byfz" resultType="Byfz">
+		SELECT A.BID AS bid,
+		A.FCZ_NM AS syqzid,
+		A.SYQR AS name,
+		A.MOBILE AS lxsj,
+		A.PAYSTATU AS paystatu,
+		A.STATU AS statu,
+		A.SL_NO AS slbh,
+		A.ADDTIME AS addtime,
+		A.SHTIME AS shsj,
+		A.SHYJ AS shyj,
+		A.BHLY AS bhly,
+		B.BILL_NO AS billno,
+		to_char(B.FEE,'fm9999999990.00') AS fee,
+		R.STATUSCODE AS statuscode,
+		R.RESPONSECODE AS responsecode,
+		R.ORDERID AS orderid 
+		FROM WEB_BYS_SL A LEFT JOIN WEB_BYSPAY B ON A.BID = B.BID LEFT JOIN WEB_BYS_REFUND R ON B.BILL_NO=R.ORDERID WHERE 1=1 AND A.SL_NO=#{slbh} AND FCZ_ID=#{cqzh}
+		ORDER BY A.BID DESC
+	</select>
+	<select id="searchbyfz4" parameterType="Byfz" resultType="Byfz">
+		SELECT A.BID AS bid,
+		A.FCZ_NM AS syqzid,
+		A.SYQR AS name,
+		A.MOBILE AS lxsj,
+		A.PAYSTATU AS paystatu,
+		A.STATU AS statu,
+		A.SL_NO AS slbh,
+		A.ADDTIME AS addtime,
+		A.SHTIME AS shsj,
+		A.SHYJ AS shyj,
+		A.BHLY AS bhly,
+		B.BILL_NO AS billno,
+		to_char(B.FEE,'fm9999999990.00') AS fee,
+		R.STATUSCODE AS statuscode,
+		R.RESPONSECODE AS responsecode,
+		R.ORDERID AS orderid 
+		FROM WEB_BYS_SL A LEFT JOIN WEB_BYSPAY B ON A.BID = B.BID LEFT JOIN WEB_BYS_REFUND R ON B.BILL_NO=R.ORDERID WHERE 1=1 AND SYQR=#{name} AND FCZ_ID=#{cqzh}
+		ORDER BY A.BID DESC
+	</select>
+	<select id="searchresult" parameterType="String" resultType="PayResult">
+	    SELECT BID AS bid,
+	    SHRQ AS shrq
+	    FROM WEB_BYS_SL WHERE SL_NO = #{orderNo}
+	</select>
+	<insert id="insertresult" parameterType="PayResult">
+	    UPDATE WEB_BYSPAY SET
+	    BILL_NO=#{orderNo},
+	    STATUSCODE='1001'
+	    WHERE SL_NO=#{orderNo}
+	</insert>
+	<update id="updatepay" parameterType="PayResult">
+	    UPDATE WEB_BYS_SL SET
+	    PAYSTATU='6',
+	    STATU='2'
+	    WHERE SL_NO=#{orderNo}
+	</update>
+	<select id="returnresult" parameterType="Byfz" resultType="Byfz">
+	    SELECT SL_NO AS slbh,
+	    PAYSTATU AS paystatu
+	    FROM WEB_BYS_SL WHERE SL_NO = #{slbh}
+	</select>
+</mapper>

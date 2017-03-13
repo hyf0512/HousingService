@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <meta charset="UTF-8">
+    <!--自适应界面,如果出现,在某些设备出现界面偏小的话,检查一下有没有加入这句 -->
+    <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<link rel="stylesheet" href="../../css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="../../css/easy-responsive-tabs.css" /> 
+	<link rel="stylesheet" href="../../css/main.css">
+	
+<!-- 	<link rel="stylesheet" href="mobile.time/css/jqueryMobile.css"> -->
+	<link href="../../mobile.time/css/mobiscroll.css" rel="stylesheet" type="text/css" />
+	<script src="../../lib/jquery.min.js"></script>
+	<script src="../../lib/jquery.mobile-1.4.5.min.js"></script>
+	<script src="../../mobile.time/js/mobiscroll.js"></script>
+	<script src="../../lib/jquery.validate.min.js"></script>
+	<script src="../../lib/jquery.metadata.js"></script>
+	<script src="../../lib/cordova-1.5.0.js"></script>
+<!-- 	<script src="lib/cordova.js"></script>
+	<script src="lib/easyResponsiveTabs.js"></script>
+	<script src="lib/jqLoading.js"></script> -->
+	<script src="../../js/main.js"></script>
+	<script src="../../js/messages_cn.js"></script>
+	<script src="../../lib/LocalResizeIMG.js"></script>
+	<script src="../../lib/mobileBUGFix.mini.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FBqGlnTD1PFePw7StH7EANlD"></script>
+</head>
+<body>
+
+<div data-role="page" id="governmentAffairs_Page1">
+ <script>
+	var pageSize=10,pageIndex=1,index_no=0,dataLength=1;//index_no内容序号
+    $(document).on("pageshow","#governmentAffairs_Page1",function(){ 
+    	//setLoginNavigationBar("governmentAffairs_AId");
+        ///滑动到底部事件
+	  	$(document).unbind("scroll");
+		  	$(document).bind("scroll", function(event){
+		     if($(document).scrollTop() >= $(document).height()-$(window).height()){
+		    	 if(dataLength!=1)return;//如果没有数据时,则不执行
+		    	 pageIndex ++;
+		    	 getGovernmentAffairsData();
+		      }
+		  	});
+	 });	
+	 $(document).on("pagehide","#governmentAffairs_Page1",function(){ 
+	  $(document).unbind("scroll");
+	 });
+    
+ 	$('#governmentAffairs_Page1').on('pageinit',function(event){
+ 		$(document).unbind("scroll");
+		getGovernmentAffairsData();
+	});
+	//获取后台数据
+	function getGovernmentAffairsData(){
+		//showLoader();
+		addDataLoader("governmentAffairs_msg_Page1_content1");
+		$.ajax({
+			type: 'POST',
+			contentType : 'application/json',
+			url: getLocalStorageObj().getItemInLS("servicePath")+"news/list",
+			data: JSON.stringify({pageSize:pageSize,pageIndex:pageIndex,columnId:'30002'}),
+			dataType: 'json',
+			success:function(result, textStatus, jqXHR){
+				delDataLoader();
+				if(result.rows.length){
+					createGovernmentUlDom(result.rows); 
+				}else{
+					noMoreData("governmentAffairs_msg_Page1_content1");
+					dataLength = 0;
+				}
+				//$("#index_body").jqLoading("destroy");
+				//hideLoader();
+			},
+           error:function(responseData){
+	           	dataLength=0;
+	           	delDataLoader();
+	           	//hideLoader();
+           }
+		});
+	}
+	function createDom(fillData) {
+	    //$.each(fillData,function(index,taget){
+	    	//index_no++;
+		     //var aLabel = "<a style=\"text-decoration:none;\" href=\""+taget.directUrl+"\" rel=\"external\">"+(index_no)+"."+taget.title+"</a><br />&nbsp;&nbsp;";
+		    /*  var aLabel= "<a style=\"text-decoration:none;\" href='javascript:governmentAffairDetail(\""+taget.contentId+"\",\""+taget.title+"\");' >"+(index_no)+"."+taget.title+"</a><br />&nbsp;&nbsp;";
+		     var contentText = "暂时没有相关数据,等待后期维护后再进行查看...";
+		     if(taget.outputContent!=null){
+		    	 contentText = taget.outputContent;
+		     }
+		     var pLabel = "<span style='font-size:80%'>"+contentText+"</span>";
+		     var pspanLabel = "<p><span style='font-size:50%'>发布时间:"+new Date().DateGridFormat(taget.fbDate)+"</span>&nbsp;&nbsp;&nbsp;<span style='font-size:50%'>点击量:"+taget.click+"</span></p>";
+		     $(aLabel).appendTo($("#governmentAffairs_msg_Page1_content1"));
+		     $(pLabel).appendTo($("#governmentAffairs_msg_Page1_content1"));
+		     $(pspanLabel).appendTo($("#governmentAffairs_msg_Page1_content1"));
+		     $("<hr />").appendTo($("#governmentAffairs_msg_Page1_content1")); */
+	    //}); 
+	}
+	//创建内容 
+	function createGovernmentUlDom(fillData) {
+		//var createId = columnId;
+		//if($("#"+createId).html()!='')return;
+
+		$.each(fillData,function(index,taget){
+			var fbsj2=new Date().DateGridFormat(taget.fbDate);
+						fbsj2=fbsj2.substring(0,10);
+        	 var li = '<li class="row" onclick="governmentAffairDetail(\''+taget.contentId+'\',\''+taget.title+'\')">\
+				 	        <div class="left">\
+					     		<div class="title">'+taget.title+'</div>\
+					     		<div class="line">\
+					     			<div class="date">发布时间:'+fbsj2+'</div>\
+					     			<div class="point">点击量：'+taget.click+'</div>\
+				     			</div>\
+				     		</div>\
+					     	<div class="right">\
+					     		<div class="arrow-icon"></div>\
+					     	</div>\
+						</li>';
+			$(li).appendTo($("#governmentAffairs_msg_Page1_content1"));		 
+        });
+	}
+	//查看详情
+	function governmentAffairDetail(contentId,title){
+		window.page_information_governmentAffairContent_contentId=contentId;
+		window.page_information_governmentAffairContent_title=title;
+		$.mobile.changePage("GovernmentAffairs_Content.html","pop");
+	}
+	
+ </script>
+ <div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+    <a class="aftera"  href="javascript:void(0);" data-icon="back" data-rel="back" style="background-color: rgba(8, 187, 249, 0);color:#FFF;border:1px solid rgba(8, 187, 249, 0);opacity: 0.8;"><font style="color:#FFFFFF;">返回</font>
+    	<div class="div_placearrow" style="width:20px;height:20px;top: 7px; left: 5px;background-image:url(../../img/serviceHotline/back_03.png);background-repeat:no-repeat;background-size:20px 20px;background-position:center;position: absolute"></div>
+    </a>
+    <h1>政务动态</h1>
+  </div>
+   <div class="placetabswrapper">
+	  	<div class="placetabswrapperinsidecontent" style="margin-top:0px;">
+	        <div class="contentinside notice">
+		        <ul id="governmentAffairs_msg_Page1_content1"></ul>
+	        </div>
+	    </div>
+  		<div class="nomoredata" style="display:none">没有更多数据了</div>
+  </div>
+  	<div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+		<div role="navigation" class="ui-navbar" data-role="navbar">
+			<ul class="ui-grid-c">
+				<li class="ui-block-a"><a class="aftera" href="javascript:openToPage(1)" data-icon="home" data-transition="slide"  rel="external">首页<div class="footer_placeiconsgrey"></div></a></li>
+				<li class="ui-block-b"><a class="aftera" href="javascript:openToPage(2)" data-icon="search" data-transition="slide" rel="external"><font style="color:#08bbf9">信息公开</font><div class="footer_placeicons_searchlight"></div></a></li>
+				<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+				<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external">便民服务<div class="footer_placeicons_interactive"></div></a></li>
+				<!-- <li class="ui-block-d"><a class="aftera" id="footSearch_AId"  href="javascript:openToPage(4)" data-icon="gear" data-transition="slide" rel="external"><font>登录</font><div class="footer_placeicons_setting"></div></a></li> -->
+				<li class="ui-block-d"><a class="aftera" href="javascript:openToPage(5)" data-icon="gear" data-transition="slide" rel="external">政务动态<div class="footer_placeicons_setting"></div></a></li>
+			</ul>
+		</div>
+	</div>
+</div> 
+
+</body>
+
+</html>

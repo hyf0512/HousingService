@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+</head>
+<body>
+
+<div data-role="page" id="config_index_Page">
+ <script>
+	$('#config_index_Page').on('pageinit',function(event){
+		//setLoginNavigationBar("config_indexAId");
+		//设置App状态
+		setAppListStatus(getAppStoreData());
+		var appStore = new Array();
+		$(".icondiv select").bind('change', function(e) {
+			var appStore = getAppStoreData();
+			var parentNode = $(this).parent().parent();
+			var aSing = $(parentNode[0]).children("a").get(0);
+			//var imgSrc = $($(aSing).children("img").get(0)).attr("src");
+			var spanHtml = $($(aSing).children("span").get(0)).text();
+			//alert(spanHtml);
+			var h2Name = $($(aSing).children("h2").get(0)).text();
+			var id = $(this).attr("id");
+			if($(this).children('option:selected').val()==1){//感兴趣
+				if(!appStore.isRepeat("id",id)){//不存在时则添加
+					var map={
+						    id:id,
+						    name:h2Name,
+						    src:spanHtml
+						    //src:imgSrc.split("../../")[1]
+						};
+					appStore.push(map);
+				}
+			}else{//没兴趣
+				if(appStore.isRepeat("id",id)){
+					appStore = appStore.removeArrayObj("id",id);
+				}
+			}
+			getLocalStorageObj().removeItemInLS("appStore");
+			getLocalStorageObj().setItemInLS("appStore",JSON.stringify(appStore));
+			
+		  });
+	});
+	//如果有感兴趣的则默认选中
+	function setAppListStatus(appStore){
+		for(var i=0;i<appStore.length;i++){
+			$("select#"+appStore[i]["id"]).val(1).slider("refresh");
+		}
+	}
+	//获取缓存中AppStore数据
+	function getAppStoreData(){
+		var appStore = getLocalStorageObj().getItemInLS("appStore");
+		if(appStore!=null){
+			appStore = JSON.parse(appStore);
+		}else{
+			appStore = []; 
+		}
+		return appStore;
+	}
+ </script>
+ <div data-role="header" style="background-color: #08BBF9;color:#FFF" data-position="fixed">
+   	<h1>设置感兴趣的栏目</h1>
+  </div>
+  <div data-role="content" id="config_index_content" class="bluefont_div">
+   	<ul data-role="listview" >
+   		<li class="lireset">
+			<a href="#"  class="aftera">
+				<img src="../../img/serviceHotline/07_11.png" width="60px" height="60px" class="imgreset">
+				<h2>公告公示</h2>
+				<p><font size="0.5">租赁住房的公告</font></p>
+				<span class="content_div" >../../img/homePage/04_07.png</span>
+			</a>
+		    <div class="icondiv" >
+				<select name="flip-1" id="image1" data-role="slider" >
+			        <option value=0>没兴趣</option>
+			        <option value=1>感兴趣</option>
+				</select>
+			</div>
+		</li>
+		<li class="lireset">
+			<a href="#" class="aftera">
+				<img src="../../img/serviceHotline/08_11.png" width="60px" height="60px" class="imgreset">
+				<h2>政务动态</h2>
+				<p><font size="0.5">政务网政务动态</font></p>
+				<span class="content_div" >../../img/homePage/05_07.png</span>
+			</a>
+		    <div class="icondiv" >
+				<select name="flip-2"  id="image2"  data-role="slider">
+			        <option value=0>没兴趣</option>
+			        <option value=1>感兴趣</option>
+				</select>
+			</div>
+		</li>
+		<li class="lireset">
+			<a href="#" class="aftera">
+				<img src="../../img/serviceHotline/12_11.png" width="60px" height="60px" class="imgreset">
+				<h2>机构职能</h2>
+				<p><font size="0.5">下局机关,各处室下属单位</font></p>
+				<span class="content_div" >../../img/homePage/06_07.png</span>
+			</a>
+		    <div class="icondiv" >
+				<select name="flip-3"  id="image3"  data-role="slider">
+			        <option value=0>没兴趣</option>
+			        <option value=1>感兴趣</option>
+				</select>
+			</div>
+		</li>
+	   	<li class="lireset">
+			<a href="#" class="aftera">
+				<img src="../../img/serviceHotline/01_07.png" width="60px" height="60px" class="imgreset">
+				<h2>服务热线</h2>
+				<p><font size="0.5">988765533</font></p>
+				<span class="content_div" >../../img/homePage/07_07.png</span>
+			</a>
+		    <div class="icondiv" >
+				<select name="flip-4"  id="image4"  data-role="slider">
+			        <option value=0>没兴趣</option>
+			        <option value=1>感兴趣</option>
+				</select>
+			</div>
+		</li>
+	  	<li class="lireset">
+			<a href="#" class="aftera">
+				<img src="../../img/serviceHotline/02_11.png" width="60px" height="60px" class="imgreset">
+				<h2>应急维修</h2>
+				<p><font size="0.5">各维修网点</font></p>
+				<span class="content_div" >../../img/homePage/08_07.png</span>
+			</a>
+			<div class="icondiv" >
+				<select name="flip-5"  id="image5"  data-role="slider">
+			        <option value=0>没兴趣</option>
+			        <option value=1>感兴趣</option>
+				</select>
+			</div>
+	  	</li>
+		<li class="lireset">
+			<a href="#" class="aftera">
+				<img src="../../img/serviceHotline/03_11.png" width="60px" height="60px" class="imgreset">
+				<h2>房产交易办理点</h2>
+				<p><font size="0.5">房产交易办理点查看</font></p>
+				<span class="content_div" >../../img/homePage/09_07.png</span>
+			</a>
+			<div class="icondiv" >
+				<select name="flip-6"  id="image6"  data-role="slider">
+			        <option value=0>没兴趣</option>
+			        <option value=1>感兴趣</option>
+				</select>
+			</div>
+		 </li>
+		 <li class="lireset">
+			<a href="#" class="aftera">
+				<img src="../../img/serviceHotline/04_11.png" width="60px" height="60px" class="imgreset">
+				<h2>查档地址</h2>
+				<p><font size="0.5">查档地址查看</font></p>
+				<span class="content_div" >../../img/homePage/10_07.png</span>
+			</a>
+			<div class="icondiv" >
+				<select name="flip-7"  id="image7"  data-role="slider">
+			        <option value=0>没兴趣</option>
+			        <option value=1>感兴趣</option>
+				</select>
+			</div>
+		  </li>
+		  <li class="lireset">
+			<a href="#" class="aftera">
+				<img src="../../img/serviceHotline/05_11.png" width="60px" height="60px" class="imgreset">
+				<h2>保障房</h2>
+				<p><font size="0.5">向申请手机发送定制信息</font></p>
+				<span class="content_div" >../../img/homePage/11_07.png</span>
+			</a>
+			<div class="icondiv" >
+				<select name="flip-8"  id="image8"  data-role="slider">
+			        <option value=0>没兴趣</option>
+			        <option value=1>感兴趣</option>
+				</select>
+			</div>
+		  </li>
+		  <li class="lireset">
+			<a href="#" class="aftera">
+				<img src="../../img/serviceHotline/06_11.png" width="60px" height="60px" class="imgreset">
+				<h2>房产交易办理预约</h2>
+				<p><font size="0.5">预约申请信息</font></p>
+				<span class="content_div" >../../img/homePage/12_07.png</span>
+			</a>
+			<div class="icondiv" >
+				<select name="flip-9"  id="image9"  data-role="slider">
+			        <option value=0>没兴趣</option>
+			        <option value=1>感兴趣</option>
+				</select>
+			</div>
+		  </li>
+		  <li class="lireset">
+			<a href="#" class="aftera">
+				<img src="../../img/serviceHotline/09_11.png" width="60px" height="60px" class="imgreset">
+				<h2>自助换房</h2>
+				<p><font size="0.5">换房操作</font></p>
+				<span class="content_div" >../../img/homePage/13_07.png</span>
+			</a>
+			<div class="icondiv" >
+				<select name="flip-10"  id="image10"  data-role="slider">
+			        <option value=0>没兴趣</option>
+			        <option value=1>感兴趣</option>
+				</select>
+			</div>
+		  </li>
+		  <li class="lireset">
+			<a href="#" class="aftera">
+				<img src="../../img/serviceHotline/13_11.png" width="60px" height="60px" class="imgreset">
+				<h2>白蚁防治</h2>
+				<p><font size="0.5">白蚁防治系统入口</font></p>
+				<span class="content_div" >../../img/homePage/14_07.png</span>
+			</a>
+			<div class="icondiv" >
+				<select name="flip-11"  id="image11"  data-role="slider">
+			        <option value=0>没兴趣</option>
+			        <option value=1>感兴趣</option>
+				</select>
+			</div>
+		</li>
+		<li class="lireset">
+			<a href="#" class="aftera">
+				<img src="../../img/serviceHotline/14_11.png" width="60px" height="60px" class="imgreset">
+				<h2>我要查询</h2>
+				<p><font size="0.5">办事进度查询</font></p>
+				<span class="content_div" >../../img/homePage/15_07.png</span>
+			</a>
+			<div class="icondiv" >
+				<select name="flip-12"  id="image12"  data-role="slider">
+			        <option value=0>没兴趣</option>
+			        <option value=1>感兴趣</option>
+				</select>
+			</div>
+		</li>
+		<li class="lireset">
+			<a href="#" class="aftera">
+				<img src="../../img/serviceHotline/10_11.png" width="60px" height="60px" class="imgreset">
+				<h2>我要咨询</h2>
+				<p><font size="0.5">房管业务咨询</font></p>
+				<span class="content_div" >../../img/homePage/16_07.png</span>
+			</a>
+			<div class="icondiv" >
+				<select name="flip-13"  id="image13"  data-role="slider">
+			        <option value=0>没兴趣</option>
+			        <option value=1>感兴趣</option>
+				</select>
+			</div>
+		</li>
+		<li class="lireset">
+			<a href="#" class="aftera">
+				<img src="../../img/serviceHotline/11_11.png" width="60px" height="60px" class="imgreset">
+				<h2>我要投票</h2>
+				<p><font size="0.5">数字物业投票系统</font></p>
+				<span class="content_div" >../../img/homePage/17_07.png</span>
+			</a>
+			<div class="icondiv" >
+				<select name="flip-14"  id="image14"  data-role="slider">
+			        <option value=0>没兴趣</option>
+			        <option value=1>感兴趣</option>
+				</select>
+			</div>
+		</li>
+		<!--  <li>
+			<a href="#">
+				<img src="../../img/serviceHotline/15_11.png">
+				<h2>我要定制</h2>
+				<p><font size="0.5">快速服务通道中房产</font></p>
+				<span class="content_div" >img/homePage/18_07.png</span>
+			</a>
+			<div class="icondiv" >
+				<select name="flip-15"  id="image15"  data-role="slider">
+			        <option value=0>没兴趣</option>
+			        <option value=1>感兴趣</option>
+				</select>
+			</div>
+		</li>  -->
+		<li class="lireset">
+			<a href="#" class="aftera">
+				<img src="../../img/serviceHotline/16_11.png" width="60px" height="60px" class="imgreset">
+				<h2>政民互动</h2>
+				<p><font size="0.5">快速服务</font></p>
+				<span class="content_div" >../../img/homePage/19_07.png</span>
+			</a>
+			<div class="icondiv" >
+				<select name="flip-15"  id="image15"  data-role="slider">
+			        <option value=0>没兴趣</option>
+			        <option value=1>感兴趣</option>
+				</select>
+			</div>
+		</li>
+    </ul>
+  </div>
+	 <div class="ui-footer ui-bar-inherit ui-footer-fixed slideup ui-fixed-hidden" role="contentinfo" data-role="footer" data-position="fixed" style="position:fixed;bottom:-30px">
+		<div role="navigation" class="ui-navbar" data-role="navbar">
+			<ul  class="ui-grid-c">
+				<li class="ui-block-a"><a class="aftera" href="javascript:openToPage(1)" data-icon="home" data-transition="slide" style="background-color:#FFF !important">首页
+	            <div class="footer_placeiconsgrey"></div></a>
+	            </li>
+				<li class="ui-block-b"><a class="aftera" href="javascript:openToPage(2)" data-icon="search" data-transition="slide" rel="external" style="background-color:#FFF !important">搜索
+	             <div class="footer_placeicons_search"></div></a>
+	            </li>
+				<!-- <li class="ui-block-c"><a class="ui-link ui-btn ui-icon-info ui-btn-icon-top ui-btn-active" href="#" data-icon="info" data-transition="slide" rel="external">登陆/注册</a></li> -->
+				<li class="ui-block-c"><a class="aftera" href="javascript:openToPage(3)" data-icon="star" data-transition="slide" rel="external" style="background-color:#FFF !important">政民互动
+	            <div class="footer_placeicons_interactive"></div></a>
+	            </li>
+	           <!--  <li class="ui-block-d"><a class="aftera" id="config_indexAId" href="javascript:openToPage(4)" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;">登录
+	            <div class="footer_placeicons_setting"></div></a>
+	            </li> -->
+				<li class="ui-block-d"><a class="aftera" href="#" data-icon="gear" data-transition="slide" rel="external" style="background-color:#FFF !important;"><font style="color:#08bbf9">设置</font>
+	            <div class="footer_placeicons_settinglight"></div></a>
+	            </li>
+			</ul>
+		</div>
+	</div>		
+</div> 
+
+
+</body>
+
+</html>
